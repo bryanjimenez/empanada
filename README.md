@@ -4,7 +4,10 @@ VEMS
 VISA Emergency Management System
 
 
-* Installing::
+Setup
+-----
+
+* Installing requirements:
 
 ```
     sudo apt-get install python-setuptools
