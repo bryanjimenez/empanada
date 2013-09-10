@@ -14,7 +14,7 @@ mapOptions);
 for (var i = 0; i < 2; i++) {
 	// init markers
 	var marker = new google.maps.Marker({
-	position: new google.maps.LatLng(25.75900,-80.37388),
+	position: new google.maps.LatLng(25.75896,-80.37402),
 	map: map,
 	title: 'You\'re Here' + i
 	});
@@ -30,12 +30,15 @@ for (var i = 0; i < 2; i++) {
 	});
 	})(marker, i);
 }
-
+/* some icons are listed here
+ * 
+ * http://www.lass.it/Web/viewer.aspx?id=4
+ */
 var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 var icons = {
 	parking: {
-		name: 'Parking',
-		icon: iconBase + 'parking_lot_maps.png',
+		name: 'Thunder',
+		icon: iconBase + 'icon44.png',
 		shadow: iconBase + 'parking_lot_maps.shadow.png'
 	},
 	library: {
@@ -63,6 +66,11 @@ for (var key in icons) {
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
 }
+/* geocoding
+ * 
+ * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
+ */
+
 function codeAddress() {
 	var address = document.getElementById("zip").value;
 	geocoder.geocode( { 'address': address}, function(results, status) {
