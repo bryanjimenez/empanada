@@ -32,24 +32,24 @@ for (var i = 0; i < 2; i++) {
 }
 /* some icons are listed here
  * 
- * http://www.lass.it/Web/viewer.aspx?id=4
+ * http://kml4earth.appspot.com/icons.html
  */
 var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 var icons = {
 	parking: {
 		name: 'Thunder',
-		icon: iconBase + 'icon44.png',
-		shadow: iconBase + 'parking_lot_maps.shadow.png'
+		icon: iconBase + 'thunderstorm.png',
+		shadow: iconBase + 'thunderstorm.shadow.png'
 	},
 	library: {
-		name: 'Library',
-		icon: iconBase + 'library_maps.png',
-		shadow: iconBase + 'library_maps.shadow.png'
+		name: 'Flood',
+		icon: iconBase + 'water.png',
+		shadow: iconBase + 'water.shadow.png'
 	},
 	info: {
-		name: 'Info',
-		icon: iconBase + 'info-i_maps.png',
-		shadow: iconBase + 'info-i_maps.shadow.png'
+		name: 'Damage',
+		icon: iconBase + 'caution.png',
+		shadow: iconBase + 'Caution.shadow.png'
 	}
 };
 
