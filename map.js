@@ -1,5 +1,8 @@
+var geocoder;
 var map;
 function initialize() {
+	geocoder = new google.maps.Geocoder();
+
 	var mapOptions = {
 	zoom: 18,
 	center: new google.maps.LatLng(25.75906,-80.37388),
@@ -11,7 +14,7 @@ mapOptions);
 for (var i = 0; i < 2; i++) {
 	// init markers
 	var marker = new google.maps.Marker({
-	position: new google.maps.LatLng(25.75896,-80.37403),
+	position: new google.maps.LatLng(25.75900,-80.37388),
 	map: map,
 	title: 'You\'re Here' + i
 	});
@@ -59,6 +62,21 @@ for (var key in icons) {
 
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
+}
+function codeAddress() {
+	var address = document.getElementById("zip").value;
+	geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+			map: map,
+			position: results[0].geometry.location
+			});
+			//alert(results[0].geometry.location);
+		} else {
+			alert("Geocode was not successful for the following reason: " + status);
+		}
+	});
 }
 
 

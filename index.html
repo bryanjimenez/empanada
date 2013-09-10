@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>Our Project Title Here</title>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
@@ -67,14 +67,14 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
             <li>
-				<form class="navbar-form navbar-left" role="search">
+				<form class="navbar-form navbar-left" role="search" onsubmit="codeAddress()">
 				  <div class="form-group">
-					<input type="text" class="form-control" placeholder="Zip Code">
+					<input id="zip" type="text" class="form-control" placeholder="Zip Code">
 				  </div>
-				  <button type="submit" class="btn btn-default">Submit</button>
+				  <button type="button" class="btn btn-default" onclick="codeAddress()">Submit</button>
 				</form>
             </li>
           </ul>
