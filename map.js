@@ -11,7 +11,7 @@ mapOptions);
 for (var i = 0; i < 2; i++) {
 	// init markers
 	var marker = new google.maps.Marker({
-	position: new google.maps.LatLng(25.75900,-80.37388),
+	position: new google.maps.LatLng(25.75896,-80.37403),
 	map: map,
 	title: 'You\'re Here' + i
 	});
