@@ -27,9 +27,14 @@
         padding: 0;
         height: 100%;
       }
+	#legend {
+		background: white;
+		padding: 10px;
+		margin: 10px;
+	}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <script>
+<!--<script>
 		var map;
 		function initialize() {
 		  var mapOptions = {
@@ -43,7 +48,8 @@
 
 		google.maps.event.addDomListener(window, 'load', initialize);
 
-    </script>
+    </script>-->
+	<script src="map.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -77,6 +83,7 @@
     </div>
 	
 	<div id="map-canvas"></div>
+	<div id="legend">VEMS Legend</div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
