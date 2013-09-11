@@ -36,20 +36,25 @@ for (var i = 0; i < 2; i++) {
  */
 var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 var icons = {
-	parking: {
-		name: 'Thunder',
-		icon: iconBase + 'thunderstorm.png',
-		shadow: iconBase + 'thunderstorm.shadow.png'
+	storm: {
+		name: 'Storm',
+		icon: iconBase + 'thunderstorm_maps.png',
+		shadow: iconBase + 'thunderstorm_maps.shadow.png'
 	},
-	library: {
-		name: 'Flood',
-		icon: iconBase + 'water.png',
-		shadow: iconBase + 'water.shadow.png'
+	fire: {
+		name: 'Fire',
+		icon: iconBase + 'firedept_maps.png',
+		shadow: iconBase + 'firedept_maps.shadow.png'
 	},
-	info: {
+	damage: {
 		name: 'Damage',
-		icon: iconBase + 'caution.png',
-		shadow: iconBase + 'Caution.shadow.png'
+		icon: iconBase + 'caution_maps.png',
+		shadow: iconBase + 'caution_maps.shadow.png'
+	},
+	flood: {
+		name: 'Flood',
+		icon: iconBase + 'water_maps.png',
+		shadow: iconBase + 'water_maps.shadow.png'
 	}
 };
 
@@ -96,7 +101,7 @@ for (var style in styles) {
 var name = style.name;
 var icon = style.icon;
 var div = document.createElement('div');
-div.innerHTML = '<img src="' + icon + '"> ' + name;
+div.innerHTML = '<img src="' + icon + 'width="50%"' +'> ' + name;
 legend.appendChild(div);
 }
 
