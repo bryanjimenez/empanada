@@ -6,37 +6,21 @@ function initialize() {
 	geocoder = new google.maps.Geocoder();
 
 	var mapOptions = {
-	zoom: 18,
-	center: new google.maps.LatLng(25.75906,-80.37388),
-	mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-map = new google.maps.Map(document.getElementById('map-canvas'),
-mapOptions);
+		zoom: 18,
+		center: new google.maps.LatLng(25.75906,-80.37388),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById('map-canvas'),
+	mapOptions);
 
-for (var i = 0; i < 2; i++) {
+
 	// init markers
 	var marker = new google.maps.Marker({
 	position: new google.maps.LatLng(25.75896,-80.37402),
 	map: map,
-	title: 'You\'re Here' + i
+	title: 'You\'re Here'
 	});
 	
-	infobubble(marker, i)
-
-/*
-	// process multiple info windows
-	(function(marker, i) {
-	// add click event
-	google.maps.event.addListener(marker, 'click', function() {
-	infowindow = new google.maps.InfoWindow({
-	content: 'You\'re Here'
-	});
-	infowindow.open(map, marker);
-	});
-	})(marker, i);
-	* 
-	* */
-}
 /* some icons are listed here
  * 
  * http://kml4earth.appspot.com/icons.html
@@ -128,7 +112,7 @@ function refresh(){
 			title: obj.markers[i].text
 			});
 			  
-			infobubble(marker, i);			  
+			infobubble(marker, i,obj.markers[i]);			  
 			 
 			  
 			}
@@ -138,12 +122,12 @@ function refresh(){
     
 }
 
-function infobubble(marker, i) {
+function infobubble(marker, i, obj) {
 	  var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
       '<a href=""><h1 id="firstHeading" class="firstHeading">UserName</h1></a>'+
-      '<img width="70px" src=https://1.gravatar.com/avatar/1ee26eb5d1e53a3b9c5e45693c68ae1f?d=https%3A%2F%2Fidenticons.github.com%2Fe1895e3d1b333d255d3c801a228f8165.png&s=420"></img><div id="bodyContent">'+
+      '<img src="'+obj.img+'"></img><div id="bodyContent">'+
       '<p>This is where user <b>UserName</b>, will have his tweet appear. ' +
 		'</p>'+
       '</div>'+
