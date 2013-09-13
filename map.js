@@ -1,5 +1,7 @@
 var geocoder;
 var map;
+
+
 function initialize() {
 	geocoder = new google.maps.Geocoder();
 
@@ -18,7 +20,10 @@ for (var i = 0; i < 2; i++) {
 	map: map,
 	title: 'You\'re Here' + i
 	});
+	
+	infobubble(marker, i)
 
+/*
 	// process multiple info windows
 	(function(marker, i) {
 	// add click event
@@ -29,6 +34,8 @@ for (var i = 0; i < 2; i++) {
 	infowindow.open(map, marker);
 	});
 	})(marker, i);
+	* 
+	* */
 }
 /* some icons are listed here
  * 
@@ -92,7 +99,72 @@ function codeAddress() {
 	});
 }
 
+function refresh(){
+	
 
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "refresh.php", false );
+    xmlHttp.send( null );
+
+    if(xmlHttp.status == 200) {
+			//alert(xmlHttp.responseText);
+			
+			var json = xmlHttp.responseText;
+			var obj = JSON.parse(json);
+			//alert(obj.markers.length);
+			for (var i = 0; i < obj.markers.length; i++) {
+			  //alert(obj.markers[i].text);
+			  // Do something with element i.
+			  
+			var x=obj.markers[i].geo.split(',')[0];
+			var y=obj.markers[i].geo.split(',')[1];
+			//alert("'"+x+"|"+y+"'");
+			
+			var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(x,y),
+			map: map,
+			title: obj.markers[i].text
+			});
+			  
+			infobubble(marker, i);			  
+			 
+			  
+			}
+
+
+    }
+    
+}
+
+function infobubble(marker, i) {
+	  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<a href=""><h1 id="firstHeading" class="firstHeading">UserName</h1></a>'+
+      '<img width="70px" src=https://1.gravatar.com/avatar/1ee26eb5d1e53a3b9c5e45693c68ae1f?d=https%3A%2F%2Fidenticons.github.com%2Fe1895e3d1b333d255d3c801a228f8165.png&s=420"></img><div id="bodyContent">'+
+      '<p>This is where user <b>UserName</b>, will have his tweet appear. ' +
+		'</p>'+
+      '</div>'+
+      '</div>';
+
+	
+	
+	
+	
+	// add click event
+	google.maps.event.addListener(marker, 'click', function() {
+	infowindow = new google.maps.InfoWindow({
+	content: contentString,
+	arrowStyle: 2,
+	arrowSize: 10,
+	ShadowStyle: 1
+	
+	});
+	infowindow.open(map, marker);
+	});
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
