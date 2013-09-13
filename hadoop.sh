@@ -15,7 +15,7 @@ sudo sed -i 's|-Xmx128m|-Xmx1024m|' /etc/hadoop/hadoop-env.sh
 
 # get examples from tar
 tar -xf hadoop-1.2.1.tar.gz
-cp hadoop-1.2.1/hadoop-examples-1.2.1.jar ..
+cp hadoop-1.2.1/hadoop-examples-1.2.1.jar .
 
 
 mkdir input
