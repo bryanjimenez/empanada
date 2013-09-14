@@ -18,6 +18,7 @@ function initialize() {
 	var marker = new google.maps.Marker({
 	position: new google.maps.LatLng(25.75896,-80.37402),
 	map: map,
+	icon: 'http://maps.google.com/mapfiles/arrow.png',
 	title: 'You\'re Here'
 	});
 	
@@ -126,16 +127,12 @@ function infobubble(marker, i, obj) {
 	  var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
-      '<a href=""><h1 id="firstHeading" class="firstHeading">UserName</h1></a>'+
-      '<img src="'+obj.img+'"></img><div id="bodyContent">'+
-      '<p>This is where user <b>UserName</b>, will have his tweet appear. ' +
+      '<a href=""><h1 id="firstHeading" class="firstHeading">'+obj.user+'</h1></a>'+
+      '<img src="'+obj.img+'" width="100px"></img><div id="bodyContent">'+
+      '<p>'+obj.text +
 		'</p>'+
       '</div>'+
       '</div>';
-
-	
-	
-	
 	
 	// add click event
 	google.maps.event.addListener(marker, 'click', function() {
