@@ -128,7 +128,7 @@ function infobubble(marker, i, obj) {
       '<div id="siteNotice">'+
       '</div>'+
       '<a href=""><h1 id="firstHeading" class="firstHeading">'+obj.user+'</h1></a>'+
-      '<img src="'+obj.img+'" width="100px"></img><div id="bodyContent">'+
+      '<img name="userpic" src="'+obj.img+'"></img><div id="bodyContent">'+
       '<p>'+obj.text +
 		'</p>'+
       '</div>'+
