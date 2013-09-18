@@ -1,6 +1,11 @@
 var geocoder;
 var map;
 var lat=25.75906,lon=-80.37388;
+var mypos;
+
+var findme= document.getElementById('findme');
+var legend;
+
 
 /*
  * http://www.w3schools.com/html/html5_geolocation.asp
@@ -16,16 +21,17 @@ function getLocation()
 	
 function showPosition(position)
 {
-	var lat=position.coords.latitude;
-	var lon=position.coords.longitude;
-	var mypos = new google.maps.LatLng(lat, lon);
+	lat=position.coords.latitude;
+	lon=position.coords.longitude;
+	mypos = new google.maps.LatLng(lat, lon);
+	//alert(mypos);
 	
 	map.setCenter(mypos);	
 	var marker = new google.maps.Marker({
-	position: mypos,
-	map: map,
-	icon: 'http://maps.google.com/mapfiles/arrow.png',
-	title: 'You\'re Here'
+		position: mypos,
+		map: map,
+		icon: 'http://maps.google.com/mapfiles/arrow.png',
+		title: 'You\'re Here'
 	});
 }
 
@@ -33,12 +39,21 @@ function showPosition(position)
 function initialize() {
 	geocoder = new google.maps.Geocoder();
 	
+	findme = document.getElementById('findme');
+	legend = document.getElementById('legend');
+	
+	//window.setInterval(function() { window.scrollTo(0,1);}, 2000); 
+
 	getLocation();
+	
+	findme.onclick=	function() {map.setCenter(mypos);};
+
 
 	var mapOptions = {
 		zoom: 18,
 		center: new google.maps.LatLng(lat,lon),
-		mapTypeId: google.maps.MapTypeId.ROADMAP
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		disableDefaultUI: true
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 	mapOptions);
@@ -73,7 +88,6 @@ var icons = {
 	}
 };
 
-var legend = document.getElementById('legend');
 for (var key in icons) {
 	var type = icons[key];
 	var name = type.name;
@@ -83,8 +97,11 @@ for (var key in icons) {
 	legend.appendChild(div);
 }
 
-map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
+
+
+map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
 }
 /* geocoding
  * 
@@ -172,7 +189,9 @@ function infobubble(marker, i, obj) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-var legend = document.getElementById('legend');
+
+
+
 /*
 for (var style in styles) {
 	var name = style.name;

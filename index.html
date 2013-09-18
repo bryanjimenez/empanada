@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="assets/ico/favicon.png">
@@ -32,10 +32,31 @@
 		background: white;
 		padding: 10px;
 		margin: 10px;
+		border: 1px solid black;
+
 	}
 	img[name=userpic] {    
 		width: 100px;
 	}
+	#findme {
+		background: white;
+		padding: 10px;
+		margin: 10px;
+		background-image: url(map-arrow.png); 
+		background-size: contain;
+		height: 40px; 
+		width: 40px; 
+		border: 1px solid black;
+	}
+	
+	@media only screen and (-moz-min-device-pixel-ratio: 2),
+       only screen and (-o-min-device-pixel-ratio: 2/1),
+       only screen and (-webkit-min-device-pixel-ratio: 2),
+       only screen and (min-device-pixel-ratio: 2) {
+		  
+	  }
+  
+	
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 	<script src="map.js" type="text/javascript"></script>
@@ -74,6 +95,8 @@
 	
 	<div id="map-canvas"></div>
 	<div id="legend"><center>Legend</center><br/></div>
+	<div id="findme"></div>
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
