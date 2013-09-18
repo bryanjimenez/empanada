@@ -1,27 +1,46 @@
 var geocoder;
 var map;
+var lat=25.75906,lon=-80.37388;
+
+function getLocation()
+{
+	if (navigator.geolocation)	{
+		navigator.geolocation.getCurrentPosition(showPosition);
+	}
+	else{alert("Geolocation is not supported by this browser.");}
+}
+	
+function showPosition(position)
+{
+	var lat=position.coords.latitude;
+	var lon=position.coords.longitude;
+	var mypos = new google.maps.LatLng(lat, lon);
+	
+	map.setCenter(mypos);	
+	var marker = new google.maps.Marker({
+	position: mypos,
+	map: map,
+	icon: 'http://maps.google.com/mapfiles/arrow.png',
+	title: 'You\'re Here'
+	});
+}
 
 
 function initialize() {
 	geocoder = new google.maps.Geocoder();
+	
+	getLocation();
 
 	var mapOptions = {
 		zoom: 18,
-		center: new google.maps.LatLng(25.75906,-80.37388),
+		center: new google.maps.LatLng(lat,lon),
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 	mapOptions);
 
 
-	// init markers
-	var marker = new google.maps.Marker({
-	position: new google.maps.LatLng(25.75896,-80.37402),
-	map: map,
-	icon: 'http://maps.google.com/mapfiles/arrow.png',
-	title: 'You\'re Here'
-	});
-	
+
 /* some icons are listed here
  * 
  * http://kml4earth.appspot.com/icons.html
@@ -77,7 +96,7 @@ function codeAddress() {
 			map: map,
 			position: results[0].geometry.location
 			});
-			//alert(results[0].geometry.location);
+			alert(results[0].geometry.location);
 		} else {
 			alert("Geocode was not successful for the following reason: " + status);
 		}
@@ -150,11 +169,12 @@ function infobubble(marker, i, obj) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 var legend = document.getElementById('legend');
+/*
 for (var style in styles) {
-var name = style.name;
-var icon = style.icon;
-var div = document.createElement('div');
-div.innerHTML = '<img src="' + icon + 'width="50%"' +'> ' + name;
-legend.appendChild(div);
+	var name = style.name;
+	var icon = style.icon;
+	var div = document.createElement('div');
+	div.innerHTML = '<img src="' + icon + 'width="50%"' +'> ' + name;
+	legend.appendChild(div);
 }
-
+*/
