@@ -2,6 +2,10 @@ var geocoder;
 var map;
 var lat=25.75906,lon=-80.37388;
 
+/*
+ * http://www.w3schools.com/html/html5_geolocation.asp
+ */
+
 function getLocation()
 {
 	if (navigator.geolocation)	{
