@@ -5,6 +5,7 @@ var mypos;
 
 var findme= document.getElementById('findme');
 var legend;
+var infowindow=null;
 
 
 /*
@@ -37,12 +38,13 @@ function showPosition(position)
 
 
 function initialize() {
+	//window.setInterval(function() { alert(window.scrollTo(0,1));}, 2000); 
+	
 	geocoder = new google.maps.Geocoder();
 	
 	findme = document.getElementById('findme');
 	legend = document.getElementById('legend');
 	
-	//window.setInterval(function() { window.scrollTo(0,1);}, 2000); 
 
 	getLocation();
 	
@@ -102,6 +104,7 @@ for (var key in icons) {
 
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
+
 }
 /* geocoding
  * 
@@ -139,21 +142,22 @@ function refresh(){
 			var json = xmlHttp.responseText;
 			var obj = JSON.parse(json);
 			//alert(obj.markers.length);
-			for (var i = 0; i < obj.markers.length; i++) {
-			  //alert(obj.markers[i].text);
-			  // Do something with element i.
-			  
-			var x=obj.markers[i].geo.split(',')[0];
-			var y=obj.markers[i].geo.split(',')[1];
-			//alert("'"+x+"|"+y+"'");
 			
-			var marker = new google.maps.Marker({
-			position: new google.maps.LatLng(x,y),
-			map: map,
-			title: obj.markers[i].text
-			});
-			  
-			infobubble(marker, i,obj.markers[i]);			  
+			for (var i = 0; i < obj.markers.length; i++) {
+				//alert(obj.markers[i].text);
+				// Do something with element i.
+
+				var x=obj.markers[i].geo.split(',')[0];
+				var y=obj.markers[i].geo.split(',')[1];
+				//alert("'"+x+"|"+y+"'");
+
+				var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(x,y),
+				map: map,
+				title: obj.markers[i].text
+				});
+
+				infobubble(marker, i,obj.markers[i]);			  
 			 
 			  
 			}
@@ -176,6 +180,9 @@ function infobubble(marker, i, obj) {
 	
 	// add click event
 	google.maps.event.addListener(marker, 'click', function() {
+	if (infowindow)
+        infowindow.close();
+    		
 	infowindow = new google.maps.InfoWindow({
 	content: contentString,
 	arrowStyle: 2,
