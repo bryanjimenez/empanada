@@ -15,28 +15,31 @@ APP_KEY = config.get('twitter', 'APP_KEY')
 APP_SECRET = config.get('twitter', 'APP_SECRET')
 OAUTH_TOKEN = config.get('twitter', 'OAUTH_TOKEN')
 OAUTH_TOKEN_SECRET = config.get('twitter', 'OAUTH_TOKEN_SECRET')
-LOG_FREQ=10
+LINE_MAX=1000
+DATE_FORMAT='%Y%m%d_%H:%M:%S'
 
-lasttime=datetime.now()
+
+tstamp= datetime.now().strftime(DATE_FORMAT)
+linecount=0
 
 class MyStreamer(TwythonStreamer):
 	def on_success(self, data):
 		try:
 			if 'text' in data:
 
-				global lasttime
+				global tstamp
+				global linecount
+				
 				print data['user']['screen_name'].encode('utf-8') + ": " +data['text'].encode('utf-8')
 
-				nowtime=datetime.now()
 				
-				if(nowtime.minute-lasttime.minute<LOG_FREQ):
-					stamp=lasttime.strftime("%Y%m%d_%H%M").lstrip("0")
+				if(linecount<LINE_MAX):
+					linecount+=1
 				else:
-					lasttime=datetime.now()
-					stamp=nowtime.strftime("%Y%m%d_%H%M").lstrip("0")
+					linecount=0
+					tstamp= datetime.now().strftime(DATE_FORMAT)
 
-
-				with open('tweets/'+stamp+'.txt', 'a') as outfile:
+				with open('tweets/'+tstamp+'.txt', 'a') as outfile:
 					json.dump(data, outfile)
 					outfile.write('\n')
 					
