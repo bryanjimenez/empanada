@@ -152,6 +152,9 @@ function refresh(){
 				//alert(obj.markers[i].text);
 				// Do something with element i.
 
+
+//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+
 				var x=obj.markers[i].geo.split(',')[0];
 				var y=obj.markers[i].geo.split(',')[1];
 				//alert("'"+x+"|"+y+"'");
@@ -173,6 +176,9 @@ function refresh(){
 }
 
 function infobubble(marker, i, obj) {
+	
+	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
+	
 	  var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
