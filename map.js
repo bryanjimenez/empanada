@@ -2,9 +2,12 @@ var geocoder;
 var map;
 var lat=25.75906,lon=-80.37388;
 var mypos;
+var mymarker;
+var interval=null;
 
-var findme= document.getElementById('findme');
-var legend;
+var findme
+var	legend
+
 var infowindow=null;
 
 
@@ -32,10 +35,13 @@ function showPosition(position)
 	mypos = new google.maps.LatLng(lat, lon);
 	//alert(mypos);
 	
-	map.setCenter(mypos);	
-	var marker = new google.maps.Marker({
+	map.setCenter(mypos);
+	if(mymarker)
+		mymarker.setMap(null);
+	mymarker = new google.maps.Marker({
 		position: mypos,
 		map: map,
+		animation: google.maps.Animation.BOUNCE,
 		icon: 'http://maps.google.com/mapfiles/arrow.png',
 		title: 'You\'re Here'
 	});
@@ -45,15 +51,14 @@ function showPosition(position)
 function initialize() {
 	//window.setInterval(function() { alert(window.scrollTo(0,1));}, 2000); 
 	
-	geocoder = new google.maps.Geocoder();
-	
+	//window.setInterval(function() { getLocation(); }, 2000); 
+
 	findme = document.getElementById('findme');
 	legend = document.getElementById('legend');
 	
-
-	getLocation();
 	
-	findme.onclick=	function() {map.setCenter(mypos);};
+	geocoder = new google.maps.Geocoder();
+	
 
 
 	var mapOptions = {
@@ -100,15 +105,49 @@ for (var key in icons) {
 	var name = type.name;
 	var icon = type.icon;
 	var div = document.createElement('div');
-	div.innerHTML = '<img src="' + icon + '"> ' + name;
+	div.innerHTML = '<img alt="'+name+'" title="'+name+'" src="' + icon + '"> ';
 	legend.appendChild(div);
 }
 
 
 
+	//getLocation();
+	//map.setCenter(mypos);
+	findme.onclick=	function() {
+		
+		// tracking mode OFF
+		if(interval){
+			findme.style.border='solid black 1px';
+			window.clearInterval(interval);
+			interval=null;
+			disableMovement(false) 	
+		}
+		// tracking mode ON
+		else{
+			disableMovement(true)
+			findme.style.border='solid red 1px';
+			interval=window.setInterval(function() { getLocation(); }, 3000); 	
+		}
+		
+	};
+	legend.onclick=function(){
+		
+		if(legend.style.height=='20px')
+			legend.style.height='';		
+		
+		else
+			legend.style.height='20px';
+
+		
+	}
+
+
 
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
+
+//window.setInterval(function() { getLocation();}, 2000); 
+
 
 }
 /* geocoding
@@ -162,6 +201,7 @@ function refresh(){
 				var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(x,y),
 				map: map,
+				animation: google.maps.Animation.DROP,
 				title: obj.markers[i].text
 				});
 
@@ -180,14 +220,16 @@ function infobubble(marker, i, obj) {
 	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
 	
 	  var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<a href=""><h1 id="firstHeading" class="firstHeading">'+obj.user+'</h1></a>'+
-      '<img name="userpic" src="'+obj.img+'"></img><div id="bodyContent">'+
-      '<p>'+obj.text +
+		'<div id="siteNotice">'+
+		'</div>'+
+		'<a href=""><h1 id="firstHeading" class="firstHeading">'+obj.user+'</h1></a>'+
+		'<img name="userpic" src="'+obj.img+'"></img><div id="bodyContent">'+
+		'<p>'+obj.text +
 		'</p>'+
-      '</div>'+
-      '</div>';
+		'<p>+/-'+
+		'</p>'+
+		'</div>'+
+		'</div>';
 	
 	// add click event
 	google.maps.event.addListener(marker, 'click', function() {
@@ -207,8 +249,25 @@ function infobubble(marker, i, obj) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-
-
+function disableMovement(disable) {
+    var mapOptions;
+    if (disable) {
+        mapOptions = {
+            draggable: false,
+            //scrollwheel: false,
+            disableDoubleClickZoom: true,
+            //zoomControl: false
+        };
+    } else {
+        mapOptions = {
+            draggable: true,
+            //scrollwheel: true,
+            disableDoubleClickZoom: false,
+            //zoomControl: true
+        };
+    }
+    map.setOptions(mapOptions);
+}
 
 /*
 for (var style in styles) {
