@@ -16,7 +16,7 @@ APP_SECRET = config.get('twitter', 'APP_SECRET')
 OAUTH_TOKEN = config.get('twitter', 'OAUTH_TOKEN')
 OAUTH_TOKEN_SECRET = config.get('twitter', 'OAUTH_TOKEN_SECRET')
 LINE_MAX=1000
-DATE_FORMAT='%Y%m%d_%H:%M:%S'
+DATE_FORMAT='%Y%m%d_%H%M%S'
 
 
 tstamp= datetime.now().strftime(DATE_FORMAT)
