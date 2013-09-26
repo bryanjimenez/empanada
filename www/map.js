@@ -6,7 +6,7 @@ var mymarker;
 var interval=null;
 
 var findme
-var	legend
+var	 legend
 
 var infowindow=null;
 
@@ -16,16 +16,21 @@ var infowindow=null;
  * http://code.google.com/apis/ajax/playground/
  */
 
+function dropPinMe(){
+	
+	map.setCenter(mypos);
 
-/*
- * http://www.w3schools.com/html/html5_geolocation.asp
- */
-function getLocation()
-{
-	if (navigator.geolocation)	{
-		navigator.geolocation.getCurrentPosition(showPosition);
-	}
-	else{alert("Geolocation is not supported by this browser.");}
+	if(mymarker)
+		mymarker.setMap(null);
+	
+	mymarker = new google.maps.Marker({
+		position: mypos,
+		map: map,
+		animation: google.maps.Animation.BOUNCE,
+		icon: 'http://maps.google.com/mapfiles/arrow.png',
+		title: 'You\'re Here'
+	});
+	
 }
 	
 function showPosition(position)
@@ -35,16 +40,7 @@ function showPosition(position)
 	mypos = new google.maps.LatLng(lat, lon);
 	//alert(mypos);
 	
-	map.setCenter(mypos);
-	if(mymarker)
-		mymarker.setMap(null);
-	mymarker = new google.maps.Marker({
-		position: mypos,
-		map: map,
-		animation: google.maps.Animation.BOUNCE,
-		icon: 'http://maps.google.com/mapfiles/arrow.png',
-		title: 'You\'re Here'
-	});
+	dropPinMe();
 }
 
 
@@ -146,10 +142,25 @@ for (var key in icons) {
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
 
-//window.setInterval(function() { getLocation();}, 2000); 
-
+google.maps.event.addListener(map, 'click', function() {
+	//close infobubble if we click on  map
+	if (infowindow)infowindow.close();
+});
 
 }
+
+
+/*
+ * http://www.w3schools.com/html/html5_geolocation.asp
+ */
+function getLocation()
+{
+	if (navigator.geolocation)	{
+		navigator.geolocation.getCurrentPosition(showPosition);
+	}
+	else{alert("Geolocation is not supported by this browser.");}
+}
+
 /* geocoding
  * 
  * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
@@ -159,12 +170,18 @@ function codeAddress() {
 	var address = document.getElementById("zip").value;
 	geocoder.geocode( { 'address': address}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			map.setCenter(results[0].geometry.location);
+			
+			mypos=results[0].geometry.location;
+			
+			
+			dropPinMe();	
+			
+			/*
 			var marker = new google.maps.Marker({
 			map: map,
 			position: results[0].geometry.location
-			});
-			alert(results[0].geometry.location);
+			});*/
+			//alert(results[0].geometry.location);
 		} else {
 			alert("Geocode was not successful for the following reason: " + status);
 		}
@@ -190,15 +207,19 @@ function refresh(){
 				var tweet = tweets.t[i];
 				var user=tweet.user.screen_name;
 				var pic=tweet.user.profile_image_url;
-				var text=tweet.text
+				var text=tweet.text;
 				var follow=tweet.user.followers_count;
+				var time=tweet.created_at;
+
 				
-//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+				
+				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
 				if(tweet.geo){
 					var x=tweet.geo.coordinates[0];
 					var y=tweet.geo.coordinates[1];
 				}
 				else{
+					//TODO we need to come up with something better here
 					var x=-81.68738214;
 					var y=27.96855823;
 				}
@@ -212,14 +233,14 @@ function refresh(){
 				title: text
 				});
 
-				infobubble(marker, user, pic, text, follow);			  
+				infobubble(marker, user, pic, text, follow, time);			  
 			}
 			
     }
     
 }
 
-function infobubble(marker, user, pic, text, follow) {
+function infobubble(marker, user, pic, text, follow, time) {
 	
 	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
 	
@@ -230,21 +251,22 @@ function infobubble(marker, user, pic, text, follow) {
 		'<img name="userpic" src="'+pic+'"></img><div id="bodyContent">'+
 		'<p style="max-width:200px">'+text +
 		'</p>'+
-		'<p>+/-'+follow+
+		'<p>+/-'+follow+' '+time+
 		'</p>'+
 		'</div>'+
 		'</div>';
 	
 	// add click event
 	google.maps.event.addListener(marker, 'click', function() {
-	if (infowindow)
-        infowindow.close();
+
+	//close infobubble if we click on other bubble
+	if (infowindow) infowindow.close();
     		
 	infowindow = new google.maps.InfoWindow({
-	content: contentString,
-	arrowStyle: 2,
-	arrowSize: 10,
-	ShadowStyle: 1
+		content: contentString,
+		arrowStyle: 2,
+		arrowSize: 10,
+		ShadowStyle: 1
 	
 	});
 	infowindow.open(map, marker);
@@ -252,6 +274,7 @@ function infobubble(marker, user, pic, text, follow) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 function disableMovement(disable) {
     var mapOptions;
