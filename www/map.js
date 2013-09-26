@@ -191,7 +191,7 @@ function refresh(){
 				var user=tweet.user.screen_name;
 				var pic=tweet.user.profile_image_url;
 				var text=tweet.text
-				var follow=tweet.followers_count;
+				var follow=tweet.user.followers_count;
 				
 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
 				if(tweet.geo){
