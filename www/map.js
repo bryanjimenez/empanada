@@ -210,6 +210,7 @@ function refresh(){
 				var text=tweet.text;
 				var follow=tweet.user.followers_count;
 				var time=tweet.created_at;
+
 				
 				
 				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
