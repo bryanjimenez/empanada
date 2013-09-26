@@ -226,9 +226,9 @@ function infobubble(marker, user, pic, text, follow) {
 	  var contentString = '<div id="content">'+
 		'<div id="siteNotice">'+
 		'</div>'+
-		'<a href="https://twitter.com/'+user+'"><h1 id="firstHeading" class="firstHeading">'+user+'</h1></a>'+
+		'<a href="https://twitter.com/'+user+'"><h3 id="firstHeading" class="firstHeading">'+user+'</h3></a>'+
 		'<img name="userpic" src="'+pic+'"></img><div id="bodyContent">'+
-		'<p>'+text +
+		'<p style="max-width:200px">'+text +
 		'</p>'+
 		'<p>+/-'+follow+
 		'</p>'+
