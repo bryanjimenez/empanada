@@ -12,7 +12,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.hadoop.examples;
 
 import java.io.IOException;
@@ -43,82 +42,82 @@ import org.json.simple.parser.JSONParser;
  * http://www.mkyong.com/java/json-simple-example-read-and-write-json/
  * */
 
-
 public class WordCount {
 
-  public static class TokenizerMapper 
-       extends Mapper<Object, Text, Text, IntWritable>{
-    
-    private final static IntWritable one = new IntWritable(1);
-    private Text word = new Text();
-      
-    public void map(Object key, Text value, Context context
-                    ) throws IOException, InterruptedException {
-						
-						
-	/*JSON*/
-	JSONParser parser = new JSONParser();
-		
-	try{
-		Object obj = parser.parse(value.toString());
-		
-		JSONObject jsonObject = (JSONObject) obj;
- 
-		String tweet = (String) jsonObject.get("text");
-		//System.out.println(tweet);
-	/*JSON*/
-			
-      //StringTokenizer itr = new StringTokenizer(value.toString()," \n\t\r\f,.:?/[]\'");
-      StringTokenizer itr = new StringTokenizer(tweet," \n\t\r\f,.:?/[]\'");
-      while (itr.hasMoreTokens()) {
-        word.set(itr.nextToken());
-        context.write(word, one);
-      }
-	
+	public static class TokenizerMapper extends
+			Mapper<Object, Text, Text, Text> {
 
-	}
-	catch(Exception e){
-		e.printStackTrace();	
-	}
-	
-						
-    }
-  }
-  
-  public static class IntSumReducer 
-       extends Reducer<Text,IntWritable,Text,IntWritable> {
-    private IntWritable result = new IntWritable();
+		private final static IntWritable one = new IntWritable(1);
+		private Text ftweet = new Text();
+		private Text word = new Text();
 
-    public void reduce(Text key, Iterable<IntWritable> values, 
-                       Context context
-                       ) throws IOException, InterruptedException {
-      int sum = 0;
-      for (IntWritable val : values) {
-        sum += val.get();
-      }
-	if(sum>4){
-      		result.set(sum);
-      		context.write(key, result);
-	}
-    }
-  }
+		public void map(Object key, Text value, Context context)
+				throws IOException, InterruptedException {
 
-  public static void main(String[] args) throws Exception {
-    Configuration conf = new Configuration();
-    String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-    if (otherArgs.length != 2) {
-      System.err.println("Usage: wordcount <in> <out>");
-      System.exit(2);
-    }
-    Job job = new Job(conf, "word count");
-    job.setJarByClass(WordCount.class);
-    job.setMapperClass(TokenizerMapper.class);
-    job.setCombinerClass(IntSumReducer.class);
-    job.setReducerClass(IntSumReducer.class);
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
-  }
+			/* JSON */
+			JSONParser parser = new JSONParser();
+
+			try {
+				ftweet.set(value.toString());
+				Object obj = parser.parse(value.toString());
+
+				JSONObject jsonObject = (JSONObject) obj;
+
+				String tweet = (String) jsonObject.get("text");
+				// System.out.println(tweet);
+				/* JSON */
+
+				// StringTokenizer itr = new
+				// StringTokenizer(value.toString()," \n\t\r\f,.:?/[]\'");
+				StringTokenizer itr = new StringTokenizer(tweet.toLowerCase(),
+						" \n\t\r\f,.:?/[]\'\"");
+				while (itr.hasMoreTokens()) {
+					String tok = itr.nextToken();
+					if (tok.equals("time")) {
+						word.set(tok);
+						context.write(word, ftweet);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static class IntSumReducer extends
+			Reducer<Text, IntWritable, Text, IntWritable> {
+		private IntWritable result = new IntWritable();
+
+		public void reduce(Text key, Iterable<IntWritable> values,
+				Context context) throws IOException, InterruptedException {
+			int sum = 0;
+			for (IntWritable val : values) {
+				sum += val.get();
+			}
+			if (sum > 4) {
+				result.set(sum);
+				context.write(key, result);
+			}
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		String[] otherArgs = new GenericOptionsParser(conf, args)
+				.getRemainingArgs();
+		if (otherArgs.length != 2) {
+			System.err.println("Usage: wordcount <in> <out>");
+			System.exit(2);
+		}
+		Job job = new Job(conf, "word count");
+		job.setJarByClass(WordCount.class);
+		job.setMapperClass(TokenizerMapper.class);
+		//job.setCombinerClass(IntSumReducer.class);
+		//job.setReducerClass(IntSumReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
 }
