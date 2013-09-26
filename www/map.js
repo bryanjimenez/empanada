@@ -62,7 +62,7 @@ function initialize() {
 
 
 	var mapOptions = {
-		zoom: 18,
+		zoom: 7,
 		center: new google.maps.LatLng(lat,lon),
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		disableDefaultUI: true
@@ -183,50 +183,54 @@ function refresh(){
     if(xmlHttp.status == 200) {
 			//alert(xmlHttp.responseText);
 			
-			var json = xmlHttp.responseText;
-			var obj = JSON.parse(json);
-			//alert(obj.markers.length);
+			var tweets = JSON.parse(xmlHttp.responseText);
+			//alert(tweets.t[0].text);
 			
-			for (var i = 0; i < obj.markers.length; i++) {
-				//alert(obj.markers[i].text);
-				// Do something with element i.
-
-
+			for (var i in tweets.t) {
+				var tweet = tweets.t[i];
+				var user=tweet.user.screen_name;
+				var pic=tweet.user.profile_image_url;
+				var text=tweet.text
+				var follow=tweet.followers_count;
+				
 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
-
-				var x=obj.markers[i].geo.split(',')[0];
-				var y=obj.markers[i].geo.split(',')[1];
+				if(tweet.geo){
+					var x=tweet.geo.coordinates[0];
+					var y=tweet.geo.coordinates[1];
+				}
+				else{
+					var x=-81.68738214;
+					var y=27.96855823;
+				}
+				
 				//alert("'"+x+"|"+y+"'");
 
 				var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(x,y),
 				map: map,
 				animation: google.maps.Animation.DROP,
-				title: obj.markers[i].text
+				title: text
 				});
 
-				infobubble(marker, i,obj.markers[i]);			  
-			 
-			  
+				infobubble(marker, user, pic, text, follow);			  
 			}
-
-
+			
     }
     
 }
 
-function infobubble(marker, i, obj) {
+function infobubble(marker, user, pic, text, follow) {
 	
 	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
 	
 	  var contentString = '<div id="content">'+
 		'<div id="siteNotice">'+
 		'</div>'+
-		'<a href=""><h1 id="firstHeading" class="firstHeading">'+obj.user+'</h1></a>'+
-		'<img name="userpic" src="'+obj.img+'"></img><div id="bodyContent">'+
-		'<p>'+obj.text +
+		'<a href="https://twitter.com/'+user+'"><h1 id="firstHeading" class="firstHeading">'+user+'</h1></a>'+
+		'<img name="userpic" src="'+pic+'"></img><div id="bodyContent">'+
+		'<p>'+text +
 		'</p>'+
-		'<p>+/-'+
+		'<p>+/-'+follow+
 		'</p>'+
 		'</div>'+
 		'</div>';
