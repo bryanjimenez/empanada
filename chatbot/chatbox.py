@@ -39,7 +39,8 @@ def Update_status_with(oauth, message):
 def Streamer():
 	oauth = get_oauthentication()
 	stream = MyStreamer(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
-	stream.statuses.filter(track='gas')
+	# stream.statuses.filter(track='gas')
+	stream.user()
 
 
 def test():
