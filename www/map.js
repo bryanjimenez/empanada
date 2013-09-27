@@ -55,8 +55,6 @@ function initialize() {
 	
 	geocoder = new google.maps.Geocoder();
 	
-
-
 	var mapOptions = {
 		zoom: 7,
 		center: new google.maps.LatLng(lat,lon),
@@ -132,11 +130,8 @@ for (var key in icons) {
 			legend.style.height='';		
 		
 		else
-			legend.style.height='20px';
-
-		
+			legend.style.height='20px';	
 	}
-
 
 
 map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
@@ -172,16 +167,7 @@ function codeAddress() {
 		if (status == google.maps.GeocoderStatus.OK) {
 			
 			mypos=results[0].geometry.location;
-			
-			
 			dropPinMe();	
-			
-			/*
-			var marker = new google.maps.Marker({
-			map: map,
-			position: results[0].geometry.location
-			});*/
-			//alert(results[0].geometry.location);
 		} else {
 			alert("Geocode was not successful for the following reason: " + status);
 		}
@@ -190,7 +176,6 @@ function codeAddress() {
 
 function refresh(){
 	
-
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
@@ -210,8 +195,6 @@ function refresh(){
 				var text=tweet.text;
 				var follow=tweet.user.followers_count;
 				var time=tweet.created_at;
-
-				
 				
 				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
 				if(tweet.geo){
@@ -223,9 +206,7 @@ function refresh(){
 					var x=-81.68738214;
 					var y=27.96855823;
 				}
-				
-				//alert("'"+x+"|"+y+"'");
-
+			
 				var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(x,y),
 				map: map,
@@ -234,26 +215,39 @@ function refresh(){
 				});
 
 				infobubble(marker, user, pic, text, follow, time);			  
-			}
-			
+			}		
     }
-    
 }
 
 function infobubble(marker, user, pic, text, follow, time) {
 	
 	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
-	
-	  var contentString = '<div id="content">'+
-		'<div id="siteNotice">'+
-		'</div>'+
-		'<a href="https://twitter.com/'+user+'"><h3 id="firstHeading" class="firstHeading">'+user+'</h3></a>'+
-		'<img name="userpic" src="'+pic+'"></img><div id="bodyContent">'+
-		'<p style="max-width:200px">'+text +
-		'</p>'+
-		'<p>+/-'+follow+' '+time+
-		'</p>'+
-		'</div>'+
+	  var d = new Date(time);
+	  var date = d.getMonth()+1+"/"+d.getDay()+"/"+d.getFullYear();
+	  
+	  var contentString = ''+
+		'<div id="content" style="width:304px; height:176px;">'+
+			'<div id="siteNotice">'+
+					'<div style="float:left;border:0px solid blue;">'+
+						'<a href="https://twitter.com/'+user+'"><h4 id="firstHeading" class="firstHeading">'+user+'</h4></a>'+
+					'</div>'+
+					'<div style="float:right;border:0px solid red;width=50%;">'+
+						'<p>+/-'+follow+'</p>'+
+					'</div>'+
+			'</div>'+
+			'<div id="left" style="float:center;border:0px solid green;width:100%;">'+
+			'</div>'+
+			'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">'+
+				'<div style="float:left;border:0px solid blue;width:204px;">'+
+					'<p style="max-width:200px">'+text +'</p>'+
+				'</div>'+
+				'<div style="float:right;border:0px solid red;width=100%;height=100%;">'+
+					'<img name="userpic" src="'+pic+'"></img>'+
+				'</div>'+
+			'</div>'+
+			'<div id="footer" style="float:right;">'+
+				'<p>'+date+'</p>'+
+			'</div>'+
 		'</div>';
 	
 	// add click event
