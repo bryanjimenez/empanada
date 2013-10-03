@@ -11,7 +11,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 
 //Results were sent back
-$file_handle = fopen("part-r-00000", "r");
+$file_handle = fopen("result.txt", "r");
 $tweets = array();
 
 //http://stackoverflow.com/questions/9133024/www-data-permissions
