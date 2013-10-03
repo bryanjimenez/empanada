@@ -13,6 +13,18 @@ var infowindow=null;
 
 
 
+function User (type) {
+    this.type = type;
+    this.color = "red";
+    this.getInfo = function() {
+        return this.color + ' ' + this.type + ' apple';
+    };
+}
+
+
+
+
+
 /* some icons are listed here
  * 
  * http://kml4earth.appspot.com/icons.html
@@ -54,6 +66,11 @@ var icons = {
 		icon: iconBase + 'gas_stations_maps.png',
 		shadow: iconBase + 'gas_stations_maps.shadow.png'
 	},
+	traffic: {
+		name: 'Traffic',
+		icon: iconBase + 'triangle_maps.png',
+		shadow: iconBase + 'triangle_maps.shadow.png'
+	},
 	info: {
 		name: 'Info',
 		icon: iconBase + 'info_maps.png',
@@ -66,6 +83,42 @@ var icons = {
  * Great place to test google api code
  * http://code.google.com/apis/ajax/playground/
  */
+
+/*
+ * http://www.w3schools.com/html/html5_geolocation.asp
+ */
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+/*  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+*/
+	lat=pos.coords.latitude;
+	lon=pos.coords.longitude;
+	mypos = new google.maps.LatLng(lat, lon);
+	//alert(mypos);
+	
+	dropPinMe();
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+	alert("Geolocation is not supported by this browser.");
+};
+
+
+
+
+
 
 function dropPinMe(){
 	
@@ -83,17 +136,6 @@ function dropPinMe(){
 	});
 	
 }
-	
-function showPosition(position)
-{
-	lat=position.coords.latitude;
-	lon=position.coords.longitude;
-	mypos = new google.maps.LatLng(lat, lon);
-	//alert(mypos);
-	
-	dropPinMe();
-}
-
 
 function initialize() {
 	//window.setInterval(function() { alert(window.scrollTo(0,1));}, 2000); 
@@ -127,10 +169,8 @@ for (var key in icons) {
 
 
 
-	//getLocation();
-	//map.setCenter(mypos);
 	findme.onclick=	function() {
-		
+		/*
 		// tracking mode OFF
 		if(interval){
 			findme.style.border='solid black 1px';
@@ -142,8 +182,13 @@ for (var key in icons) {
 		else{
 			disableMovement(true)
 			findme.style.border='solid red 1px';
-			interval=window.setInterval(function() { getLocation(); }, 3000); 	
+			//interval=window.setInterval(function() { getLocation(); }, 3000); 	
+			getLocation(); 	
+
 		}
+		*/
+
+		navigator.geolocation.getCurrentPosition(success, error, options);
 		
 	};
 	legend.onclick=function(){
@@ -164,19 +209,16 @@ google.maps.event.addListener(map, 'click', function() {
 	if (infowindow)infowindow.close();
 });
 
-}
-
 
 /*
- * http://www.w3schools.com/html/html5_geolocation.asp
- */
-function getLocation()
-{
-	if (navigator.geolocation)	{
-		navigator.geolocation.getCurrentPosition(showPosition);
-	}
-	else{alert("Geolocation is not supported by this browser.");}
+	getLocation();
+	map.setCenter(mypos);
+	*/
+
 }
+
+
+
 
 /* geocoding
  * 

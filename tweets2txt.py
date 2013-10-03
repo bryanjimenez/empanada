@@ -17,6 +17,7 @@ OAUTH_TOKEN = config.get('twitter', 'OAUTH_TOKEN')
 OAUTH_TOKEN_SECRET = config.get('twitter', 'OAUTH_TOKEN_SECRET')
 LINE_MAX=1000
 DATE_FORMAT='%Y%m%d_%H%M%S'
+PATH2LOG='hadoop/tweets/'
 
 
 tstamp= datetime.now().strftime(DATE_FORMAT)
@@ -39,7 +40,7 @@ class MyStreamer(TwythonStreamer):
 					linecount=0
 					tstamp= datetime.now().strftime(DATE_FORMAT)
 
-				with open('tweets/'+tstamp+'.txt', 'a') as outfile:
+				with open(PATH2LOG+tstamp+'.txt', 'a') as outfile:
 					json.dump(data, outfile)
 					outfile.write('\n')
 					
