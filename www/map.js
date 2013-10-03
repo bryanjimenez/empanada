@@ -6,9 +6,60 @@ var mymarker;
 var interval=null;
 
 var findme
-var	 legend
+var	legend
 
 var infowindow=null;
+
+
+
+
+/* some icons are listed here
+ * 
+ * http://kml4earth.appspot.com/icons.html
+ */
+var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+var icons = {
+	storm: {
+		name: 'Storm',
+		icon: iconBase + 'thunderstorm_maps.png',
+		shadow: iconBase + 'thunderstorm_maps.shadow.png'
+	},
+	fire: {
+		name: 'Fire',
+		icon: iconBase + 'firedept_maps.png',
+		shadow: iconBase + 'firedept_maps.shadow.png'
+	},
+	damage: {
+		name: 'Damage',
+		icon: iconBase + 'caution_maps.png',
+		shadow: iconBase + 'caution_maps.shadow.png'
+	},
+	flood: {
+		name: 'Flood',
+		icon: iconBase + 'water_maps.png',
+		shadow: iconBase + 'water_maps.shadow.png'
+	},
+		thunder: {
+		name: 'Thunder',
+		icon: iconBase + 'thunderstorm_maps.png',
+		shadow: iconBase + 'thunderstorm_maps.shadow.png'
+	},
+	shelter: {
+		name: 'Shelter',
+		icon: iconBase + 'ranger_station_maps.png',
+		shadow: iconBase + 'ranger_station_maps.shadow.png'
+	},
+	fuel: {
+		name: 'Fuel',
+		icon: iconBase + 'gas_stations_maps.png',
+		shadow: iconBase + 'gas_stations_maps.shadow.png'
+	},
+	info: {
+		name: 'Info',
+		icon: iconBase + 'info_maps.png',
+		shadow: iconBase + 'info_maps.shadow.png'
+	}
+};
 
 
 /*
@@ -64,35 +115,6 @@ function initialize() {
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 	mapOptions);
 
-
-
-/* some icons are listed here
- * 
- * http://kml4earth.appspot.com/icons.html
- */
-var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-var icons = {
-	storm: {
-		name: 'Storm',
-		icon: iconBase + 'thunderstorm_maps.png',
-		shadow: iconBase + 'thunderstorm_maps.shadow.png'
-	},
-	fire: {
-		name: 'Fire',
-		icon: iconBase + 'firedept_maps.png',
-		shadow: iconBase + 'firedept_maps.shadow.png'
-	},
-	damage: {
-		name: 'Damage',
-		icon: iconBase + 'caution_maps.png',
-		shadow: iconBase + 'caution_maps.shadow.png'
-	},
-	flood: {
-		name: 'Flood',
-		icon: iconBase + 'water_maps.png',
-		shadow: iconBase + 'water_maps.shadow.png'
-	}
-};
 
 for (var key in icons) {
 	var type = icons[key];
@@ -186,9 +208,10 @@ function refresh(){
 			//alert(xmlHttp.responseText);
 			
 			var tweets = JSON.parse(xmlHttp.responseText);
-			//alert(tweets.t[0].text);
+			//alert(tweets.f[0]);
 			
 			for (var i in tweets.t) {
+				var filter = tweets.f[i];
 				var tweet = tweets.t[i];
 				var user=tweet.user.screen_name;
 				var pic=tweet.user.profile_image_url;
@@ -210,6 +233,7 @@ function refresh(){
 				var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(x,y),
 				map: map,
+				icon: icons[filter].icon,
 				animation: google.maps.Animation.DROP,
 				title: text
 				});
@@ -239,7 +263,7 @@ function infobubble(marker, user, pic, text, follow, time) {
 			'</div>'+
 			'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">'+
 				'<div style="float:left;border:0px solid blue;width:204px;">'+
-					'<p style="max-width:200px">'+text +'</p>'+
+					'<p style="max-width:200px">'+text+'</p>'+
 				'</div>'+
 				'<div style="float:right;border:0px solid red;width=100%;height=100%;">'+
 					'<img name="userpic" src="'+pic+'"></img>'+
