@@ -237,6 +237,73 @@ function codeAddress() {
 		}
 	});
 }
+/* Thanks to
+ * http://www.fplmaps.com/
+ */
+function fpl(){
+	
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "StormFeedRestoreZoom2.json", false );
+    xmlHttp.send( null );
+
+    if(xmlHttp.status == 200) {
+			//alert(xmlHttp.responseText);
+			
+			var fpl = JSON.parse(xmlHttp.responseText);
+			//alert(tweets.f[0]);
+			
+			for (var i in fpl.outages) {
+				var filter = "info";
+				var outage = fpl.outages[i];
+				
+				if(!outage.status)
+					continue;
+					
+				var cause=outage.Cause;
+				var pic="";
+				var status=outage.status;
+				var reported="Reported "+outage.dateReported;
+				var updated="Updated "+outage.lastUpdated;
+
+
+				var x=outage.lat;
+				var y=outage.lng;
+
+			  var contentString = ''+
+				'<div id="content" style="width:304px; height:176px;">'+
+					'<div id="siteNotice">'+
+							'<div style="float:left;border:0px solid blue;">'+
+								'<h4 id="firstHeading" class="firstHeading">'+cause+'</h4>'+
+							'</div>'+
+							'<div style="float:right;border:0px solid red;width=50%;">'+
+							'</div>'+
+					'</div>'+
+					'<div id="left" style="float:center;border:0px solid green;width:100%;">'+
+					'</div>'+
+					'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">'+
+						'<div style="float:left;border:0px solid blue;width:100%;">'+
+							'<p style="max-width:300px">'+status+'</p>'+
+						'</div>'+
+					'</div>'+
+					'<div id="footer" style="float:right;">'+
+						'<p>'+reported+'<br/>'+updated+'</p>'+
+					'</div>'+
+				'</div>';
+			
+				var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(x,y),
+				map: map,
+				icon: icons[filter].icon,
+				animation: google.maps.Animation.DROP,
+				title: status
+				});
+
+				infobubble(marker, contentString);			  
+			}		
+    }
+}
 
 function refresh(){
 	
@@ -260,6 +327,35 @@ function refresh(){
 				var text=tweet.text;
 				var follow=tweet.user.followers_count;
 				var time=tweet.created_at;
+				var d = new Date(time);
+				var date = d.getMonth()+1+"/"+d.getDay()+"/"+d.getFullYear();
+
+			  var contentString = ''+
+				'<div id="content" style="width:304px; height:176px;">'+
+					'<div id="siteNotice">'+
+							'<div style="float:left;border:0px solid blue;">'+
+								'<a href="https://twitter.com/'+user+'"><h4 id="firstHeading" class="firstHeading">'+user+'</h4></a>'+
+							'</div>'+
+							'<div style="float:right;border:0px solid red;width=50%;">'+
+								'<p>+/-'+follow+'</p>'+
+							'</div>'+
+					'</div>'+
+					'<div id="left" style="float:center;border:0px solid green;width:100%;">'+
+					'</div>'+
+					'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">'+
+						'<div style="float:left;border:0px solid blue;width:204px;">'+
+							'<p style="max-width:200px">'+text+'</p>'+
+						'</div>'+
+						'<div style="float:right;border:0px solid red;width=100%;height=100%;">'+
+							'<img name="userpic" src="'+pic+'"></img>'+
+						'</div>'+
+					'</div>'+
+					'<div id="footer" style="float:right;">'+
+						'<p>'+date+'</p>'+
+					'</div>'+
+				'</div>';
+				
+				
 				
 				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
 				if(tweet.geo){
@@ -280,41 +376,12 @@ function refresh(){
 				title: text
 				});
 
-				infobubble(marker, user, pic, text, follow, time);			  
+				infobubble(marker, contentString);			  
 			}		
     }
 }
 
-function infobubble(marker, user, pic, text, follow, time) {
-	
-	//"profile_image_url_https": "https://si0.twimg.com/profile_images/378800000397149614/2474965717ccf1a5d796a364486dd36a_normal.jpeg"
-	  var d = new Date(time);
-	  var date = d.getMonth()+1+"/"+d.getDay()+"/"+d.getFullYear();
-	  
-	  var contentString = ''+
-		'<div id="content" style="width:304px; height:176px;">'+
-			'<div id="siteNotice">'+
-					'<div style="float:left;border:0px solid blue;">'+
-						'<a href="https://twitter.com/'+user+'"><h4 id="firstHeading" class="firstHeading">'+user+'</h4></a>'+
-					'</div>'+
-					'<div style="float:right;border:0px solid red;width=50%;">'+
-						'<p>+/-'+follow+'</p>'+
-					'</div>'+
-			'</div>'+
-			'<div id="left" style="float:center;border:0px solid green;width:100%;">'+
-			'</div>'+
-			'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">'+
-				'<div style="float:left;border:0px solid blue;width:204px;">'+
-					'<p style="max-width:200px">'+text+'</p>'+
-				'</div>'+
-				'<div style="float:right;border:0px solid red;width=100%;height=100%;">'+
-					'<img name="userpic" src="'+pic+'"></img>'+
-				'</div>'+
-			'</div>'+
-			'<div id="footer" style="float:right;">'+
-				'<p>'+date+'</p>'+
-			'</div>'+
-		'</div>';
+function infobubble(marker, contentString) {	  
 	
 	// add click event
 	google.maps.event.addListener(marker, 'click', function() {
