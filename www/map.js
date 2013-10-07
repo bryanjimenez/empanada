@@ -1,13 +1,14 @@
 var geocoder;
 var map;
-var lat = 25.75906, lon = -80.37388;
+var lat = 25.75906, lng = -80.37388;
 var mypos;
 var mymarker;
 var interval = null;
 
-var findme
-var legend
-
+var findme;
+var legend;
+var filter=[];
+var forbidden="http://maps.google.com/mapfiles/kml/shapes/forbidden_maps.png";
 var infowindow = null;
 
 
@@ -101,23 +102,23 @@ function success(pos) {
      
      console.log('Your current position is:');
      console.log('Latitude : ' + crd.latitude);
-     console.log('Longitude: ' + crd.longitude);
+     console.log('lnggitude: ' + crd.lnggitude);
      console.log('More or less ' + crd.accuracy + ' meters.');
      */
     lat = pos.coords.latitude;
-    lon = pos.coords.longitude;
-    mypos = new google.maps.LatLng(lat, lon);
+    lng = pos.coords.lnggitude;
+    mypos = new google.maps.LatLng(lat, lng);
     //alert(mypos);
 
     dropPinOnMe();
 }
-;
+
 
 function error(err) {
     console.warn('ERROR(' + err.code + '): ' + err.message);
     alert("Geolocation is not supported by this browser.");
 }
-;
+
 
 
 
@@ -142,19 +143,17 @@ function dropPinOnMe() {
 }
 
 function initialize() {
-    //window.setInterval(function() { alert(window.scrollTo(0,1));}, 2000); 
-
-    //window.setInterval(function() { getLocation(); }, 2000); 
 
     findme = document.getElementById('findme');
     legend = document.getElementById('legend');
+    legendtitle = document.getElementById('legendtitle');
 
 
     geocoder = new google.maps.Geocoder();
 
     var mapOptions = {
-        zoom: 7,
-        center: new google.maps.LatLng(lat, lon),
+        zoom: 12,
+        center: new google.maps.LatLng(lat, lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true
     };
@@ -163,11 +162,13 @@ function initialize() {
 
 
     for (var key in icons) {
+		filter.push(key.toLowerCase());
+		
         var type = icons[key];
         var name = type.name;
         var icon = type.icon;
         var div = document.createElement('div');
-        div.innerHTML = '<img alt="' + name + '" title="' + name + '" src="' + icon + '"> ';
+        div.innerHTML = '<img alt="' + name + '" title="' + name + '" src="' + icon + '" onclick="filters(this);"> ';
         legend.appendChild(div);
     }
 
@@ -195,7 +196,7 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(success, error, options);
 
     };
-    legend.onclick = function() {
+    legendtitle.onclick = function() {
 
         if (legend.style.height == '20px')
             legend.style.height = '';
@@ -213,7 +214,7 @@ function initialize() {
         if (infowindow)
             infowindow.close();
     });
-
+	google.maps.event.addListener(map, 'dragend', refresh);
 
     /*
      getLocation();
@@ -230,13 +231,19 @@ function initialize() {
  * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
  */
 
+// REVERSE GEOCODING
+//https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
+//maps.google.com/maps/api/geocode/json?latlng=25.705501,-80.359855&components=postal_code&sensor=false
+
 function codeAddress() {
     var address = document.getElementById("zip").value;
     geocoder.geocode({'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
 
             mypos = results[0].geometry.location;
-            dropPinOnMe();
+            //dropPinOnMe();
+            refresh();
+            map.setCenter(mypos);
         } else {
             alert("Geocode was not successful for the following reason: " + status);
         }
@@ -250,10 +257,11 @@ function fpl() {
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "StormFeedRestoreZoom2.json", false);
-    xmlHttp.send(null);
+    xmlHttp.onreadystatechange=function()
+	{
+		if (xmlHttp.readyState==4 && xmlHttp.status==200)
+		{
 
-    if (xmlHttp.status == 200) {
         //alert(xmlHttp.responseText);
 
         var fpl = JSON.parse(xmlHttp.responseText);
@@ -306,84 +314,104 @@ function fpl() {
             });
 
             infobubble(marker, contentString);
-        }
-    }
+        }		}
+	}
+    xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
+    xmlHttp.send(null);
 }
 
 function refresh() {
-
+	
+	//TODO
+	// currently the refresh will pull the same markers if the center isnt far from the old center
+	// could avoid this by using the old center and only getting back the new markers
+	
+	//alert("!");
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "refresh.php", false);
+
+	xmlHttp.onreadystatechange=function()
+	{
+		if (xmlHttp.readyState==4 && xmlHttp.status==200)
+		{
+			var tweets = JSON.parse(xmlHttp.responseText);
+			
+			if(!tweets.t)
+				return;
+				
+			//alert(tweets.t.length);
+
+			for (var i in tweets.t) {
+				//alert(i);
+				var filter = tweets.f[i];
+				var tweet = tweets.t[i];
+
+				var user = tweet.user.screen_name;
+				var pic = tweet.user.profile_image_url;
+				var text = tweet.text;
+				var follow = tweet.user.followers_count;
+				var time = tweet.created_at;
+				var d = new Date(time);
+				var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
+
+				var contentString = '' +
+						'<div id="content" style="width:304px; height:176px;">' +
+						'<div id="siteNotice">' +
+						'<div style="float:left;border:0px solid blue;">' +
+						'<a href="https://twitter.com/' + user + '"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
+						'</div>' +
+						'<div style="float:right;border:0px solid red;width=50%;">' +
+						'<p>+/-' + follow + '</p>' +
+						'</div>' +
+						'</div>' +
+						'<div id="left" style="float:center;border:0px solid green;width:100%;">' +
+						'</div>' +
+						'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
+						'<div style="float:left;border:0px solid blue;width:204px;">' +
+						'<p style="max-width:200px">' + text + '</p>' +
+						'</div>' +
+						'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
+						'<img name="userpic" src="' + pic + '"></img>' +
+						'</div>' +
+						'</div>' +
+						'<div id="footer" style="float:right;">' +
+						'<p>' + date + '</p>' +
+						'</div>' +
+						'</div>';
+
+				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+				if (tweet.geo) {
+					var x = tweet.geo.coordinates[0];
+					var y = tweet.geo.coordinates[1];
+				}
+				else {
+					//TODO we need to come up with something better here
+					var x = -81.68738214;
+					var y = 27.96855823;
+				}
+
+				var marker = new google.maps.Marker({
+					position: new google.maps.LatLng(x, y),
+					map: map,
+					icon: icons[filter].icon,
+					animation: google.maps.Animation.DROP,
+					title: text
+				});
+
+				infobubble(marker, contentString);
+			}
+		}
+	}
+	//PARAMETERS
+	olat=lat;
+	olng=lng;
+	lat=map.getCenter().lat();
+	lng=map.getCenter().lng();
+	rad=3;
+	//alert("refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&filter="+filter);
+    xmlHttp.open("GET", "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&filter="+filter, true);
     xmlHttp.send(null);
-
-    if (xmlHttp.status == 200) {
-        //alert(xmlHttp.responseText);
-
-        var tweets = JSON.parse(xmlHttp.responseText);
-        //alert(tweets.f[0]);
-
-        for (var i in tweets.t) {
-            var filter = tweets.f[i];
-            var tweet = tweets.t[i];
-            var user = tweet.user.screen_name;
-            var pic = tweet.user.profile_image_url;
-            var text = tweet.text;
-            var follow = tweet.user.followers_count;
-            var time = tweet.created_at;
-            var d = new Date(time);
-            var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
-
-            var contentString = '' +
-                    '<div id="content" style="width:304px; height:176px;">' +
-                    '<div id="siteNotice">' +
-                    '<div style="float:left;border:0px solid blue;">' +
-                    '<a href="https://twitter.com/' + user + '"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
-                    '</div>' +
-                    '<div style="float:right;border:0px solid red;width=50%;">' +
-                    '<p>+/-' + follow + '</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div id="left" style="float:center;border:0px solid green;width:100%;">' +
-                    '</div>' +
-                    '<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-                    '<div style="float:left;border:0px solid blue;width:204px;">' +
-                    '<p style="max-width:200px">' + text + '</p>' +
-                    '</div>' +
-                    '<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
-                    '<img name="userpic" src="' + pic + '"></img>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div id="footer" style="float:right;">' +
-                    '<p>' + date + '</p>' +
-                    '</div>' +
-                    '</div>';
-
-
-
-            //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
-            if (tweet.geo) {
-                var x = tweet.geo.coordinates[0];
-                var y = tweet.geo.coordinates[1];
-            }
-            else {
-                //TODO we need to come up with something better here
-                var x = -81.68738214;
-                var y = 27.96855823;
-            }
-
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(x, y),
-                map: map,
-                icon: icons[filter].icon,
-                animation: google.maps.Animation.DROP,
-                title: text
-            });
-
-            infobubble(marker, contentString);
-        }
-    }
 }
 
 function infobubble(marker, contentString) {
@@ -429,6 +457,25 @@ function disableMovement(disable) {
     map.setOptions(mapOptions);
 }
 
+
+//ADD REMOVE Filters from filter array
+//ENABLE DISABLE legend icon
+function filters(obj){
+	//alert(filter);
+
+	var name = obj.alt.toLowerCase();
+	if(obj.src==forbidden){
+		obj.src=obj.name;
+		filter.push(name);
+	}
+	else{
+		obj.name=obj.src;
+		obj.src=forbidden;
+		filter.splice(filter.indexOf(name),1);
+
+	}
+	//	alert(filter);
+}
 /*
  for (var style in styles) {
  var name = style.name;
