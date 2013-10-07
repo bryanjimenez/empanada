@@ -16,6 +16,8 @@ package org.apache.hadoop.examples;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
+import java.util.ArrayList;
+
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -27,6 +29,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
+
 
 /*neede for JSON manipulation*/
 import org.json.simple.JSONArray;
@@ -56,6 +59,17 @@ public class WordCount {
 
 			/* JSON */
 			JSONParser parser = new JSONParser();
+			
+			/* Keywords */
+			ArrayList <String> keyword_list = new ArrayList(); 
+			keyword_list.add("storm");
+			keyword_list.add("fire");
+			keyword_list.add("damage");
+			keyword_list.add("flood");
+			keyword_list.add("thunder");
+			keyword_list.add("shelter");
+			keyword_list.add("traffic");
+			keyword_list.add("fuel");
 
 			try {
 				ftweet.set(value.toString());
@@ -63,9 +77,9 @@ public class WordCount {
 
 				JSONObject jsonObject = (JSONObject) obj;
 
+				//get only text node of JSON for now ignore the rest 
 				String tweet = (String) jsonObject.get("text");
 				// System.out.println(tweet);
-				/* JSON */
 
 				// StringTokenizer itr = new
 				// StringTokenizer(value.toString()," \n\t\r\f,.:?/[]\'");
@@ -73,10 +87,14 @@ public class WordCount {
 						" \n\t\r\f,.:?/[]\'\"");
 				while (itr.hasMoreTokens()) {
 					String tok = itr.nextToken();
-					if (tok.equals("time")) {
-						word.set(tok);
-						context.write(word, ftweet);
-					}
+					
+					//iterate through keyword list serching for matches on word token
+					//note that we are examining a word at a time, we might want more than one word later on
+					for (String keyword : keyword_list) 
+			               if(tok.equals(keyword)){
+			            	   word.set(tok);
+			            	   context.write(word, ftweet);
+			               }			
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

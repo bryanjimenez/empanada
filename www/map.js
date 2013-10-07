@@ -11,7 +11,7 @@ var filter=[];
 var forbidden="http://maps.google.com/mapfiles/kml/shapes/forbidden_maps.png";
 var infowindow = null;
 
-
+//https://developers.google.com/maps/documentation/javascript/reference#Map
 
 /*
  * example pseudoclass
