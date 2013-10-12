@@ -65,7 +65,7 @@ function main(){
 		$odelta=distance($_GET['olat'],$_GET['olng'],$lat,$lng, 'M');
 		$delta=distance($_GET['lat'],$_GET['lng'],$lat,$lng, 'M');
 		
-		if($delta<$_GET['rad'] && $odelta>$_GET['rad'] && (bool)strrpos($_GET['filter'],$filter)){
+		if($delta<$_GET['rad'] && $odelta>$_GET['orad'] && (bool)strrpos($_GET['filter'],$filter)){
 			$filters[] = $filter;
 			$tweets[] = $tweet;
 		}
