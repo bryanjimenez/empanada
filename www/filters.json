@@ -1,0 +1,52 @@
+{
+    "hurricane": {
+        "name": "Hurricane",
+        "icon": "image/hurricane.png",
+        "shadow": ""
+    },
+    "fire": {
+        "name": "Fire",
+        "icon": "image/fire.png",
+        "shadow": ""
+    },
+    "accident": {
+        "name": "Accident",
+        "icon": "image/caraccident.png",
+        "shadow": ""
+    },
+    "flood": {
+        "name": "Flood",
+        "icon": "image/flood.png",
+        "shadow": ""
+    },
+    "powerout": {
+        "name": "Power Outage",
+        "icon": "image/poweroutage.png",
+        "shadow": ""
+    },
+    "linedown": {
+        "name": "Line Down",
+        "icon": "image/linedown.png",
+        "shadow": ""
+    },    
+    "treedown": {
+        "name": "Tree Down",
+        "icon": "image/treedown.png",
+        "shadow": ""
+    },
+    "shelter": {
+        "name": "Shelter",
+        "icon": "image/shelter.png",
+        "shadow": ""
+    },
+    "fuel": {
+        "name": "Fuel",
+        "icon": "image/fuel.png",
+        "shadow": ""
+    },
+    "zombies": {
+        "name": "Zombies!",
+        "icon": "image/zombies.png",
+        "shadow": ""
+    }
+}
