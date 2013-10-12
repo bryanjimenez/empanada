@@ -1,12 +1,17 @@
 #!/usr/bin/python
 from twython import Twython, TwythonError, TwythonStreamer
 import time
+from ChatBotClass import *
+
+bot = ChatBot()
 
 class MyStreamer(TwythonStreamer):
 	
 	def on_success(self, data):
     		if 'text' in data:
         		print data['text'].encode('utf-8')
+        		bot.add_to_mention( data )
+        		bot.respond_to_mention()
 
 	def on_error(self, status_code, data):
 		print status_code
@@ -25,7 +30,7 @@ def get_oauthentication():
 	return oauth
 
 
-def Update_status_with(oauth, message):
+def update_status_with(oauth, message):
 		
 	twitter = Twython(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
 	twitter.verify_credentials()
@@ -36,18 +41,18 @@ def Update_status_with(oauth, message):
 		print e
 		
 	
-def Streamer():
+def streamer():
 	oauth = get_oauthentication()
 	stream = MyStreamer(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
 	# stream.statuses.filter(track='gas')
 	stream.user()
 
 
-def test():
-	time.sleep(10)
+def sleep(time):
+	time.sleep(time)
 
 
-def Search_for(str):
+def search_for(str):
 	oauth = get_oauthentication()
 	twitter = Twython(oauth['APP_KEY'], oauth['APP_SECRET'], oauth_version=2)
 	ACCESS_TOKEN = twitter.obtain_access_token()
@@ -59,8 +64,10 @@ def Search_for(str):
 	for result in search:
 		print result['text']
 	
-
 if __name__ == "__main__":
-    Streamer()
-    # Search_for("gas")
-    # Update_status_with(get_oauthentication(), "This message")
+	# bot.add_to_mention()
+	# bot.respond_to_mention()
+
+    streamer()
+    # search_for("gas")
+    # update_status_with(get_oauthentication(), "This message")
