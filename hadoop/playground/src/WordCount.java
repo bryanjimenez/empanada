@@ -15,12 +15,17 @@
 package org.apache.hadoop.examples;
 
 import java.io.IOException;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
 import java.util.StringTokenizer;
 import java.util.ArrayList;
-
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -29,7 +34,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
-
 
 /*neede for JSON manipulation*/
 import org.json.simple.JSONArray;
@@ -53,31 +57,21 @@ public class WordCount {
 		private final static IntWritable one = new IntWritable(1);
 		private Text ftweet = new Text();
 		private Text word = new Text();
+		public static ArrayList<String> keyword_list = new ArrayList();
 
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
 
-			/* JSON */
-			JSONParser parser = new JSONParser();
-			
-			/* Keywords */
-			ArrayList <String> keyword_list = new ArrayList(); 
-			keyword_list.add("storm");
-			keyword_list.add("fire");
-			keyword_list.add("damage");
-			keyword_list.add("flood");
-			keyword_list.add("thunder");
-			keyword_list.add("shelter");
-			keyword_list.add("traffic");
-			keyword_list.add("fuel");
-
 			try {
+				/* JSON */
+				JSONParser parser = new JSONParser();
+
 				ftweet.set(value.toString());
 				Object obj = parser.parse(value.toString());
 
 				JSONObject jsonObject = (JSONObject) obj;
 
-				//get only text node of JSON for now ignore the rest 
+				// get only text node of JSON for now ignore the rest
 				String tweet = (String) jsonObject.get("text");
 				// System.out.println(tweet);
 
@@ -87,14 +81,16 @@ public class WordCount {
 						" \n\t\r\f,.:?/[]\'\"");
 				while (itr.hasMoreTokens()) {
 					String tok = itr.nextToken();
-					
-					//iterate through keyword list serching for matches on word token
-					//note that we are examining a word at a time, we might want more than one word later on
-					for (String keyword : keyword_list) 
-			               if(tok.equals(keyword)){
-			            	   word.set(tok);
-			            	   context.write(word, ftweet);
-			               }			
+
+					// iterate through keyword list serching for matches on word
+					// token
+					// note that we are examining a word at a time, we might
+					// want more than one word later on
+					for (String keyword : keyword_list)
+						if (tok.equals(keyword)) {
+							word.set(tok);
+							context.write(word, ftweet);
+						}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -121,17 +117,63 @@ public class WordCount {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
+		// conf.addResource(new Path("../../env_vars"));
+
 		String[] otherArgs = new GenericOptionsParser(conf, args)
 				.getRemainingArgs();
 		if (otherArgs.length != 2) {
 			System.err.println("Usage: wordcount <in> <out>");
 			System.exit(2);
 		}
+		
+		// ----------------------------------------------------------
+		//			READ FILTER FILE
+		// ----------------------------------------------------------
+		// Path pt=new Path("hdfs://pathTofile");
+		//Path pt = new Path("../www/hfilters.json");
+		String l;
+		String line="";
+		//FileSystem fs = FileSystem.get(conf);
+		BufferedReader br = new BufferedReader(new FileReader("../www/filters.json"));
+
+		try {
+			//BufferedReader br = new BufferedReader(new FileReader(fs.open(pt)));
+			
+			while ((l = br.readLine()) != null) {
+				line +=l;
+				//System.out.println(line);
+			}
+			
+		} finally {
+			// you should close out the BufferedReader
+			br.close();
+		}
+		// ----------------------------------------------------------
+		//			PARSE JSON
+		//http://stackoverflow.com/questions/6697147/json-iterate-through-jsonarray
+		//http://juliusdavies.ca/json-simple-1.1.1-javadocs/org/json/simple/JSONObject.html
+		// ----------------------------------------------------------
+		JSONParser parser = new JSONParser();		
+		JSONObject jsonObject = (JSONObject) parser.parse(line);
+
+
+		Set<String> filters = jsonObject.keySet();
+		
+		// inside each object there is a "name" field, get value and add to keyword_list
+		for(String i : filters)
+		{
+		      JSONObject objects = (JSONObject) jsonObject.get(i);
+		      String keyword = ((String) objects.get("name")).toLowerCase();
+		      TokenizerMapper.keyword_list.add(keyword);
+		}
+		// ----------------------------------------------------------
+
+					
 		Job job = new Job(conf, "word count");
 		job.setJarByClass(WordCount.class);
 		job.setMapperClass(TokenizerMapper.class);
-		//job.setCombinerClass(IntSumReducer.class);
-		//job.setReducerClass(IntSumReducer.class);
+		// job.setCombinerClass(IntSumReducer.class);
+		// job.setReducerClass(IntSumReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
