@@ -139,6 +139,7 @@ function initialize() {
         zoom: zoom,
         center: new google.maps.LatLng(lat, lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
+        //mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDefaultUI: true
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -191,7 +192,10 @@ function initialize() {
         if (infowindow)
             infowindow.close();
     });
-	google.maps.event.addListener(map, 'dragend', refresh);
+	google.maps.event.addListener(map, 'dragend', function(){
+		refresh();
+		fpl();
+	});
 
     /*
      getLocation();
@@ -245,7 +249,7 @@ function getfilters() {
 				var name = type.name;
 				var icon = type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
+				div.innerHTML = '<div title="' + key + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
 				//div.innerHTML = '<div><img alt="' + name + '" title="' + name + '" src="" onclick="filters(this);"></div> ';
 				legend.appendChild(div);
 			}
@@ -265,7 +269,7 @@ function fpl() {
     xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange=function()
 	{
-		if (xmlHttp.readyState==4 && xmlHttp.status==200)
+		if (xmlHttp.readyState==4 && xmlHttp.status==200  && xmlHttp.responseText)
 		{
 
         //alert(xmlHttp.responseText);
@@ -273,9 +277,9 @@ function fpl() {
         var fpl = JSON.parse(xmlHttp.responseText);
         //alert(tweets.f[0]);
 
-        for (var i in fpl.outages) {
+        for (var i in fpl.o) {
             var filter = "powerout";
-            var outage = fpl.outages[i];
+            var outage = fpl.o[i];
 
             if (!outage.status)
                 continue;
@@ -321,11 +325,27 @@ function fpl() {
                 title: status
             });
 
+
+			markers.push(marker);
+			markerst.push(filter);
+			
+					
             infobubble(marker, contentString);
+            
+
         }		}
 	}
-    xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
+	
+	
+	var s = "fpl.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+filter;
+	//alert(s);
+	
+    xmlHttp.open("GET", s, true);
+    
+    //xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
     xmlHttp.send(null);
+    
+
 }
 
 function refresh() {
@@ -438,15 +458,12 @@ function refresh() {
 }
 
 function toggleMarkers(category, t){ 
-var i;       
-
-  for (i = 0; i < markers.length; i++) {        
-	if(markerst[i]==category)
-       markers[i].setVisible(t);        
-
-
-
-  }    
+	if (infowindow)
+		infowindow.close();
+	
+	for (var i = 0; i < markers.length; i++)      
+		if(markerst[i]==category)
+			markers[i].setVisible(t);        
 }
 
 
