@@ -1,0 +1,99 @@
+{
+    "outages": [
+        {
+            "lat": 27.871,
+            "Cause": "Under investigation",
+            "lng": -80.497,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 106,
+            "dateReported": "10/13/13 09:03 PM",
+            "status": "We have dispatched a power restoration specialist to investigate and restore your power.",
+            "etr": "10/13/13 10:45 PM"
+        },
+        {
+            "lat": 26.591,
+            "lng": -81.8765,
+            "Number of outages": 2
+        },
+        {
+            "lat": 27.015,
+            "Cause": "Damage to FPL equipment",
+            "lng": -82.052,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 1,
+            "dateReported": "10/13/13 07:10 AM",
+            "status": "A power restoration team is currently in the area and is working to restore your power.",
+            "etr": "Not available"
+        },
+        {
+            "lat": 26.924,
+            "Cause": "Under investigation",
+            "lng": -82.315,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 1,
+            "dateReported": "10/13/13 09:21 PM",
+            "status": "We are aware of your power outage and will be assigning your ticket to a specialist as soon as possible.",
+            "etr": "10/13/13 11:00 PM"
+        },
+        {
+            "lat": 25.791281249999997,
+            "lng": -80.3080625,
+            "Number of outages": 15
+        },
+        {
+            "lat": 26.436,
+            "lng": -80.23358333333334,
+            "Number of outages": 5
+        },
+        {
+            "lat": 27.146,
+            "Cause": "Damage to FPL equipment",
+            "lng": -80.231,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 10,
+            "dateReported": "10/13/13 05:52 PM",
+            "status": "A power restoration team is currently in the area and is working to restore your power.",
+            "etr": "10/13/13 10:45 PM"
+        },
+        {
+            "lat": 25.915999999999997,
+            "lng": -80.14333333333333,
+            "Number of outages": 3
+        },
+        {
+            "lat": 27.911,
+            "Cause": "Under investigation",
+            "lng": -80.674,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 1,
+            "dateReported": "10/13/13 08:59 PM",
+            "status": "We will be dispatching a power restoration specialist to the area as soon as possible.",
+            "etr": "10/13/13 10:45 PM"
+        },
+        {
+            "lat": 27.025833333333335,
+            "lng": -80.13883333333332,
+            "Number of outages": 4
+        },
+        {
+            "lat": 26.483333333333334,
+            "lng": -80.10488888888888,
+            "Number of outages": 5
+        },
+        {
+            "lat": 27.4605,
+            "lng": -82.5695,
+            "Number of outages": 2
+        },
+        {
+            "lat": 29.258,
+            "Cause": "Damage to FPL equipment",
+            "lng": -81.085,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 9,
+            "dateReported": "10/13/13 08:27 PM",
+            "status": "We have dispatched a power restoration team to help restore your power.",
+            "etr": "10/14/13 12:15 AM"
+        }
+    ]
+}

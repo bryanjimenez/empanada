@@ -86,6 +86,7 @@ public class WordCount {
 					// token
 					// note that we are examining a word at a time, we might
 					// want more than one word later on
+					// or a better approach at searching
 					for (String keyword : keyword_list)
 						if (tok.equals(keyword)) {
 							word.set(tok);

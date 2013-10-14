@@ -247,9 +247,9 @@ function getfilters() {
 				filter.push(key.toLowerCase());
 				var type = icons[key];
 				var name = type.name;
-				var icon = type.icon;
+				var icon = "image/red/"+type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div title="' + key + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
+				div.innerHTML = '<div title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
 				//div.innerHTML = '<div><img alt="' + name + '" title="' + name + '" src="" onclick="filters(this);"></div> ';
 				legend.appendChild(div);
 			}
@@ -320,7 +320,7 @@ function fpl() {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(x, y),
                 map: map,
-                icon: icons[filter].icon,
+                icon: "image/orange/"+icons[filter].icon,
                 animation: google.maps.Animation.DROP,
                 title: status
             });
@@ -388,7 +388,7 @@ function refresh() {
 						'<div id="content" style="width:304px; height:176px;">' +
 						'<div id="siteNotice">' +
 						'<div style="float:left;border:0px solid blue;">' +
-						'<a href="https://twitter.com/' + user + '"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
+						'<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
 						'</div>' +
 						'<div style="float:right;border:0px solid red;width=50%;">' +
 						'<p>+/-' + follow + '</p>' +
@@ -423,7 +423,7 @@ function refresh() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					map: map,
-					icon: icons[filter].icon,
+					icon: "image/red/"+icons[filter].icon,
 					animation: google.maps.Animation.DROP,
 					title: text
 				});
