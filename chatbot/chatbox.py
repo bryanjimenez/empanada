@@ -9,9 +9,12 @@ class MyStreamer(TwythonStreamer):
 	
 	def on_success(self, data):
     		if 'text' in data:
-        		print data['text'].encode('utf-8')
-        		bot.add_to_mention( data )
-        		bot.respond_to_mention()
+        		print "DEBUG - " + data['text'].encode('utf-8')
+        		post_back = bot.add_to_mention( data )
+        		if ( post_back == 0 ):
+        			bot.respond_to_mention()
+        		 	print "DEBUG - " + bot.get_message()
+        		  	# update_status_with(get_oauthentication(), bot.get_message())
 
 	def on_error(self, status_code, data):
 		print status_code
@@ -36,7 +39,7 @@ def update_status_with(oauth, message):
 	twitter.verify_credentials()
 			
 	try:
-		pass # twitter.update_status(status=message)
+		twitter.update_status(status=message)
 	except TwythonError as e:
 		print e
 		
@@ -65,9 +68,6 @@ def search_for(str):
 		print result['text']
 	
 if __name__ == "__main__":
-	# bot.add_to_mention()
-	# bot.respond_to_mention()
-
     streamer()
     # search_for("gas")
     # update_status_with(get_oauthentication(), "This message")
