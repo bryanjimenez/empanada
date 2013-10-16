@@ -1,5 +1,6 @@
 var geocoder;
 var map;
+var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 var mypos;
 var mymarker;
@@ -13,6 +14,8 @@ var legend;
 var filter=[];
 var forbidden="image/forbidden.png";
 var infowindow = null;
+
+
 
 //https://developers.google.com/maps/documentation/javascript/reference#Map
 
@@ -129,7 +132,7 @@ function initialize() {
     findme = document.getElementById('findme');
     legend = document.getElementById('legend');
     legendtitle = document.getElementById('legendtitle');
-
+	fiu = new google.maps.LatLng(lat, lng);
 
 	getfilters();
 
@@ -137,13 +140,14 @@ function initialize() {
 
     var mapOptions = {
         zoom: zoom,
-        center: new google.maps.LatLng(lat, lng),
+        center: fiu,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         //mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDefaultUI: true
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+
 
 
 
@@ -160,7 +164,7 @@ function initialize() {
 			navigator.geolocation.clearWatch(watching);
 			watching=null;
 			pinMe(false);
-			}
+		}
 		// tracking mode ON
 		else{
 			disableMovement(true);
@@ -195,6 +199,27 @@ function initialize() {
 	google.maps.event.addListener(map, 'dragend', function(){
 		refresh();
 		fpl();
+		
+		
+		if(watching){
+			findme.style.border='solid black 1px';
+			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
+			disableMovement(false);
+			navigator.geolocation.clearWatch(watching);
+			watching=null;
+			pinMe(false);
+		}
+		// tracking mode ON
+		/*else{
+			disableMovement(true);
+			findme.style.border='solid red 1px';
+			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
+			watching=navigator.geolocation.watchPosition(success, error, options);
+			refresh(); 	
+		}*/
+
+		
+		
 	});
 
     /*
@@ -249,7 +274,7 @@ function getfilters() {
 				var name = type.name;
 				var icon = "image/red/"+type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
+				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
 				//div.innerHTML = '<div><img alt="' + name + '" title="' + name + '" src="" onclick="filters(this);"></div> ';
 				legend.appendChild(div);
 			}
@@ -386,27 +411,32 @@ function refresh() {
 
 				var contentString = '' +
 						'<div id="content" style="width:304px; height:176px;">' +
-						'<div id="siteNotice">' +
-						'<div style="float:left;border:0px solid blue;">' +
-						'<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
-						'</div>' +
-						'<div style="float:right;border:0px solid red;width=50%;">' +
-						'<p>+/-' + follow + '</p>' +
-						'</div>' +
-						'</div>' +
-						'<div id="left" style="float:center;border:0px solid green;width:100%;">' +
-						'</div>' +
-						'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-						'<div style="float:left;border:0px solid blue;width:204px;">' +
-						'<p style="max-width:200px">' + text + '</p>' +
-						'</div>' +
-						'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
-						'<img name="userpic" src="' + pic + '"></img>' +
-						'</div>' +
-						'</div>' +
-						'<div id="footer" style="float:right;">' +
-						'<p>' + date + '</p>' +
-						'</div>' +
+							'<div id="siteNotice">' +
+								'<div style="float:left;border:0px solid blue;">' +
+									'<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
+								'</div>' +
+								'<div style="float:right;border:0px solid red;width=50%;">' +
+									'<p>+/-' + follow + '</p>' +
+								'</div>' +
+							'</div>' +
+							'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
+								'<div style="float:left;border:0px solid blue;width:204px;">' +
+									'<p style="max-width:200px">' + text + '</p>' +
+								'</div>' +
+								'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
+									'<img name="userpic" src="' + pic + '"></img>' +
+								'</div>' +
+							'</div>' +
+
+							'<div id="options" style="float:left;border:0px solid blue;width:100%;">'+
+								'<div id="footer" style="float:right;border:0px solid black;">' +
+									'<p>' + date + '</p>'+
+								'</div>' +
+								'<a href="javascript:showSearch();">Search Nearby</a>' +
+									'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">'+
+										'<input id="target" type="text"><button id="search" onclick="searchNear(this.previousSibling)" >Search</button>'+
+									'</div>' +	
+							'</div>' +
 						'</div>';
 
 				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
@@ -419,7 +449,9 @@ function refresh() {
 					var x = -81.68738214;
 					var y = 27.96855823;
 				}
-
+				if(!icons[filter])
+				alert(filter);
+				
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					map: map,
@@ -515,14 +547,14 @@ function disableMovement(disable) {
     
     if (disable) {
         mapOptions = {
-            draggable: false,
+            //draggable: false,
             //scrollwheel: false,
             disableDoubleClickZoom: true,
             //zoomControl: false
         };
     } else {
         mapOptions = {
-            draggable: true,
+            //draggable: true,
             //scrollwheel: true,
             disableDoubleClickZoom: false,
             //zoomControl: true
@@ -538,7 +570,10 @@ function filters(obj){
 	
 var div = document.createElement('div');
 	
-	var name = obj.title.toLowerCase();
+	//var name = obj.title.toLowerCase();
+	var name = obj.id.toLowerCase().split('_')[0];
+
+	//alert(name+" "+name2);
 
 	if(obj.innerHTML==''){
 		obj.innerHTML = '<img src="'+forbidden+'">';		
@@ -552,12 +587,51 @@ var div = document.createElement('div');
 	
 	}
 }
-/*
- for (var style in styles) {
- var name = style.name;
- var icon = style.icon;
- var div = document.createElement('div');
- div.innerHTML = '<img src="' + icon + 'width="50%"' +'> ' + name;
- legend.appendChild(div);
- }
- */
+function showSearch(){
+	document.getElementById('detail').style.visibility='';
+}
+
+//https://developers.google.com/places/training/additional-places-features
+function searchNear(obj){
+	var request = {
+		location: new google.maps.LatLng(lat, lng),
+		radius: 500,
+		//types: ['restaurant']
+		keyword: obj.value 
+	};
+	//infowindow = new google.maps.InfoWindow();
+	var service = new google.maps.places.PlacesService(map);
+	service.nearbySearch(request, callback);
+}
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  //var placeLoc = place.geometry.location;
+ 
+//https://developers.google.com/maps/documentation/javascript/examples/place-search-pagination  
+    var image = {
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(25, 25)
+    };
+
+  
+  var marker = new google.maps.Marker({
+    map: map,
+    icon: image,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}

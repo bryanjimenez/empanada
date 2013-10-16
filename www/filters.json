@@ -19,7 +19,7 @@
         "icon": "flood.png",
         "shadow": ""
     },
-    "powerout": {
+    "poweroutage": {
         "name": "Power Outage",
         "icon": "poweroutage.png",
         "shadow": ""
@@ -45,7 +45,7 @@
         "shadow": ""
     },
     "zombies": {
-        "name": "Zombie Outbreak",
+        "name": "Zombie",
         "icon": "zombies.png",
         "shadow": ""
     }
