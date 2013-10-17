@@ -205,7 +205,7 @@ function initialize() {
     });
 	google.maps.event.addListener(map, 'dragend', function(){
 		refresh();
-		//fpl();
+		fpl();
 		
 		
 		if(watching){
@@ -351,7 +351,7 @@ function fpl() {
 
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(x, y),
-                map: map,
+                //map: map,
                 icon: "image/orange/"+icons[filter].icon,
                 animation: google.maps.Animation.DROP,
                 title: status
@@ -360,7 +360,12 @@ function fpl() {
 
 			markers.push(marker);
 			markerst.push(filter);
-			
+
+//			document.getElementById("mcount").innerHTML=count++;				
+			markers.push(marker);
+			markerst.push(filter);
+			manager.addMarker(marker,12);
+			manager.refresh();
 					
             infobubble(marker, contentString);
             
@@ -470,6 +475,8 @@ function refresh() {
 				});
 
 				document.getElementById("mcount").innerHTML=count++;				
+				markers.push(marker);
+				markerst.push(filter);
 				manager.addMarker(marker,12);
 				manager.refresh();
 				/*
