@@ -58,6 +58,7 @@ public class WordCount {
 		private Text ftweet = new Text();
 		private Text word = new Text();
 		public static ArrayList<String> keyword_list = new ArrayList();
+		public static ArrayList<String> keyname_list = new ArrayList();
 
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
@@ -87,9 +88,10 @@ public class WordCount {
 					// note that we are examining a word at a time, we might
 					// want more than one word later on
 					// or a better approach at searching
-					for (String keyword : keyword_list)
-						if (tok.equals(keyword)) {
-							word.set(tok);
+//					for (String keyword : keyword_list)
+					for (int i=0;i< keyword_list.size();i++)
+						if (tok.equals(keyword_list.get(i))) {
+							word.set(keyname_list.get(i));
 							context.write(word, ftweet);
 						}
 				}
@@ -165,6 +167,7 @@ public class WordCount {
 		{
 		      JSONObject objects = (JSONObject) jsonObject.get(i);
 		      String keyword = ((String) objects.get("name")).toLowerCase();
+		      TokenizerMapper.keyname_list.add(i);
 		      TokenizerMapper.keyword_list.add(keyword);
 		}
 		// ----------------------------------------------------------
