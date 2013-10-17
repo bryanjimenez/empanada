@@ -8,6 +8,13 @@ header('Content-type: application/json');
 // This is the default value set in php.ini
 error_reporting(E_ALL ^ E_NOTICE);
 
+ini_set('display_errors', '1');
+
+//DANGER!!
+ini_set('memory_limit','-1');
+
+
+
 
 function getZipcode($x, $y){
 	//GOOGLE API URL with lat & lng inserted
@@ -51,7 +58,7 @@ function main(){
 	$lines = file("result.txt");
 
 	foreach ($lines as $line) {
-		$split= split("\t",$line);
+		$split= explode("\t",$line);
 		
 
 		$tweet = json_decode($split[1]);
@@ -65,22 +72,23 @@ function main(){
 		$odelta=distance($_GET['olat'],$_GET['olng'],$lat,$lng, 'M');
 		$delta=distance($_GET['lat'],$_GET['lng'],$lat,$lng, 'M');
 		
-			//echo "$delta $filter\n";
 
 		if($delta<$_GET['rad'] && $odelta>$_GET['orad'] && (bool)strrpos($_GET['filter'],$filter)){
 			$filters[] = $filter;
 			$tweets[] = $tweet;
+			//echo ($delta<$_GET['rad'])."\n";
+			//echo "true\n";
+
 		}
-		
+
 	}
 	//echo `./dohadoop.sh`;
-
 	//BUILD response JSON
 	$json['t']= $tweets;
 	$json['f']= $filters;
 	//$json['z']= $zipcode;
 
-	if($tweets)
+	//if($tweets)
 	echo json_encode($json);
 }
 

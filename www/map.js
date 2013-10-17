@@ -1,11 +1,15 @@
 var geocoder;
 var map;
+var manager;
 var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 var mypos;
 var mymarker;
 var markers=[];
 var markerst=[];
+
+var count=0;
+
 
 var watching=null;
 
@@ -147,6 +151,9 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+            
+    var mgrOptions = { borderPadding: 50, maxZoom: 15};
+	manager = new MarkerManager(map, mgrOptions);        
 
 
 
@@ -198,7 +205,7 @@ function initialize() {
     });
 	google.maps.event.addListener(map, 'dragend', function(){
 		refresh();
-		fpl();
+		//fpl();
 		
 		
 		if(watching){
@@ -303,7 +310,7 @@ function fpl() {
         //alert(tweets.f[0]);
 
         for (var i in fpl.o) {
-            var filter = "powerout";
+            var filter = "poweroutage";
             var outage = fpl.o[i];
 
             if (!outage.status)
@@ -449,20 +456,31 @@ function refresh() {
 					var x = -81.68738214;
 					var y = 27.96855823;
 				}
+				
+				//DEBUG
 				if(!icons[filter])
 				alert(filter);
 				
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
-					map: map,
+					//map: map,
 					icon: "image/red/"+icons[filter].icon,
 					animation: google.maps.Animation.DROP,
 					title: text
 				});
+
+				document.getElementById("mcount").innerHTML=count++;				
+				manager.addMarker(marker,12);
+				manager.refresh();
+				/*
 					
+					if(markers.length>300){
+						markers.shift().setMap(null);
+						markerst.shift();
+					}
 					markers.push(marker);
 					markerst.push(filter);
-					
+				*/
 					
 				infobubble(marker, contentString);
 			}
@@ -479,6 +497,9 @@ function refresh() {
 	//alert(map.getZoom());
 	//alert(zoom2rad(map.getZoom()));
 	rad=zoom2rad(zoom);
+	
+	document.getElementById('zoom').innerHTML=zoom;
+	
 	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+filter;
 	//alert(s);
 	
