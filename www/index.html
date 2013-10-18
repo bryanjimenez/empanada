@@ -47,18 +47,21 @@
 		width: 100px;
 	}
 	#findme {
-		background: white;
+		/*background: white;*/
 		padding: 5px;
 		/*margin: 0px;*/
 		background-image: url(image/arrow_off.png); 
 		background-size: contain;
 		height: 40px; 
 		width: 40px; 
-		border: 1px solid black;
+		/*border: 1px solid black;*/
 	}
 	#target{
 		height: 2em; 
 		width: 10em; 
+	}
+	#zippy{
+		padding-top:12px;
 	}
 	
     </style>
@@ -87,23 +90,21 @@
             <li><a href="contact.html">Contact</a></li>
 				
 			<li>
-				<div class="make-switch switch-small" data-text-label="Zip">
-				<input type="checkbox">
+				<div id="zippy" class="make-switch switch-small" data-text-label="Zip">
+				<input id="zipshow"type="checkbox">
 				</div>
 			</li>
-			<li>
+			<!--li>
 				<div id="legendt" class="make-switch switch-small" data-text-label="Legend">
 				<input type="checkbox" checked>
 				</div>
-			</li>
+			</li-->
             <li>
 				<form class="navbar-form navbar-right" role="search" onsubmit="codeAddress();return false;">
 				  <div class="form-group">
-					<input id="zip" type="text" class="form-control">
+					<input id="zip" style="display:none;" type="text" class="form-control">
 				  </div>
-				  <button type="submit" class="btn btn-default" data-toggle="collapse" data-target=".navbar-collapse">Submit</button>
-				 
-				  
+				  <!--button type="submit" class="btn btn-default" data-toggle="collapse" data-target=".navbar-collapse">Submit</button-->
 				</form>
 
 

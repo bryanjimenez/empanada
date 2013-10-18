@@ -96,9 +96,7 @@ function error(err) {
       break;
     }
   
-	findme.style.border='solid black 1px';
 	findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-	disableMovement(false);
 	navigator.geolocation.clearWatch(watching);
 	watching=null;
 	pinMe(false);
@@ -123,8 +121,8 @@ function pinMe(t) {
 		mymarker = new google.maps.Marker({
 			position: mypos,
 			map: map,
-			animation: google.maps.Animation.BOUNCE,
-			icon: 'http://maps.google.com/mapfiles/arrow.png',
+			//animation: google.maps.Animation.BOUNCE,
+			icon: 'image/red.png',
 			title: 'You\'re Here'
 		});
 	}
@@ -134,7 +132,8 @@ function pinMe(t) {
 function initialize() {
 
     findme = document.getElementById('findme');
-    legend = document.getElementById('legend');
+	legend = document.getElementById('legend');
+	zipshow = document.getElementById('zipshow');
     legendtitle = document.getElementById('legendtitle');
 	fiu = new google.maps.LatLng(lat, lng);
 
@@ -158,29 +157,25 @@ function initialize() {
 
 
 
-
-
+	// EVENT HANDLERS
 
     findme.onclick = function() {
 
         // tracking mode OFF
 		if(watching){
-			findme.style.border='solid black 1px';
 			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-			disableMovement(false);
+			//disableMovement(false);
 			navigator.geolocation.clearWatch(watching);
 			watching=null;
 			pinMe(false);
 		}
 		// tracking mode ON
 		else{
-			disableMovement(true);
-			findme.style.border='solid red 1px';
+			//disableMovement(true);
 			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
 			watching=navigator.geolocation.watchPosition(success, error, options);
 			refresh(); 	
 		}
-
         //just once 
 		//navigator.geolocation.getCurrentPosition(success, error, options);
     };
@@ -193,6 +188,10 @@ function initialize() {
         else
             legend.style.height = '20px';
     }
+    
+	zipshow.onchange=function (){
+		document.getElementById('zip').style.display=zipshow.checked?"inline":"none";
+	}
 
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
@@ -209,9 +208,9 @@ function initialize() {
 		
 		
 		if(watching){
-			findme.style.border='solid black 1px';
+			//findme.style.border='solid black 1px';
 			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-			disableMovement(false);
+			//disableMovement(false);
 			navigator.geolocation.clearWatch(watching);
 			watching=null;
 			pinMe(false);
@@ -566,9 +565,8 @@ function infobubble(marker, contentString) {
     });
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
 
-
+/*
 function disableMovement(disable) {
     var mapOptions;
  
@@ -589,7 +587,7 @@ function disableMovement(disable) {
         };
     }
     map.setOptions(mapOptions);
-}
+}*/
 
 
 //ADD REMOVE Filters from filter array
@@ -663,3 +661,8 @@ function createMarker(place) {
     infowindow.open(map, this);
   });
 }
+
+
+//EVENTS
+
+google.maps.event.addDomListener(window, 'load', initialize);
