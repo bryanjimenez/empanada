@@ -452,7 +452,7 @@ function refresh() {
 					title: text
 				});
 
-				document.getElementById("mcount").innerHTML=count++;				
+//				document.getElementById("mcount").innerHTML=count++;				
 				markers.push(marker);
 				markerst.push(filter);
 				manager.addMarker(marker,12);
@@ -483,7 +483,7 @@ function refresh() {
 	//alert(zoom2rad(map.getZoom()));
 	rad=zoom2rad(zoom);
 	
-	document.getElementById('zoom').innerHTML=zoom;
+//	document.getElementById('zoom').innerHTML=zoom;
 	
 	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+filter;
 	//alert(s);
