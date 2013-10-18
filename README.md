@@ -19,5 +19,5 @@ Setup
 * Installing dev environment for Hadoop:
 
 ```
-    sudo ./hadoop.sh
+   hadoop/get_hadoop.sh
 ```
