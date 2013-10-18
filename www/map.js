@@ -133,10 +133,11 @@ function initialize() {
 
     findme = document.getElementById('findme');
 	legend = document.getElementById('legend');
-	zipshow = document.getElementById('zipshow');
     legendtitle = document.getElementById('legendtitle');
+	zipshow = document.getElementById('zipshow');
 	fiu = new google.maps.LatLng(lat, lng);
 
+	// make request for filters
 	getfilters();
 
     geocoder = new google.maps.Geocoder();
@@ -160,22 +161,7 @@ function initialize() {
 	// EVENT HANDLERS
 
     findme.onclick = function() {
-
-        // tracking mode OFF
-		if(watching){
-			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-			//disableMovement(false);
-			navigator.geolocation.clearWatch(watching);
-			watching=null;
-			pinMe(false);
-		}
-		// tracking mode ON
-		else{
-			//disableMovement(true);
-			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
-			watching=navigator.geolocation.watchPosition(success, error, options);
-			refresh(); 	
-		}
+		tracking();
         //just once 
 		//navigator.geolocation.getCurrentPosition(success, error, options);
     };
@@ -193,9 +179,6 @@ function initialize() {
 		document.getElementById('zip').style.display=zipshow.checked?"inline":"none";
 	}
 
-
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
 
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
@@ -228,10 +211,9 @@ function initialize() {
 		
 	});
 
-    /*
-     getLocation();
-     map.setCenter(mypos);
-     */
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
+
 
 }
 
@@ -461,9 +443,6 @@ function refresh() {
 					var y = 27.96855823;
 				}
 				
-				//DEBUG
-				if(!icons[filter])
-				alert(filter);
 				
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
@@ -632,14 +611,27 @@ function searchNear(obj){
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
     for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
+      var request = {
+		reference: results[i].reference
+		};
+	service = new google.maps.places.PlacesService(map);
+	service.getDetails(request, callback_detail);
+
+
+      
+      //createMarker(results[i]);
     }
   }
 }
+function callback_detail(place, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+	createMarker(place);
+	}
+}
 
 function createMarker(place) {
-  //var placeLoc = place.geometry.location;
- 
+//var placeLoc = place.geometry.location;
+//https://developers.google.com/places/documentation/search#PlaceSearchRequests 
 //https://developers.google.com/maps/documentation/javascript/examples/place-search-pagination  
     var image = {
       url: place.icon,
@@ -648,7 +640,6 @@ function createMarker(place) {
       anchor: new google.maps.Point(17, 34),
       scaledSize: new google.maps.Size(25, 25)
     };
-
   
   var marker = new google.maps.Marker({
     map: map,
@@ -656,12 +647,50 @@ function createMarker(place) {
     position: place.geometry.location
   });
 
+	var contentString = '' +
+			'<div id="content" style="width:304px;height:176px;">' +
+				'<div id="siteNotice">' +
+					'<span style="font-weight:400">'+place.name+'</span>' +
+				'</div>' +
+				'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
+					'<span>'+place.formatted_address+'<br/><br/>'+
+					
+					''+(place.website==null?'':'<a href="'+place.website+'" target="_blank">'+place.website+'</a>')+'<br/>' +
+					''+(place.formatted_phone_number==null?'':place.formatted_phone_number)+'<br/>' +
+					''+(place.rating==null?'':place.rating)+'</span><br/><br/>' +
+					
+					'<a href="'+(place.url==null?'':place.url)+'" target="_blank">More Info</a>' +
+				'</div>' +
+			'</div>';
+
   google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name);
+    infowindow.setContent(contentString);
     infowindow.open(map, this);
   });
 }
 
+
+/*
+ * Turns the compass on and off
+ */ 
+function tracking(){
+	        // tracking mode OFF
+		if(watching){
+			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
+			//disableMovement(false);
+			navigator.geolocation.clearWatch(watching);
+			watching=null;
+			pinMe(false);
+		}
+		// tracking mode ON
+		else{
+			//disableMovement(true);
+			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
+			watching=navigator.geolocation.watchPosition(success, error, options);
+			refresh(); 	
+		}
+	
+}
 
 //EVENTS
 
