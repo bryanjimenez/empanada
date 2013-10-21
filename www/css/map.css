@@ -1,0 +1,33 @@
+  html,body, #map-canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      
+	#legend {
+		background: white;
+		padding: 5px;
+		/*margin: 0px;*/
+		border: 1px solid black;
+
+	}
+	img[name=userpic] {    
+		width: 100px;
+	}
+	#findme {
+		/*background: orange;*/
+		padding: 5px;
+		/*margin: 0px;*/
+		background-image: url(/image/arrow_off.png); 
+		background-size: contain;
+		height: 40px; 
+		width: 40px; 
+		/*border: 1px solid black;*/
+	}
+	#target{
+		height: 2em; 
+		width: 10em; 
+	}
+	#zippy{
+		padding-top:12px;
+	}

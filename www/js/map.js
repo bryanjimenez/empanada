@@ -268,7 +268,7 @@ function getfilters() {
 			}
         }		
 	}
-    xmlHttp.open("GET", "filters.json", true);
+    xmlHttp.open("GET", "json/filters.json", true);
     xmlHttp.send(null);
 }
 
