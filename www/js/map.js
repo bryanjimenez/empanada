@@ -8,7 +8,6 @@ var mymarker;
 var markers=[];
 var markerst=[];
 
-var count=0;
 
 
 var watching=null;
@@ -16,6 +15,33 @@ var watching=null;
 var findme;
 var legend;
 var filter=[];
+
+
+function Legend(list) {
+	this.filters=list;
+
+	this.add = function (item) {
+		this.list.push(item);
+	};
+    this.getFilters = function() {
+        return this.filters;
+    };
+}
+
+function User1() {
+	var fiu;
+	var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
+	var mypos;
+	var mymarker;
+	
+	this.add = function (item) {
+		this.list.push(item);
+	};
+    this.getLatLng = function() {
+        return this.lat+","+this.lng;
+    };
+}
+
 var forbidden="image/forbidden.png";
 var infowindow = null;
 
@@ -170,7 +196,6 @@ function initialize() {
 
         if (legend.style.height == '20px')
             legend.style.height = '';
-
         else
             legend.style.height = '20px';
     }
@@ -657,7 +682,7 @@ function createMarker(place) {
 					
 					''+(place.website==null?'':'<a href="'+place.website+'" target="_blank">'+place.website+'</a>')+'<br/>' +
 					''+(place.formatted_phone_number==null?'':place.formatted_phone_number)+'<br/>' +
-					''+(place.rating==null?'':place.rating)+'</span><br/><br/>' +
+					''+(place.rating==null?'':'Rating: '+place.rating)+'</span><br/><br/>' +
 					
 					'<a href="'+(place.url==null?'':place.url)+'" target="_blank">More Info</a>' +
 				'</div>' +
