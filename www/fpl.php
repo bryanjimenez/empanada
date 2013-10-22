@@ -48,7 +48,7 @@ function main(){
 	//$zipcode=getZipcode($_GET["lat"],$_GET["lng"]);
 
 	//OPEN results file and insert into an array of lines
-	$lines = file("StormFeedRestoreZoom2.json");
+	$lines = file("json/StormFeedRestoreZoom2.json");
 	
 	//Merge array to STRING and decode to JSON
 	$outages =json_decode(implode("",$lines));
@@ -61,21 +61,17 @@ function main(){
 			
 			$lat=$outage->lat;
 			$lng=$outage->lng;
-			$filter=powerout;
+			//$filter=powerout;
 
 			$odelta=distance($_GET['olat'],$_GET['olng'],$lat,$lng, 'M');
 			$delta=distance($_GET['lat'],$_GET['lng'],$lat,$lng, 'M');
 			//echo ($delta." ".$_GET['rad']."\n");
 			//echo ($odelta." ".$_GET['orad']."\n");
-			if($delta<$_GET['rad'] && $odelta>$_GET['orad'] && (bool)strrpos($_GET['filter'],$filter)){
+			if($delta<$_GET['rad'] && $odelta>$_GET['orad']){
 				$o[]=$outage;
 			}
 
 		}
-/*
-		
-
-	*/	
 	}
 
 	//echo `./dohadoop.sh`;

@@ -4,18 +4,91 @@ var manager;
 var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 var mypos;
+
 var mymarker;
 var markers=[];
 var markerst=[];
 
-var count=0;
 
 
 var watching=null;
 
 var findme;
 var legend;
-var filter=[];
+//var filter=[];
+
+
+/* some icons are listed here
+ * 
+ * http://kml4earth.appspot.com/icons.html
+ */
+//var icons;
+var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
+
+var leg;
+function Legend() {
+	var filters=[];
+	var icons;
+
+	this.add = function (item) {
+		filters.push(item);
+	};
+	this.remove = function (item) {
+		filters.splice(filters.indexOf(item),1);
+	};
+			
+
+    this.getFilters = function() {
+        return filters;
+    };
+    this.getIcons = function(key) {
+        return icons[key].icon;
+    };
+    
+	var xmlHttp = null;
+	
+	xmlHttp = new XMLHttpRequest();
+	par= this;
+	xmlHttp.onreadystatechange=function(par) {
+		if (xmlHttp.readyState==4 && xmlHttp.status==200)
+		{
+			//alert(xmlHttp.responseText);
+			icons = JSON.parse(xmlHttp.responseText);
+			for (var key in icons) {
+				//alert(key);
+
+				filters.push(key.toLowerCase());
+				//alert(this.filters[0]);
+				var type = icons[key];
+				var name = type.name;
+				var icon = "image/red/"+type.icon;
+				var div = document.createElement('div');
+				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
+				legend.appendChild(div);
+				//alert(div);
+			}
+		}		
+	}
+	xmlHttp.open("GET", "json/filters.json", true);
+	xmlHttp.send(null);
+
+}
+
+function User() {
+	var fiu;
+	var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
+	var mypos;
+	var mymarker;
+	
+	this.add = function (item) {
+		this.list.push(item);
+	};
+    this.getLatLng = function() {
+        return this.lat+","+this.lng;
+    };
+}
+
 var forbidden="image/forbidden.png";
 var infowindow = null;
 
@@ -23,26 +96,10 @@ var infowindow = null;
 
 //https://developers.google.com/maps/documentation/javascript/reference#Map
 
-/*
- * example pseudoclass
- */
-function User(type) {
-    this.type = type;
-    this.color = "red";
-    this.getInfo = function() {
-        return this.color + ' ' + this.type + ' apple';
-    };
-}
 
 
 
 
-/* some icons are listed here
- * 
- * http://kml4earth.appspot.com/icons.html
- */
-var icons;
-var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 
 
 /*
@@ -138,7 +195,10 @@ function initialize() {
 	fiu = new google.maps.LatLng(lat, lng);
 
 	// make request for filters
-	getfilters();
+	leg = new Legend(legend);
+	//leg.initialize();
+	//alert(leg.filters);
+	//getfilters();
 
     geocoder = new google.maps.Geocoder();
 
@@ -170,7 +230,6 @@ function initialize() {
 
         if (legend.style.height == '20px')
             legend.style.height = '';
-
         else
             legend.style.height = '20px';
     }
@@ -333,14 +392,14 @@ function fpl() {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(x, y),
                 //map: map,
-                icon: "image/orange/"+icons[filter].icon,
+                icon: "image/orange/"+leg.getIcons(filter),
                 animation: google.maps.Animation.DROP,
                 title: status
             });
 
 
-			markers.push(marker);
-			markerst.push(filter);
+//			markers.push(marker);
+//			markerst.push(filter);
 
 //			document.getElementById("mcount").innerHTML=count++;				
 			markers.push(marker);
@@ -355,7 +414,7 @@ function fpl() {
 	}
 	
 	
-	var s = "fpl.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+filter;
+	var s = "fpl.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad;
 	//alert(s);
 	
     xmlHttp.open("GET", s, true);
@@ -447,7 +506,7 @@ function refresh() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/red/"+icons[filter].icon,
+					icon: "image/red/"+leg.getIcons(filter),
 					animation: google.maps.Animation.DROP,
 					title: text
 				});
@@ -485,7 +544,7 @@ function refresh() {
 	
 //	document.getElementById('zoom').innerHTML=zoom;
 	
-	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+filter;
+	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+leg.getFilters();
 	//alert(s);
 	
     xmlHttp.open("GET", s, true);
@@ -582,12 +641,12 @@ var div = document.createElement('div');
 
 	if(obj.innerHTML==''){
 		obj.innerHTML = '<img src="'+forbidden+'">';		
-		filter.splice(filter.indexOf(name),1);
+		leg.remove(name)
 		toggleMarkers(name,false);
 	}
 	else{
 		obj.innerHTML = '';
-		filter.push(name);
+		leg.add(name);
 		toggleMarkers(name,true);
 	
 	}
@@ -657,7 +716,7 @@ function createMarker(place) {
 					
 					''+(place.website==null?'':'<a href="'+place.website+'" target="_blank">'+place.website+'</a>')+'<br/>' +
 					''+(place.formatted_phone_number==null?'':place.formatted_phone_number)+'<br/>' +
-					''+(place.rating==null?'':place.rating)+'</span><br/><br/>' +
+					''+(place.rating==null?'':'Rating: '+place.rating)+'</span><br/><br/>' +
 					
 					'<a href="'+(place.url==null?'':place.url)+'" target="_blank">More Info</a>' +
 				'</div>' +
