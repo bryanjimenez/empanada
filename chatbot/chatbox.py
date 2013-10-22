@@ -12,6 +12,7 @@ class MyStreamer(TwythonStreamer):
         		print "DEBUG - " + data['text'].encode('utf-8')
         		post_back = bot.add_to_mention( data )
         		if ( post_back == 0 ):
+        			print "DEBUG - RESPONDING TO MENTION"
         			bot.respond_to_mention()
         		 	print "DEBUG - " + bot.get_message()
         		  	# update_status_with(get_oauthentication(), bot.get_message())
@@ -42,8 +43,8 @@ def update_status_with(oauth, message):
 		twitter.update_status(status=message)
 	except TwythonError as e:
 		print e
-		
-	
+
+
 def streamer():
 	oauth = get_oauthentication()
 	stream = MyStreamer(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
