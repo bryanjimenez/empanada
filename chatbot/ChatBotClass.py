@@ -11,9 +11,10 @@ class ChatBot():
         self.current_mention = {} # current mention
         self.question = False
         self.filter = self.get_filters()
+        self.error = self.get_errors()
         self.keyword = '@empanada305'
         self.twitter_username = "empanada305" # hardcoded not a good idea
-        
+                
         # Messages (Strings)
         self.website_address = "our website"
         self.message  = "Please refer to " + self.website_address + " for more information."
@@ -76,7 +77,7 @@ class ChatBot():
                 # call to generate result - this makes a call to refresh wish returns issues around a longitude and latitude 
                 result_ok = self.generate_result()
                 # create message based on generate_result()
-                if (result_ok): self.message = generate_message(item) # "@" + self.current_mention['user']['screen_name'] + " " + self.you_mentioned_filter + item
+                self.message = self.generate_message(self.current_filter, result_ok) # "@" + self.current_mention['user']['screen_name'] + " " + self.you_mentioned_filter + item
 
 
     # get_latitude form the current mention
@@ -95,9 +96,28 @@ class ChatBot():
             return -1
         
 
+    # get list of errors
+    def get_errors(self):
+        import json
+        
+        error_codes = open('error.json')
+        json_errors = json.load(error_codes)
+        error_codes.close()
+           
+        return json_errors
+
     #
-    def generate_message(self, item):
-        return "@" + self.current_mention['user']['screen_name'] + " " + self.you_mentioned_filter + item
+    def generate_message(self, item, code):
+        str_code = str(code)
+        
+        verb = "are" if (code > 1) else "is" # is vs are for more than 2 items
+        if (code == 0): str_code = "no" # this will switch 0 for "no" in the message    
+        
+        
+        if (code >= 0):            
+            return "There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
+        
+        return self.error[str_code]
 
 
     # get results from backend
@@ -111,7 +131,7 @@ class ChatBot():
         filter = self.current_filter
         
         if (latitude == -1 and longitude == -1):
-            return False
+            return -1
             
         conn = httplib.HTTPConnection(self.website_url)
         conn.request("GET", "/refresh.php?lat="+latitude+"&lng="+longitude+"&rad="+radius+"&olat=0&olng=0&orad=0&filter=fuel,"+filter)
@@ -124,7 +144,7 @@ class ChatBot():
             if self.debug: print "DEBUG - " + json_data['t'][0]['text']
             
         conn.close()
-        return True
+        return len(json_data['f'])
 
 
 
