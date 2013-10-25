@@ -1,44 +1,36 @@
+//GOOGLE Globals
 var geocoder;
 var map;
 var manager;
+
+//EMPANADA Globals
 var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 var mypos;
 
-var mymarker;
 var markers=[];
 var markerst=[];
 
+var infowindow = null;
 
 
-var watching=null;
 
-var findme;
 var legend;
-//var filter=[];
+function Legend(parent) {
+	var forbidden="image/forbidden.png";
 
-
-/* some icons are listed here
- * 
- * http://kml4earth.appspot.com/icons.html
- */
-//var icons;
-var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-
-
-var leg;
-function Legend() {
 	var filters=[];
 	var icons;
+	this.div = parent;
 
 	this.add = function (item) {
 		filters.push(item);
 	};
+
 	this.remove = function (item) {
 		filters.splice(filters.indexOf(item),1);
 	};
 			
-
     this.getFilters = function() {
         return filters;
     };
@@ -46,10 +38,21 @@ function Legend() {
         return icons[key].icon;
     };
     
-	var xmlHttp = null;
-	
-	xmlHttp = new XMLHttpRequest();
-	par= this;
+    this.toggle = function (obj) {
+		var name = obj.id.toLowerCase().split('_')[0];
+		if(obj.innerHTML==''){
+			obj.innerHTML = '<img src="'+forbidden+'">';		
+			this.remove(name)
+			toggleMarkers(name,false);
+		}
+		else{
+			obj.innerHTML = '';
+			this.add(name);
+			toggleMarkers(name,true);
+		}
+	};
+    
+	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange=function(par) {
 		if (xmlHttp.readyState==4 && xmlHttp.status==200)
 		{
@@ -64,19 +67,213 @@ function Legend() {
 				var name = type.name;
 				var icon = "image/red/"+type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
-				legend.appendChild(div);
-				//alert(div);
+				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
+				
+				parent.appendChild(div);
 			}
 		}		
 	}
 	xmlHttp.open("GET", "json/filters.json", true);
 	xmlHttp.send(null);
-
 }
 
 function User() {
-	var fiu;
+	var _this = this;
+    
+}
+
+var places;
+function Places() {
+
+
+				
+	//https://developers.google.com/places/training/additional-places-features
+	this.searchNear = function (obj){
+		var request = {
+			location: new google.maps.LatLng(lat, lng),
+			radius: 500,
+			//types: ['restaurant']
+			keyword: obj.value 
+		};
+		//infowindow = new google.maps.InfoWindow();
+		var service = new google.maps.places.PlacesService(map);
+		service.nearbySearch(request, callback);
+	};
+	
+	function callback(results, status) {
+		if (status == google.maps.places.PlacesServiceStatus.OK) {
+			for (var i = 0; i < results.length; i++) {
+				var request = {
+					reference: results[i].reference
+				};
+				service = new google.maps.places.PlacesService(map);
+				service.getDetails(request, callback_detail);
+			}
+		}
+	}
+	function callback_detail(place, status) {
+		if (status == google.maps.places.PlacesServiceStatus.OK)
+			createMarker(place);
+	}
+
+	//https://developers.google.com/places/documentation/search#PlaceSearchRequests 
+	//https://developers.google.com/maps/documentation/javascript/examples/place-search-pagination  
+	function createMarker(place) {
+		var contentString = '' +
+		'<div id="content" style="width:304px;height:176px;">' +
+			'<div id="siteNotice">' +
+				'<span style="font-weight:400">'+place.name+'</span>' +
+			'</div>' +
+			'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
+				'<span>'+place.formatted_address+'<br/><br/>'+
+				
+				''+(place.website==null?'':'<a href="'+place.website+'" target="_blank">'+place.website+'</a>')+'<br/>' +
+				''+(place.formatted_phone_number==null?'':place.formatted_phone_number)+'<br/>' +
+				''+(place.rating==null?'':'Rating: '+place.rating)+'</span><br/><br/>' +
+				
+				'<a href="'+(place.url==null?'':place.url)+'" target="_blank">More Info</a>' +
+			'</div>' +
+		'</div>';
+		
+		var image = {
+			url: place.icon,
+			size: new google.maps.Size(71, 71),
+			origin: new google.maps.Point(0, 0),
+			anchor: new google.maps.Point(17, 34),
+			scaledSize: new google.maps.Size(25, 25)
+		};
+
+		var marker = new google.maps.Marker({
+			map: map,
+			icon: image,
+			position: place.geometry.location
+		});
+
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.setContent(contentString);
+			infowindow.open(map, this);
+		});
+	}
+}
+
+var compass;
+function Compass(obj) {
+	var _this = this;
+	var mymarker;
+	var watching=null;
+	var needle_off = 'image/arrow_off.png';
+	var needle_on = 'image/arrow_on.png'
+	
+	this.htmlObj = obj;	
+
+    document.getElementById('legendtitle').onclick = function() {
+
+        if (_this.htmlObj.style.height == '20px')
+            _this.htmlObj.style.height = '';
+        else
+            _this.htmlObj.style.height = '20px';
+    }
+
+	obj.onclick = function (){
+		_this.toggle();
+	};
+	
+
+    
+	/*
+	* Great place to test google api code
+	* http://code.google.com/apis/ajax/playground/
+	*/
+    this.dropPin = function (t) {
+		//toggle off
+		if(!t && mymarker)
+				mymarker.setMap(null);	
+		else{
+			map.setCenter(mypos);
+
+			if (mymarker)
+				mymarker.setMap(null);
+
+			mymarker = new google.maps.Marker({
+				position: mypos,
+				map: map,
+				//animation: google.maps.Animation.BOUNCE,
+				icon: 'image/red.png',
+				title: 'You\'re Here'
+			});
+		}
+	}
+	
+	/*
+	 * http://www.w3schools.com/html/html5_geolocation.asp
+	 */
+	var options = {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+	};
+
+	function success(pos) {
+		lat = pos.coords.latitude;
+		lng = pos.coords.longitude;
+		mypos = new google.maps.LatLng(lat, lng);
+		_this.dropPin(true);
+	}
+
+	function error(err) {
+		var msg;
+
+		switch(error.code)
+		{
+			case error.PERMISSION_DENIED:
+				msg="User denied the request for Geolocation."
+				break;
+			case error.POSITION_UNAVAILABLE:
+				msg="Location information is unavailable."
+				break;
+			case error.TIMEOUT:
+				msg="The request to get user location timed out."
+				break;
+			case error.UNKNOWN_ERROR:
+				msg="An unknown error occurred."
+				break;
+		}	  
+		_this.off();
+
+		//console.warn('ERROR(' + err.code + '): ' + err.message);
+		alert("Geolocation is not supported by your browser at this time.");
+		//alert(msg);
+	};
+	
+    this.off = function(){
+			_this.htmlObj.style.backgroundImage = 'url(\''+needle_off+'\')';
+			//disableMovement(false);
+			navigator.geolocation.clearWatch(watching);
+			watching=null;
+			_this.dropPin(false);
+	};
+    
+    this.toggle = function() {
+		// tracking mode OFF
+		if(watching){
+			_this.htmlObj.style.backgroundImage = 'url(\''+needle_off+'\')';
+			//disableMovement(false);
+			navigator.geolocation.clearWatch(watching);
+			watching=null;
+			_this.dropPin(false);
+		}
+		// tracking mode ON
+		else{
+			//disableMovement(true);
+			_this.htmlObj.style.backgroundImage = 'url(\''+needle_on+'\')';
+			watching=navigator.geolocation.watchPosition(success, error, options);
+			//refresh(); 	
+		}
+	};   
+}
+
+function Map() {
+	/*var fiu;
 	var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 	var mypos;
 	var mymarker;
@@ -86,13 +283,8 @@ function User() {
 	};
     this.getLatLng = function() {
         return this.lat+","+this.lng;
-    };
+    };*/
 }
-
-var forbidden="image/forbidden.png";
-var infowindow = null;
-
-
 
 //https://developers.google.com/maps/documentation/javascript/reference#Map
 
@@ -102,104 +294,18 @@ var infowindow = null;
 
 
 
-/*
- * Great place to test google api code
- * http://code.google.com/apis/ajax/playground/
- */
 
-/*
- * http://www.w3schools.com/html/html5_geolocation.asp
- */
-
-var options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0
-};
-
-function success(pos) {
-    /*  var crd = pos.coords;
-     
-     console.log('Your current position is:');
-     console.log('Latitude : ' + crd.latitude);
-     console.log('lnggitude: ' + crd.lnggitude);
-     console.log('More or less ' + crd.accuracy + ' meters.');
-     */
-    lat = pos.coords.latitude;
-    lng = pos.coords.longitude;
-    mypos = new google.maps.LatLng(lat, lng);
-    //alert(mypos);
-
-    pinMe(true);
-}
-
-
-function error(err) {
-  var msg;
-  
-  switch(error.code)
-    {
-    case error.PERMISSION_DENIED:
-      msg="User denied the request for Geolocation."
-      break;
-    case error.POSITION_UNAVAILABLE:
-      msg="Location information is unavailable."
-      break;
-    case error.TIMEOUT:
-      msg="The request to get user location timed out."
-      break;
-    case error.UNKNOWN_ERROR:
-      msg="An unknown error occurred."
-      break;
-    }
-  
-	findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-	navigator.geolocation.clearWatch(watching);
-	watching=null;
-	pinMe(false);
-	
-	
-    console.warn('ERROR(' + err.code + '): ' + err.message);
-//    alert("Geolocation is not supported by this browser.");
-    alert(msg);
-}
-
-function pinMe(t) {
-
-	//toggle off
-	if(!t && mymarker)
-			mymarker.setMap(null);	
-	else{
-		map.setCenter(mypos);
-
-		if (mymarker)
-			mymarker.setMap(null);
-
-		mymarker = new google.maps.Marker({
-			position: mypos,
-			map: map,
-			//animation: google.maps.Animation.BOUNCE,
-			icon: 'image/red.png',
-			title: 'You\'re Here'
-		});
-	}
-}
 
 
 function initialize() {
 
-    findme = document.getElementById('findme');
-	legend = document.getElementById('legend');
-    legendtitle = document.getElementById('legendtitle');
 	zipshow = document.getElementById('zipshow');
 	fiu = new google.maps.LatLng(lat, lng);
 
-	// make request for filters
-	leg = new Legend(legend);
-	//leg.initialize();
-	//alert(leg.filters);
-	//getfilters();
-
+	legend = new Legend(document.getElementById('legend'));
+	compass = new Compass(document.getElementById('findme'));
+	places = new Places();
+	
     geocoder = new google.maps.Geocoder();
 
     var mapOptions = {
@@ -220,24 +326,9 @@ function initialize() {
 
 	// EVENT HANDLERS
 
-    findme.onclick = function() {
-		tracking();
-        //just once 
-		//navigator.geolocation.getCurrentPosition(success, error, options);
-    };
-    
-    legendtitle.onclick = function() {
-
-        if (legend.style.height == '20px')
-            legend.style.height = '';
-        else
-            legend.style.height = '20px';
-    }
-    
 	zipshow.onchange=function (){
 		document.getElementById('zip').style.display=zipshow.checked?"inline":"none";
 	}
-
 
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
@@ -248,32 +339,11 @@ function initialize() {
 		refresh();
 		fpl();
 		
-		
-		if(watching){
-			//findme.style.border='solid black 1px';
-			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-			//disableMovement(false);
-			navigator.geolocation.clearWatch(watching);
-			watching=null;
-			pinMe(false);
-		}
-		// tracking mode ON
-		/*else{
-			disableMovement(true);
-			findme.style.border='solid red 1px';
-			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
-			watching=navigator.geolocation.watchPosition(success, error, options);
-			refresh(); 	
-		}*/
-
-		
-		
+		compass.off();
 	});
 
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(findme);
-
-
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
+    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
 }
 
 
@@ -294,7 +364,6 @@ function codeAddress() {
         if (status == google.maps.GeocoderStatus.OK) {
 
             mypos = results[0].geometry.location;
-            //pinMe();
             map.setCenter(mypos);
             refresh();
 
@@ -302,33 +371,6 @@ function codeAddress() {
             alert("Geocode was not successful for the following reason: " + status);
         }
     });
-}
-
-function getfilters() {
-
-    var xmlHttp = null;
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange=function()
-	{
-		if (xmlHttp.readyState==4 && xmlHttp.status==200)
-		{
-			//alert(xmlHttp.responseText);
-			icons = JSON.parse(xmlHttp.responseText);
-
-			for (var key in icons) {
-				filter.push(key.toLowerCase());
-				var type = icons[key];
-				var name = type.name;
-				var icon = "image/red/"+type.icon;
-				var div = document.createElement('div');
-				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="filters(this);"></div> ';
-				//div.innerHTML = '<div><img alt="' + name + '" title="' + name + '" src="" onclick="filters(this);"></div> ';
-				legend.appendChild(div);
-			}
-        }		
-	}
-    xmlHttp.open("GET", "json/filters.json", true);
-    xmlHttp.send(null);
 }
 
 /* Thanks to
@@ -392,8 +434,8 @@ function fpl() {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(x, y),
                 //map: map,
-                icon: "image/orange/"+leg.getIcons(filter),
-                animation: google.maps.Animation.DROP,
+                icon: "image/orange/"+legend.getIcons(filter),
+                //animation: google.maps.Animation.DROP,
                 title: status
             });
 
@@ -421,20 +463,11 @@ function fpl() {
     
     //xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
     xmlHttp.send(null);
-    
-
 }
 
 function refresh() {
 	
-	//TODO
-	// currently the refresh will pull the same markers if the center isnt far from the old center
-	// could avoid this by using the old center and only getting back the new markers
-	
-	//alert("!");
-    var xmlHttp = null;
-
-    xmlHttp = new XMLHttpRequest();
+    var xmlHttp = new XMLHttpRequest();
 
 	xmlHttp.onreadystatechange=function()
 	{
@@ -486,7 +519,7 @@ function refresh() {
 								'</div>' +
 								'<a href="javascript:showSearch();">Search Nearby</a>' +
 									'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">'+
-										'<input id="target" type="text"><button id="search" onclick="searchNear(this.previousSibling)" >Search</button>'+
+										'<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>'+
 									'</div>' +	
 							'</div>' +
 						'</div>';
@@ -506,25 +539,15 @@ function refresh() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/red/"+leg.getIcons(filter),
-					animation: google.maps.Animation.DROP,
+					icon: "image/red/"+legend.getIcons(filter),
+					//animation: google.maps.Animation.DROP,
 					title: text
 				});
 
-//				document.getElementById("mcount").innerHTML=count++;				
 				markers.push(marker);
 				markerst.push(filter);
 				manager.addMarker(marker,12);
 				manager.refresh();
-				/*
-					
-					if(markers.length>300){
-						markers.shift().setMap(null);
-						markerst.shift();
-					}
-					markers.push(marker);
-					markerst.push(filter);
-				*/
 					
 				infobubble(marker, contentString);
 			}
@@ -537,23 +560,17 @@ function refresh() {
 	lat=map.getCenter().lat();
 	lng=map.getCenter().lng();
 	zoom=map.getZoom();
-	
-	//alert(map.getZoom());
-	//alert(zoom2rad(map.getZoom()));
 	rad=zoom2rad(zoom);
 	
-//	document.getElementById('zoom').innerHTML=zoom;
 	
-	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+leg.getFilters();
+	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+legend.getFilters();
 	//alert(s);
 	
     xmlHttp.open("GET", s, true);
     xmlHttp.send(null);
-
-   	//alert(markers[filter][0].toString());
-
 }
 
+// When legend item is clicked that category is toggled here
 function toggleMarkers(category, t){ 
 	if (infowindow)
 		infowindow.close();
@@ -628,128 +645,14 @@ function disableMovement(disable) {
 }*/
 
 
-//ADD REMOVE Filters from filter array
-//ENABLE DISABLE legend icon
-function filters(obj){
-	
-var div = document.createElement('div');
-	
-	//var name = obj.title.toLowerCase();
-	var name = obj.id.toLowerCase().split('_')[0];
-
-	//alert(name+" "+name2);
-
-	if(obj.innerHTML==''){
-		obj.innerHTML = '<img src="'+forbidden+'">';		
-		leg.remove(name)
-		toggleMarkers(name,false);
-	}
-	else{
-		obj.innerHTML = '';
-		leg.add(name);
-		toggleMarkers(name,true);
-	
-	}
-}
 function showSearch(){
 	document.getElementById('detail').style.visibility='';
 }
 
-//https://developers.google.com/places/training/additional-places-features
-function searchNear(obj){
-	var request = {
-		location: new google.maps.LatLng(lat, lng),
-		radius: 500,
-		//types: ['restaurant']
-		keyword: obj.value 
-	};
-	//infowindow = new google.maps.InfoWindow();
-	var service = new google.maps.places.PlacesService(map);
-	service.nearbySearch(request, callback);
-}
-function callback(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      var request = {
-		reference: results[i].reference
-		};
-	service = new google.maps.places.PlacesService(map);
-	service.getDetails(request, callback_detail);
 
 
-      
-      //createMarker(results[i]);
-    }
-  }
-}
-function callback_detail(place, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-	createMarker(place);
-	}
-}
-
-function createMarker(place) {
-//var placeLoc = place.geometry.location;
-//https://developers.google.com/places/documentation/search#PlaceSearchRequests 
-//https://developers.google.com/maps/documentation/javascript/examples/place-search-pagination  
-    var image = {
-      url: place.icon,
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(25, 25)
-    };
-  
-  var marker = new google.maps.Marker({
-    map: map,
-    icon: image,
-    position: place.geometry.location
-  });
-
-	var contentString = '' +
-			'<div id="content" style="width:304px;height:176px;">' +
-				'<div id="siteNotice">' +
-					'<span style="font-weight:400">'+place.name+'</span>' +
-				'</div>' +
-				'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-					'<span>'+place.formatted_address+'<br/><br/>'+
-					
-					''+(place.website==null?'':'<a href="'+place.website+'" target="_blank">'+place.website+'</a>')+'<br/>' +
-					''+(place.formatted_phone_number==null?'':place.formatted_phone_number)+'<br/>' +
-					''+(place.rating==null?'':'Rating: '+place.rating)+'</span><br/><br/>' +
-					
-					'<a href="'+(place.url==null?'':place.url)+'" target="_blank">More Info</a>' +
-				'</div>' +
-			'</div>';
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(contentString);
-    infowindow.open(map, this);
-  });
-}
 
 
-/*
- * Turns the compass on and off
- */ 
-function tracking(){
-	        // tracking mode OFF
-		if(watching){
-			findme.style.backgroundImage = 'url(\'image/arrow_off.png\')';
-			//disableMovement(false);
-			navigator.geolocation.clearWatch(watching);
-			watching=null;
-			pinMe(false);
-		}
-		// tracking mode ON
-		else{
-			//disableMovement(true);
-			findme.style.backgroundImage = 'url(\'image/arrow_on.png\')';
-			watching=navigator.geolocation.watchPosition(success, error, options);
-			refresh(); 	
-		}
-	
-}
 
 //EVENTS
 
