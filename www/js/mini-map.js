@@ -68,7 +68,7 @@ function Legend(parent) {
 				var name = type.name;
 				var icon = "image/red/"+type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
+				//div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
 				
 				parent.appendChild(div);
 			}
@@ -308,7 +308,7 @@ function initialize() {
 	fiu = new google.maps.LatLng(lat, lng);
 
 	legend = new Legend(document.getElementById('legend'));
-	compass = new Compass(document.getElementById('findme'));
+	//compass = new Compass(document.getElementById('findme'));
 	places = new Places();
 	
     geocoder = new google.maps.Geocoder();
@@ -320,19 +320,17 @@ function initialize() {
         //mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDefaultUI: true
     };
-    map = new google.maps.Map(document.getElementById('map-canvas'),
+    map = new google.maps.Map(document.getElementById('mini-map-canvas'),
             mapOptions);
             
     var mgrOptions = { borderPadding: 50, maxZoom: 15};
 	manager = new MarkerManager(map, mgrOptions);        
 
-	alert(location.search);
+	//alert(location.search);
 
 	// EVENT HANDLERS
 
-	zipshow.onchange=function (){
-		document.getElementById('zip').style.display=zipshow.checked?"inline":"none";
-	}
+
 
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
@@ -347,7 +345,7 @@ function initialize() {
 	});
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
+    //map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
 }
 
 

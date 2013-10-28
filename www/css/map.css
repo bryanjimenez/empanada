@@ -3,6 +3,15 @@
         padding: 0;
         height: 100%;
       }
+	#mini-map-canvas {
+		/*margin: 0;
+		padding: 0;*/
+		height: 50%;
+		width:50%;
+		/*margin:0 auto;*/
+		top:25%;
+		left:25%;
+	}
       
 	#legend {
 		background: white;
