@@ -60,8 +60,9 @@ function Legend(parent) {
 			//alert(xmlHttp.responseText);
 			icons = JSON.parse(xmlHttp.responseText);
 			for (var key in icons) {
-				//alert(key);
-
+				//alert(key.toLowerCase()+" "+location.search.split('&')[2].split('=')[1]);
+				
+				if(key.toLowerCase()==location.search.split('&')[2].split('=')[1])
 				filters.push(key.toLowerCase());
 				//alert(this.filters[0]);
 				var type = icons[key];
@@ -70,7 +71,7 @@ function Legend(parent) {
 				var div = document.createElement('div');
 				//div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
 				
-				parent.appendChild(div);
+				//parent.appendChild(div);
 			}
 			//Do a refresh once filters are up
 			//alert(legend.getFilters());
