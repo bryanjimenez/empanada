@@ -5,7 +5,7 @@ export HADOOP_CLASSPATH=json-simple-1.1.1.jar
 
 rm -R output
 
-hadoop-1.2.1/bin/hadoop jar playground/wordcount.jar org.apache.hadoop.examples.WordCount tweets output
+hadoop-1.2.1/bin/hadoop jar playground/TweetCategorizer.jar org.apache.hadoop.examples.TweetCategorizer tweets output
 
 
 # This is for the UI to use the results

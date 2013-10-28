@@ -6,6 +6,7 @@ var manager;
 //EMPANADA Globals
 var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
+var olat = 0, olng = 0, ozoom=14; orad=0;
 var mypos;
 
 var markers=[];
@@ -71,6 +72,10 @@ function Legend(parent) {
 				
 				parent.appendChild(div);
 			}
+			//Do a refresh once filters are up
+			//alert(legend.getFilters());
+			refresh();
+			fpl();
 		}		
 	}
 	xmlHttp.open("GET", "json/filters.json", true);
@@ -323,7 +328,6 @@ function initialize() {
 
 
 
-
 	// EVENT HANDLERS
 
 	zipshow.onchange=function (){
@@ -458,6 +462,9 @@ function fpl() {
 	
 	var s = "fpl.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad;
 	//alert(s);
+	olat=lat;
+	olng=lng;
+	orad=zoom2rad(zoom);
 	
     xmlHttp.open("GET", s, true);
     
@@ -540,7 +547,7 @@ function refresh() {
 					position: new google.maps.LatLng(x, y),
 					//map: map,
 					icon: "image/red/"+legend.getIcons(filter),
-					//animation: google.maps.Animation.DROP,
+					animation: google.maps.Animation.DROP,
 					title: text
 				});
 
@@ -554,9 +561,6 @@ function refresh() {
 		}
 	}
 	//PARAMETERS
-	olat=lat;
-	olng=lng;
-	orad=zoom2rad(zoom);
 	lat=map.getCenter().lat();
 	lng=map.getCenter().lng();
 	zoom=map.getZoom();
@@ -565,6 +569,8 @@ function refresh() {
 	
 	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+legend.getFilters();
 	//alert(s);
+
+	
 	
     xmlHttp.open("GET", s, true);
     xmlHttp.send(null);
