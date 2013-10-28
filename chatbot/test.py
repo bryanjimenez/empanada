@@ -62,11 +62,24 @@ def generate_result():
     conn.close()
 
 
+def time():
+    from time import gmtime, strftime    
+    print strftime("%a, %d %b %Y %X", gmtime())
+    
+    #from datetime import datetime
+        
+    #print str(datetime.now())
+    
+    # d = date    
+    # print d.today()
+    # print d
+
 
 def main():
     # results_read()
     # json_read()
-    generate_result()
+    # generate_result()
+    time()
     
     
 if __name__ == "__main__":
