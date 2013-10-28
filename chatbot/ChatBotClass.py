@@ -16,7 +16,7 @@ class ChatBot():
         self.twitter_username = "empanada305" # hardcoded not a good idea
                 
         # Messages (Strings)
-        self.website_address = "our website"
+        self.website_address = "empanada.cs.fiu.edu"
         self.message  = "Please refer to " + self.website_address + " for more information."
         self.general_message_no_location = "Your location is not available. Please refer to " + self.website_address + " for more information."
         self.you_mentioned_filter = "You mentioned something about "
@@ -50,6 +50,7 @@ class ChatBot():
         if ( tweet['user']['screen_name'] == self.twitter_username ): # if tweet is from the same username then we ignore the tweet
             if self.debug: print "DEBUG - " + tweet['user']['screen_name'] + " came from same user"
             return -1 # tweet won't get a reply
+        
         # for key in self.keyword: # this could be remove or we could add more keywords
         if ( str.upper(self.keyword) in tweet['text'].upper() ): # if the tweet mentions @empanada305 then we move on to find the filter in the text
             for filter_key in self.filter:
@@ -71,13 +72,13 @@ class ChatBot():
             if self.debug: print "DEBUG - Geolocation is " + ("" if self.current_mention['user']['geo_enabled'] else "not ") + "enabled" # Debbugin
             # print type(mention['user']['geo_enabled'])
             if ( self.current_mention['user']['geo_enabled'] == False ):
-                self.message = "@" + self.current_mention['user']['screen_name'] + " " + self.general_message_no_location
+                self.message = self.get_current_time() + "@" + self.current_mention['user']['screen_name'] + " " + self.general_message_no_location # add time stamp to this message
             else:
                 # make a querry to get incidents around the location?????                    
                 # call to generate result - this makes a call to refresh wish returns issues around a longitude and latitude 
                 result_ok = self.generate_result()
                 # create message based on generate_result()
-                self.message = self.generate_message(self.current_filter, result_ok) # "@" + self.current_mention['user']['screen_name'] + " " + self.you_mentioned_filter + item
+                self.message = self.generate_message(self.current_filter, result_ok, self.current_mention['user']['screen_name']) # "@" + self.current_mention['user']['screen_name'] + " " + self.you_mentioned_filter + item
 
 
     # get_latitude form the current mention
@@ -106,8 +107,16 @@ class ChatBot():
            
         return json_errors
 
+
+    # get current file
+    def get_current_time(self):
+        from time import gmtime, strftime    
+        return strftime("%a, %d %b %Y %X", gmtime()) + " "
+        
+
     #
-    def generate_message(self, item, code):
+    def generate_message(self, item, code, username):
+        current_time = self.get_current_time()        
         str_code = str(code)
         
         verb = "are" if (code > 1) else "is" # is vs are for more than 2 items
@@ -115,9 +124,9 @@ class ChatBot():
         
         
         if (code >= 0):            
-            return "There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
+            return current_time + "@" + username + " There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
         
-        return self.error[str_code]
+        return current_time + "@" + username + " " + self.error[str_code]
 
 
     # get results from backend
@@ -134,14 +143,18 @@ class ChatBot():
             return -1
             
         conn = httplib.HTTPConnection(self.website_url)
-        conn.request("GET", "/refresh.php?lat="+latitude+"&lng="+longitude+"&rad="+radius+"&olat=0&olng=0&orad=0&filter=fuel,"+filter)
+        conn.request("GET", "/refresh.php?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
         result = conn.getresponse()
         if self.debug: print "DEBUG - RESPONSE FROM getresponse() - " + result.reason
         if (result.reason == "OK"):
             data = result.read()
             if self.debug: print "DEBUG - " + data
             json_data = json.loads(data)
-            if self.debug: print "DEBUG - " + json_data['t'][0]['text']
+            if self.debug: print "DEBUG - " + str(type(json_data['t']))
+            if (json_data['t']):
+                if self.debug: print "DEBUG - " + json_data['t'][0]['text']
+            else:
+                return 0
             
         conn.close()
         return len(json_data['f'])
