@@ -41,6 +41,30 @@ class ChatBot():
         return json_filters
     
 
+    # finds out whether the question needs the closest location
+    def analyze_question(self, text):
+        question = { "is": ["there"],
+                     "are": ["there"],
+                     "what": ["close", "near", "around", "nearby", "adjacent", "not far"],
+                     "where": ["get", "find", "acquire", "obtain", "close"]
+                    }
+        find_closest = False
+        
+        # iterate through the keys
+        # if the key is found then we iterate
+        # through the values
+        #
+        for key in question.key:
+            if (key in text.upper()):
+                
+                for next in question['key']:
+                    if (key.upper() in text.upper()):
+                        return True
+               
+                
+        return find_closest
+        
+
 
     # adds incoming tweets to metions if the contain the self.keyword phrase
     # it won't get added if the tweet came from the same username
@@ -55,9 +79,13 @@ class ChatBot():
         if ( str.upper(self.keyword) in tweet['text'].upper() ): # if the tweet mentions @empanada305 then we move on to find the filter in the text
             for filter_key in self.filter:
                 if ( filter_key.upper() in tweet['text'].upper() ):
+                    
                     if self.debug: print "DEBUG - added the tweet to the queue"
                     self.mentions.append(tweet)
                     self.keys.append(filter_key)
+                    # find out whether the question needs a close location
+                    if self.debug: print "DEBUG - This question requires a close point response " + str(self.analyze_question(tweet['text']))
+                    
                     return 0; # tweet had the self.keyword in it
 
         return -1 # tweet won't get a reply   
