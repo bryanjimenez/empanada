@@ -74,8 +74,8 @@ function Legend(parent) {
 			}
 			//Do a refresh once filters are up
 			//alert(legend.getFilters());
+						
 			refresh();
-			fpl();
 		}		
 	}
 	xmlHttp.open("GET", "json/filters.json", true);
@@ -294,17 +294,15 @@ function Map() {
 //https://developers.google.com/maps/documentation/javascript/reference#Map
 
 
-
-
-
-
-
-
-
-
 function initialize() {
 
 	zipshow = document.getElementById('zipshow');
+	
+	//alert(lat=location.search.split('&')[0].split('=')[1]);
+
+	lat=location.search.split('&')[0].split('=')[1];
+	lng=location.search.split('&')[1].split('=')[1];
+
 	fiu = new google.maps.LatLng(lat, lng);
 
 	legend = new Legend(document.getElementById('legend'));
@@ -348,127 +346,6 @@ function initialize() {
     //map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
 }
 
-
-
-
-/* geocoding
- * 
- * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
- */
-
-// REVERSE GEOCODING
-//https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
-//maps.google.com/maps/api/geocode/json?latlng=25.705501,-80.359855&components=postal_code&sensor=false
-
-function codeAddress() {
-    var address = document.getElementById("zip").value;
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-
-            mypos = results[0].geometry.location;
-            map.setCenter(mypos);
-            refresh();
-
-        } else {
-            alert("Geocode was not successful for the following reason: " + status);
-        }
-    });
-}
-
-/* Thanks to
- * http://www.fplmaps.com/
- */
-function fpl() {
-
-    var xmlHttp = null;
-
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange=function()
-	{
-		if (xmlHttp.readyState==4 && xmlHttp.status==200  && xmlHttp.responseText)
-		{
-
-        //alert(xmlHttp.responseText);
-
-        var fpl = JSON.parse(xmlHttp.responseText);
-        //alert(tweets.f[0]);
-
-        for (var i in fpl.o) {
-            var filter = "poweroutage";
-            var outage = fpl.o[i];
-
-            if (!outage.status)
-                continue;
-
-            var cause = outage.Cause;
-            var pic = "http://www.fpl.com/fplcommon/wrapper/1024images/w_topLogo.gif";
-            var status = outage.status;
-            var reported = "Reported " + outage.dateReported;
-            var updated = "Updated " + outage.lastUpdated;
-
-
-            var x = outage.lat;
-            var y = outage.lng;
-			var contentString = '' +
-			'<div id="content" style="width:304px; height:176px;">' +
-			'<div id="siteNotice">' +
-			'<div style="float:left;border:0px solid blue;">' +
-                    '<h4 id="firstHeading" class="firstHeading">' + cause + '</h4>' +
-			'</div>' +
-			'<div style="float:right;border:0px solid red;width=50%;">' +
-			'</div>' +
-			'</div>' +
-			'<div id="left" style="float:center;border:0px solid green;width:100%;">' +
-			'</div>' +
-			'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-			'<div style="float:left;border:0px solid blue;width:204px;">' +
-			'<p style="max-width:200px">' + status + '</p>' +
-			'</div>' +
-			'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
-			'<img name="userpic" src="' + pic + '"></img>' +
-			'</div>' +
-			'</div>' +
-			'<div id="footer" style="float:right;">' +
-            '<p>' + reported + '<br/>' + updated + '</p>' +
-			'</div>' +
-			'</div>';
-
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(x, y),
-                //map: map,
-                icon: "image/orange/"+legend.getIcons(filter),
-                //animation: google.maps.Animation.DROP,
-                title: status
-            });
-
-
-//			markers.push(marker);
-//			markerst.push(filter);
-
-//			document.getElementById("mcount").innerHTML=count++;				
-			markers.push(marker);
-			markerst.push(filter);
-			manager.addMarker(marker,12);
-			manager.refresh();
-					
-            infobubble(marker, contentString);
-            
-
-        }		}
-	}
-	
-	
-	var s = "fpl.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad;
-	//alert(s);
-	olat=lat;
-	olng=lng;
-	orad=zoom2rad(zoom);
-	
-    xmlHttp.open("GET", s, true);
-    
-    //xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
-    xmlHttp.send(null);
-}
 
 function refresh() {
 	
@@ -574,15 +451,7 @@ function refresh() {
     xmlHttp.send(null);
 }
 
-// When legend item is clicked that category is toggled here
-function toggleMarkers(category, t){ 
-	if (infowindow)
-		infowindow.close();
-	
-	for (var i = 0; i < markers.length; i++)      
-		if(markerst[i]==category)
-			markers[i].setVisible(t);        
-}
+
 
 
 //15 = 1/2, 14 = 1, 13 = 2, 12 = 4, 11 = 8, 10 = 16
@@ -623,31 +492,6 @@ function infobubble(marker, contentString) {
         infowindow.open(map, marker);
     });
 }
-
-
-/*
-function disableMovement(disable) {
-    var mapOptions;
- 
-    
-    if (disable) {
-        mapOptions = {
-            //draggable: false,
-            //scrollwheel: false,
-            disableDoubleClickZoom: true,
-            //zoomControl: false
-        };
-    } else {
-        mapOptions = {
-            //draggable: true,
-            //scrollwheel: true,
-            disableDoubleClickZoom: false,
-            //zoomControl: true
-        };
-    }
-    map.setOptions(mapOptions);
-}*/
-
 
 function showSearch(){
 	document.getElementById('detail').style.visibility='';

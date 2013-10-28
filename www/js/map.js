@@ -326,7 +326,6 @@ function initialize() {
     var mgrOptions = { borderPadding: 50, maxZoom: 15};
 	manager = new MarkerManager(map, mgrOptions);        
 
-	alert(location.search);
 
 	// EVENT HANDLERS
 
