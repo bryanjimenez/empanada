@@ -83,15 +83,9 @@ function Legend(parent) {
 	xmlHttp.send(null);
 }
 
-function User() {
-	var _this = this;
-    
-}
 
 var places;
 function Places() {
-
-
 				
 	//https://developers.google.com/places/training/additional-places-features
 	this.searchNear = function (obj){
@@ -278,26 +272,10 @@ function Compass(obj) {
 	};   
 }
 
-function Map() {
-	/*var fiu;
-	var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
-	var mypos;
-	var mymarker;
-	
-	this.add = function (item) {
-		this.list.push(item);
-	};
-    this.getLatLng = function() {
-        return this.lat+","+this.lng;
-    };*/
-}
-
-//https://developers.google.com/maps/documentation/javascript/reference#Map
-
 
 function initialize() {
 
-	zipshow = document.getElementById('zipshow');
+	//zipshow = document.getElementById('zipshow');
 	
 	//alert(lat=location.search.split('&')[0].split('=')[1]);
 
@@ -306,31 +284,36 @@ function initialize() {
 
 	fiu = new google.maps.LatLng(lat, lng);
 
-	legend = new Legend(document.getElementById('legend'));
+	legend = new Legend();
 	//compass = new Compass(document.getElementById('findme'));
-	places = new Places();
+	//places = new Places();
 	
-    geocoder = new google.maps.Geocoder();
+    //geocoder = new google.maps.Geocoder();
 
     var mapOptions = {
+        draggable: false,
+        scrollwheel: false,
+        disableDoubleClickZoom: true,
+		zoomControl: false,
         zoom: zoom,
         center: fiu,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         //mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDefaultUI: true
     };
+    
     map = new google.maps.Map(document.getElementById('mini-map-canvas'),
             mapOptions);
             
-    var mgrOptions = { borderPadding: 50, maxZoom: 15};
-	manager = new MarkerManager(map, mgrOptions);        
+    //var mgrOptions = { borderPadding: 50, maxZoom: 15};
+	//manager = new MarkerManager(map, mgrOptions);        
 
 	//alert(location.search);
 
 	// EVENT HANDLERS
 
 
-
+/*
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
         if (infowindow)
@@ -342,7 +325,7 @@ function initialize() {
 		
 		compass.off();
 	});
-
+*/
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     //map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
 }
@@ -421,7 +404,7 @@ function refresh() {
 				
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
-					//map: map,
+					map: map,
 					icon: "image/red/"+legend.getIcons(filter),
 					animation: google.maps.Animation.DROP,
 					title: text
@@ -429,8 +412,8 @@ function refresh() {
 
 				markers.push(marker);
 				markerst.push(filter);
-				manager.addMarker(marker,12);
-				manager.refresh();
+				//manager.addMarker(marker,12);
+				//manager.refresh();
 					
 				infobubble(marker, contentString);
 			}
@@ -440,7 +423,7 @@ function refresh() {
 	lat=map.getCenter().lat();
 	lng=map.getCenter().lng();
 	zoom=map.getZoom();
-	rad=zoom2rad(zoom);
+	rad=5;
 	
 	
 	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+legend.getFilters();
@@ -450,26 +433,6 @@ function refresh() {
 	
     xmlHttp.open("GET", s, true);
     xmlHttp.send(null);
-}
-
-
-
-
-//15 = 1/2, 14 = 1, 13 = 2, 12 = 4, 11 = 8, 10 = 16
-//-1 = 1/2, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
-//2^(14-zoom) = radius
-//ln(x^y) = y*ln(x)
-//ln(2^(14-zoom)) = ln(radius) = (14-zoom) * ln(2)
-//ln(radius)/ln(2) -14 = -zoom
-//zoom = 14 - ln(radius)/ln(2)
-//throw  round on there to make sure we get an integer
-//and don't make the g-maps API angry
-function rad2zoom(radius){
-    return Math.round(14-Math.log(radius)/Math.LN2);
-}
-
-function zoom2rad(zoom){
-    return Math.round(Math.pow(Math.E,(14-zoom)/Math.LN2));
 }
 
 
@@ -493,12 +456,6 @@ function infobubble(marker, contentString) {
         infowindow.open(map, marker);
     });
 }
-
-function showSearch(){
-	document.getElementById('detail').style.visibility='';
-}
-
-
 
 
 
