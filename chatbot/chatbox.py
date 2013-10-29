@@ -9,7 +9,7 @@ class MyStreamer(TwythonStreamer):
 	
 	def on_success(self, data):
     		if 'text' in data:
-        		print "DEBUG - " + data['text'].encode('utf-8')
+        		print data['text'].encode('utf-8')
         		post_back = bot.add_to_mention( data )
         		if ( post_back == 0 ):
         			print "DEBUG - RESPONDING TO MENTION"

@@ -75,11 +75,18 @@ def time():
     # print d
 
 
+def str_format():
+    a = "this is an <<ex>>"
+    
+    print a.replace("<<ex>>", "test")
+        
+    
 def main():
     # results_read()
     # json_read()
     # generate_result()
-    time()
+    # time()
+    str_format()
     
     
 if __name__ == "__main__":
