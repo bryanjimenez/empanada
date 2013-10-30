@@ -49,7 +49,7 @@ import org.json.simple.parser.JSONParser;
  * http://www.mkyong.com/java/json-simple-example-read-and-write-json/
  * */
 
-public class WordCount {
+public class TweetCategorizer {
 
 	public static class TokenizerMapper extends
 			Mapper<Object, Text, Text, Text> {
@@ -125,7 +125,7 @@ public class WordCount {
 		String[] otherArgs = new GenericOptionsParser(conf, args)
 				.getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: wordcount <in> <out>");
+			System.err.println("Usage: TweetCategorizer <in> <out>");
 			System.exit(2);
 		}
 		
@@ -137,7 +137,7 @@ public class WordCount {
 		String l;
 		String line="";
 		//FileSystem fs = FileSystem.get(conf);
-		BufferedReader br = new BufferedReader(new FileReader("../www/filters.json"));
+		BufferedReader br = new BufferedReader(new FileReader("../www/json/filters.json"));
 
 		try {
 			//BufferedReader br = new BufferedReader(new FileReader(fs.open(pt)));
@@ -173,8 +173,8 @@ public class WordCount {
 		// ----------------------------------------------------------
 
 					
-		Job job = new Job(conf, "word count");
-		job.setJarByClass(WordCount.class);
+		Job job = new Job(conf, "categorize tweets");
+		job.setJarByClass(TweetCategorizer.class);
 		job.setMapperClass(TokenizerMapper.class);
 		// job.setCombinerClass(IntSumReducer.class);
 		// job.setReducerClass(IntSumReducer.class);
