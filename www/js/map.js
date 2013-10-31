@@ -504,6 +504,17 @@ function refresh() {
 				var d = new Date(time);
 				var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
 
+				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+				if (tweet.geo) {
+					var x = tweet.geo.coordinates[0];
+					var y = tweet.geo.coordinates[1];
+				}
+				else {
+					//TODO we need to come up with something better here
+					var x = -81.68738214;
+					var y = 27.96855823;
+				}
+				
 				var contentString = '' +
 						'<div id="content" style="width:304px; height:176px;">' +
 							'<div id="siteNotice">' +
@@ -527,23 +538,17 @@ function refresh() {
 								'<div id="footer" style="float:right;border:0px solid black;">' +
 									'<p>' + date + '</p>'+
 								'</div>' +
+								'<a href="http://maps.google.com/maps/?daddr='+user+'@'+x+','+y+'">Go here</a>' +
+
 								'<a href="javascript:showSearch();">Search Nearby</a>' +
 									'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">'+
 										'<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>'+
 									'</div>' +	
+									
 							'</div>' +
 						'</div>';
 
-				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
-				if (tweet.geo) {
-					var x = tweet.geo.coordinates[0];
-					var y = tweet.geo.coordinates[1];
-				}
-				else {
-					//TODO we need to come up with something better here
-					var x = -81.68738214;
-					var y = 27.96855823;
-				}
+
 				
 				
 				var marker = new google.maps.Marker({
