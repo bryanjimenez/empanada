@@ -1,0 +1,37 @@
+{
+    "profanity":{
+	"words":""
+    },
+    "key1": {
+	"category":"hurricane",
+        "keywords": "hurricane wind rain cyclone storm",
+	"falseKeywords": "sports @hurricanesports football coach sport",
+	"bigrams": "tropical storm, ",
+	"falseBigram": "go canes, football coach, miami hurricanes",
+	"synonyms": null
+    },
+    "key2": {
+	"category":"accident",
+        "keywords": "motorcyclist accident delays vehicles vehicles car cars truck trucks bike bikes #traffic st Hwy Rd highway boulevard lane",
+	"falseKeywords": null,
+	"bigrams": "Driving on, highway patrol, car accident, accident at, accident on, hit and run, there been, there an",
+	"falseBigram": "got into, get into, got in, by accident, on accident",
+	"synonyms": null        
+    },
+    "key3": {
+	"category": "powerout",
+        "keywords": "electricity powerout power",
+	"falseKeywords": null,
+	"bigrams": "power outage,",
+	"falseBigram": null,
+	"synonyms": null   
+    },
+    "key4": {
+	"category": "fuel",
+        "keywords": "fuel gas gasoline gallon $",
+	"falseKeywords": null,
+	"bigrams": "gas station, Fuel Center,",
+	"falseBigram": null,
+	"synonyms": null
+    }
+}
