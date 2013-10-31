@@ -231,7 +231,8 @@ class ChatBot():
             return current_time + username + " There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
         if (code == self.MSG_CON_PIN_LOCATION_NEEDED):
             # forming the real url to request access to the map
-            location_url = self.tiny_url(self.website_url + "/mini.html?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item)
+            # self.tiny_url(self.website_url + "/mini.html?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item)
+            location_url = self.tiny_url( "http://" + self.website_url + "/mini.html?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item )
             return current_time + " " + username + " " + self.format_message(self.error[str_code], filter=item, location=location_url)
         elif (code == self.MSG_REFER):
             return current_time + " " + username + " " + self.format_message(self.error[str_code], website=self.website_address)
