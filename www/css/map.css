@@ -4,10 +4,10 @@
         height: 100%;
       }
 	#mini-map-canvas {
-		height: 50%;
-		width:40%;
-		top:25%;
-		left:30%;
+		height: 100%;
+		width:100%;
+		/*top:25%;
+		left:30%;*/
 	}
       
 	#legend {
