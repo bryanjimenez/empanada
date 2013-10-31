@@ -76,17 +76,34 @@ def time():
 
 
 def str_format():
+    
     a = "this is an <<ex>>"
     
     print a.replace("<<ex>>", "test")
         
+    
+def tiny_url():
+    import httplib
+    """
+    
+    conn = httplib.HTTPConnection("tinyurl.com")
+    conn.request("GET", "/api-create.php?url=empanada.cs.fiu.edu")
+    result = conn.getresponse()
+    print result.reason
+    if (result.reason == "OK"):
+        data = result.read()
+        print type(data)
+    
+    conn.close()
+    """
     
 def main():
     # results_read()
     # json_read()
     # generate_result()
     # time()
-    str_format()
+    # str_format()
+    tiny_url()
     
     
 if __name__ == "__main__":

@@ -68,7 +68,7 @@ class ChatBot():
         question = { "is": ["there"],
                      "are": ["there"],
                      "what": ["close", "near", "around", "nearby", "adjacent", "not far"],
-                     "where": ["get", "find", "acquire", "obtain", "close", "buy", "purchase"]
+                     "where": ["get", "find", "acquire", "obtain", "close", "buy", "purchase", "are", "is"]
                     }
         find_closest = False
         
@@ -80,7 +80,7 @@ class ChatBot():
             if (key.upper() in text.upper()):
                 
                 for next in question[key]:
-                    if (key.upper() in text.upper()):
+                    if (next.upper() in text.upper()):
                         return True
                
                 
@@ -107,14 +107,23 @@ class ChatBot():
             
             # iterate through all the filters
             for filter_key in self.filter:
+                # here add another for loop to iterate
+                # for synonyms for example fuel = gas = diesel
+                # for synonym in self.filter['synonyms']
+                ####
                 if ( filter_key.upper() in tweet['text'].upper() ):
                     
                     if self.debug: print "DEBUG - added the tweet to the queue"
                     self.mentions.append(tweet)
                     self.keys.append(filter_key)
+                    # here add another variable for synonym used
+                    # self.synonym_used.append(synonym)
+                    #
+                    #
+                    #
                     # find out whether the question needs a close location
                     if self.debug: print "DEBUG - This question requires a close point response " + str(self.analyze_question(tweet['text']))                    
-                    return 0; # tweet had the self.keyword in it
+                    return 0; # tweet had the self.keyword in it and one of the synonyms
 
         return -1 # tweet won't get a reply   
 
@@ -188,6 +197,20 @@ class ChatBot():
         return msg
 
 
+    def tiny_url(self, url):
+        import httplib
+        data = ""
+    
+        conn = httplib.HTTPConnection("tinyurl.com")
+        conn.request("GET", "/api-create.php?url="+url)
+        result = conn.getresponse()
+        print result.reason
+        if (result.reason == "OK"):
+            data = result.read()
+            if self.debug: print "DEBUG - " + data
+        
+        conn.close()
+        return data
 
 
     # generates a message based on the code
@@ -207,7 +230,9 @@ class ChatBot():
         if (code >= 0):            
             return current_time + username + " There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
         if (code == self.MSG_CON_PIN_LOCATION_NEEDED):
-            return current_time + " " + username + " " + self.format_message(self.error[str_code], filter=item, location=str(result['closest_location']))
+            # forming the real url to request access to the map
+            location_url = self.tiny_url(self.website_url + "/mini.html?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item)
+            return current_time + " " + username + " " + self.format_message(self.error[str_code], filter=item, location=location_url)
         elif (code == self.MSG_REFER):
             return current_time + " " + username + " " + self.format_message(self.error[str_code], website=self.website_address)
         
