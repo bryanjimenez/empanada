@@ -563,7 +563,7 @@ function refresh() {
 								'<div id="footer" style="float:right;border:0px solid black;">' +
 									'<p>' + date + '</p>'+
 								'</div>' +
-								'<a href="http://maps.google.com/maps/?saddr=my%20location@'+lat+','+lng+'&daddr='+user+'@'+x+','+y+'">Go here</a> | ' +
+								'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr='+user+'@'+x+','+y+'">Go here</a> | ' +
 
 								'<a href="javascript:showSearch();">Search Nearby</a>' +
 									'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">'+
