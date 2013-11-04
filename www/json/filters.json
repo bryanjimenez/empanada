@@ -2,51 +2,61 @@
     "hurricane": {
         "name": "Hurricane",
         "icon": "hurricane.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["hurricane", "tornado"]
     },
     "fire": {
         "name": "Fire",
         "icon": "fire.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["fire"]
     },
     "accident": {
         "name": "Accident",
         "icon": "caraccident.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["accident"]
     },
     "flood": {
         "name": "Flood",
         "icon": "flood.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["flood", "water"]
     },
     "poweroutage": {
         "name": "Power Outage",
         "icon": "poweroutage.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["poweroutage"]
     },
     "linedown": {
         "name": "Line Down",
         "icon": "linedown.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["linedown"]
     },    
     "treedown": {
         "name": "Tree Down",
         "icon": "treedown.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["treedown"]
     },
     "shelter": {
         "name": "Shelter",
         "icon": "shelter.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["shelter"]
     },
     "fuel": {
         "name": "Fuel",
         "icon": "fuel.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["fuel", "gas", "diesel", "combustible", "oil"]
     },
     "zombies": {
         "name": "Zombie",
         "icon": "zombies.png",
-        "shadow": ""
+        "shadow": "",
+        "synonyms": ["zombies"]
     }
 }
