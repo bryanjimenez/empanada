@@ -151,7 +151,7 @@ class ChatBot():
             
             if ( self.current_mention['user']['geo_enabled'] == False ):
                 # add time stamp to this message
-                self.message = self.generate_message(result=self.MSG_REFER, username=self.current_mention['user']['screen_name']) 
+                self.message = self.generate_message(result={'code': self.MSG_GEN_NO_LOCATION}, username=self.current_mention['user']['screen_name']) 
             else:
                 # make a querry to get incidents around the location?????                    
                 # call to generate result - this makes a call to refresh 
@@ -222,7 +222,7 @@ class ChatBot():
 
     # generates a message based on the code
     ######
-    def generate_message(self, item="", result={"code": "-52"}, username="EMPTY"):
+    def generate_message(self, item="", result={"code": -52}, username="EMPTY"):
         username = "@" + username
         
         code = result['code']
