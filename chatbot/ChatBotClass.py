@@ -17,9 +17,11 @@ class ChatBot():
         self.website_url = "empanada.cs.fiu.edu"
         self.mentions = []
         self.keys = []
+        self.synonyms = []
         self.radius = "4"
         self.current_filter = "" # current filter
         self.current_mention = {} # current mention
+        self.current_synonym = "" # current synonym
         self.question = False
         self.filter = self.get_filters()
         self.error = self.get_errors()
@@ -111,19 +113,23 @@ class ChatBot():
                 # for synonyms for example fuel = gas = diesel
                 # for synonym in self.filter['synonyms']
                 ####
-                if ( filter_key.upper() in tweet['text'].upper() ):
+                for syno in self.filter[filter_key]['synonyms']:
                     
-                    if self.debug: print "DEBUG - added the tweet to the queue"
-                    self.mentions.append(tweet)
-                    self.keys.append(filter_key)
-                    # here add another variable for synonym used
-                    # self.synonym_used.append(synonym)
-                    #
-                    #
-                    #
-                    # find out whether the question needs a close location
-                    if self.debug: print "DEBUG - This question requires a close point response " + str(self.analyze_question(tweet['text']))                    
-                    return 0; # tweet had the self.keyword in it and one of the synonyms
+                    # Check whether the one of the synonyms 
+                    # related to the keyword is used in the tweet 
+                    #####
+                    if ( syno.upper() in tweet['text'].upper() ):
+                        
+                        if self.debug: print "DEBUG - added the tweet to the queue"
+                        self.mentions.append(tweet)
+                        self.keys.append(filter_key)
+                        # here add another variable for synonym used
+                        # self.synonym_used.append(synonym)
+                        ######
+                        self.synonyms.append(syno)
+                        # find out whether the question needs a close location
+                        if self.debug: print "DEBUG - This question requires a close point response " + str(self.analyze_question(tweet['text']))                    
+                        return 0; # tweet had the self.keyword in it and one of the synonyms
 
         return -1 # tweet won't get a reply   
 
@@ -133,10 +139,11 @@ class ChatBot():
     def respond_to_mention(self):
         if self.mentions:
             # single mention variable
-            self.current_mention = self.mentions.pop(0)
-            
+            self.current_mention = self.mentions.pop(0)            
             # single key variable corresponding to mention that was just poped 
-            self.current_filter = self.keys.pop(0) 
+            self.current_filter = self.keys.pop(0)
+            # single synonym variable corresponding to the synonym being used in the question
+            self.current_synonym = self.synonyms.pop(0)
             
             # Debbugin
             # if self.debug: print "DEBUG - Geolocation is " + ("" if self.current_mention['user']['geo_enabled'] else "not ") + "enabled" 
@@ -228,12 +235,12 @@ class ChatBot():
         
         
         if (code >= 0):            
-            return current_time + username + " There " +verb+ " " +str_code+ " mentions of " +item+ " close to your location."
+            return current_time + username + " There " +verb+ " " +str_code+ " mentions of " +self.current_synonym+ " close to your location."
         if (code == self.MSG_CON_PIN_LOCATION_NEEDED):
             # forming the real url to request access to the map
             # self.tiny_url(self.website_url + "/mini.html?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item)
             location_url = self.tiny_url( "http://" + self.website_url + "?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item )
-            return current_time + " " + username + " " + self.format_message(self.error[str_code], filter=item, location=location_url)
+            return current_time + " " + username + " " + self.format_message(self.error[str_code], filter=self.current_synonym, location=location_url)
         elif (code == self.MSG_REFER):
             return current_time + " " + username + " " + self.format_message(self.error[str_code], website=self.website_address)
         
@@ -297,11 +304,16 @@ class ChatBot():
         # we will analyze the question to see whether
         # it requires a fixed point to be returned
         pin_needed = self.analyze_question(self.current_mention['text'])
-        
+        # HTTP request initialization
+        ####
         conn = httplib.HTTPConnection(self.website_url)
         conn.request("GET", "/refresh.php?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
         http_result = conn.getresponse()
+        # DEBUG message
         if self.debug: print "DEBUG - RESPONSE FROM getresponse() - " + http_result.reason
+        # if response is OK then http was good
+        # we can proceed
+        ####
         if (http_result.reason == "OK"):
             data = http_result.read()
             # if self.debug: print "DEBUG - " + data
