@@ -43,6 +43,7 @@ import java.util.Iterator;
 
 
 
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -113,6 +114,7 @@ public class empanada3 {
     	java.util.TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
     	java.util.TreeMap<String,String> keywordsMap = new TreeMap<String, String>();
     	java.util.TreeMap<String,String> falseKeywordsMap = new TreeMap<String, String>();
+    	java.util.TreeMap<String,String> bigramMap = new TreeMap<String, String>();
     	Iterator<?> vectorItr = vector.keys();
 
     	//CREATES MAPS TO APPLY VECTOR
@@ -138,6 +140,12 @@ public class empanada3 {
 	        	    		falseKeywordsMap.put(falseKeywordsScanner.next(), category);
 	        	    	}
 	    			}
+	    			if (!vectorField.isNull("bigram")){
+	        	    	Scanner bigramScanner = new Scanner(vectorField.get("bigram").toString());
+	        	    	while (bigramScanner.hasNext()){
+	        	    		bigramMap.put(bigramScanner.next(), category);
+	        	    	}
+	    			}
 	    		}  
 			} catch (JSONException e1) {
 				e1.printStackTrace();
@@ -145,20 +153,33 @@ public class empanada3 {
     	}
     	//FINISH CREATING MAPS TO APPLY VECTOR
 
+    	String bigram;
     	String tweetCategory = "";
     	String badTweetCategory = "";
-    	int winningCategory = 0;
+    	int winningCategoryCounter = 0;
     	int winningFalseCategory = 0;
     	StringTokenizer itr = new StringTokenizer(tweetText, " \t\n\r\f,.:;?![]'\"");
-		while (itr.hasMoreTokens()) {
-			word.set(itr.nextToken().toLowerCase());
+		//int wordCounter = 0;
+		String previousWord = "";
+    	while (itr.hasMoreTokens()) {
+			
+			String myWord = itr.nextToken();			
+			String myBigram = previousWord.concat(" ").concat(myWord);
+			
+		/*	word.set(itr.nextToken().toLowerCase());
+			if(word.toString().equals("accident")){
+				context.write(new Text("accident"), value);
+			}	*/
+			
+			
+			word.set(myWord.toLowerCase());
 			if(keywordsMap.containsKey(word.toString())){			
 				int categoryCounter = categoryMap.get(keywordsMap.get(word.toString()));
 				categoryCounter++;
 				categoryMap.put(keywordsMap.get(word.toString()), categoryCounter);				
-				if (categoryCounter > 1 && categoryCounter > winningCategory){
+				if (categoryCounter > 1 && categoryCounter > winningCategoryCounter){
 					tweetCategory = keywordsMap.get(word.toString());
-					winningCategory = categoryCounter;
+					winningCategoryCounter = categoryCounter;
 				}
 				keywordsMap.remove(word.toString());
 			}
@@ -172,6 +193,20 @@ public class empanada3 {
 				}
 				falseKeywordsMap.remove(word.toString());
 			}
+			
+			if (bigramMap.containsKey(myBigram)){
+				int categoryCounter = categoryMap.get(bigramMap.get(myBigram));
+				categoryCounter++;
+				categoryMap.put(bigramMap.get(myBigram), categoryCounter);				
+				if (categoryCounter > 1 && categoryCounter > winningCategoryCounter){
+					tweetCategory = bigramMap.get(myBigram);
+					winningCategoryCounter = categoryCounter;
+				}
+				context.write(new Text(myBigram), value);
+				bigramMap.remove(myBigram);
+			}
+			
+			previousWord = myWord;
 				
 		}
 
