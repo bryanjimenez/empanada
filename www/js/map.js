@@ -22,9 +22,11 @@ var infowindow = null;
 
 var legend;
 function Legend(parent) {
+	var _this=this;
 	var forbidden="image/forbidden.png";
 
 	var filters=[];
+	var prefilters;
 	var icons;
 	this.div = parent;
 
@@ -42,12 +44,15 @@ function Legend(parent) {
     this.getIcons = function(key) {
         return icons[key].icon;
     };
-    
+    this.setPreFilters = function (f){
+		prefilters=f.split(",");
+		//alert(prefilters);
+	}
     this.toggle = function (obj) {
 		var name = obj.id.toLowerCase().split('_')[0];
 		if(obj.innerHTML==''){
 			obj.innerHTML = '<img src="'+forbidden+'">';		
-			this.remove(name)
+			this.remove(name);
 			toggleMarkers(name,false);
 		}
 		else{
@@ -64,18 +69,28 @@ function Legend(parent) {
 			//alert(xmlHttp.responseText);
 			icons = JSON.parse(xmlHttp.responseText);
 			for (var key in icons) {
-				//alert(key);
+				key=key.toLowerCase();
+				//(key);
 
-				filters.push(key.toLowerCase());
+				filters.push(key);
 				//alert(this.filters[0]);
 				var type = icons[key];
 				var name = type.name;
 				var icon = "image/red/"+type.icon;
 				var div = document.createElement('div');
-				div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
 				
+				if(prefilters && prefilters.indexOf(key)<0){
+					div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"><img src="'+forbidden+'"></div> ';
+					_this.remove(key);
+				}else{
+					div.innerHTML = '<div id="'+key+'_filter" title="' + name + '" style="width:32px;height:37px;background-image: url(' + icon + ')" onclick="legend.toggle(this);"></div> ';
+				}
 				parent.appendChild(div);
 			}
+			for (var i in prefilters){
+				//alert(i);
+			}
+			
 			//Do a refresh once filters are up
 			//alert(legend.getFilters());
 			refresh();
@@ -309,9 +324,19 @@ function Map() {
 function initialize() {
 
 	zipshow = document.getElementById('zipshow');
-	fiu = new google.maps.LatLng(lat, lng);
-
 	legend = new Legend(document.getElementById('legend'));
+	
+	//TODO 
+	//do better error check here FIX THIS
+	if(location.search.indexOf('lat=')>-1)
+		lat=location.search.split('lat=')[1].split('&')[0];
+	if(location.search.indexOf('lng=')>-1)
+		lng=location.search.split('lng=')[1].split('&')[0];
+	if(location.search.indexOf('filter=')>-1)
+		legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
+	
+
+	
 	compass = new Compass(document.getElementById('findme'));
 	places = new Places();
 	
@@ -319,7 +344,7 @@ function initialize() {
 
     var mapOptions = {
         zoom: zoom,
-        center: fiu,
+        center: new google.maps.LatLng(lat, lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         //mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDefaultUI: true
@@ -504,6 +529,17 @@ function refresh() {
 				var d = new Date(time);
 				var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
 
+				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+				if (tweet.geo) {
+					var x = tweet.geo.coordinates[0];
+					var y = tweet.geo.coordinates[1];
+				}
+				else {
+					//TODO we need to come up with something better here
+					var x = -81.68738214;
+					var y = 27.96855823;
+				}
+				
 				var contentString = '' +
 						'<div id="content" style="width:304px; height:176px;">' +
 							'<div id="siteNotice">' +
@@ -527,23 +563,17 @@ function refresh() {
 								'<div id="footer" style="float:right;border:0px solid black;">' +
 									'<p>' + date + '</p>'+
 								'</div>' +
+								'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr='+user+'@'+x+','+y+'">Go here</a> | ' +
+
 								'<a href="javascript:showSearch();">Search Nearby</a>' +
 									'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">'+
 										'<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>'+
 									'</div>' +	
+									
 							'</div>' +
 						'</div>';
 
-				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
-				if (tweet.geo) {
-					var x = tweet.geo.coordinates[0];
-					var y = tweet.geo.coordinates[1];
-				}
-				else {
-					//TODO we need to come up with something better here
-					var x = -81.68738214;
-					var y = 27.96855823;
-				}
+
 				
 				
 				var marker = new google.maps.Marker({
