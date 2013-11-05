@@ -27,7 +27,11 @@ javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1
 
 jar -cvf playground/empanada3.jar -C playground/classes/ .
 
-javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada4.java 
+javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes playground/src/MyWordCount.java
 
-jar -cvf playground/empanada4.jar -C playground/classes/ .
+jar -cvf playground/mywordcount.jar -C playground/classes/ .
+
+#javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada4.java 
+
+#jar -cvf playground/empanada4.jar -C playground/classes/ .
 
