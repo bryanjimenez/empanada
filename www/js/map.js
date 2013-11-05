@@ -1,25 +1,51 @@
-//TODO
-//http://stackoverflow.com/questions/12823579/
-
-
 //GOOGLE Globals
 var geocoder;
 var map;
 var manager;
 
 //EMPANADA Globals
-var fiu;
 var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
 var olat = 0, olng = 0, ozoom=14; orad=0;
 var mypos;
 
-var markers=[];
-var markerst=[];
+//SINGLETON
+var Markers = {
+	markers:[],
+	markerst:[],
+	window:null,
+	
+	toggle: function (category, t){ 
+		if (this.window)
+			this.window.close();
+		
+		for (var i = 0; i < this.markers.length; i++)      
+			if(this.markerst[i]==category)
+				this.markers[i].setVisible(t);        
+	},
+	push: function(m,f,c){
+		this.markers.push(m);
+		this.markerst.push(f);
+		
+		
+		google.maps.event.addListener(m, 'click', function() {
 
-var infowindow = null;
+			//close infobubble if we click on other bubble
+			if (Markers.window)
+				Markers.window.close();
 
+			Markers.window = new google.maps.InfoWindow({
+				content: c,
+				arrowStyle: 2,
+				arrowSize: 10,
+				ShadowStyle: 1
 
+			});
+			Markers.window.open(map, m);
+		});
+	}
+}
 
+//SINGLETON
 var legend;
 function Legend(parent) {
 	var _this=this;
@@ -53,12 +79,13 @@ function Legend(parent) {
 		if(obj.innerHTML==''){
 			obj.innerHTML = '<img src="'+forbidden+'">';		
 			this.remove(name);
-			toggleMarkers(name,false);
+			//toggleMarkers(name,false);
+			Markers.toggle(name,false);
 		}
 		else{
 			obj.innerHTML = '';
 			this.add(name);
-			toggleMarkers(name,true);
+			Markers.toggle(name,true);
 		}
 	};
     
@@ -106,10 +133,10 @@ function User() {
     
 }
 
+
+//SINGLETON
 var places;
 function Places() {
-
-
 				
 	//https://developers.google.com/places/training/additional-places-features
 	this.searchNear = function (obj){
@@ -174,12 +201,14 @@ function Places() {
 		});
 
 		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(contentString);
-			infowindow.open(map, this);
+			Markers.window.setContent(contentString);
+			Markers.window.open(map, this);
 		});
 	}
 }
 
+
+//SINGLETON
 var compass;
 function Compass(obj) {
 	var _this = this;
@@ -187,6 +216,7 @@ function Compass(obj) {
 	var watching=null;
 	var needle_off = 'image/arrow_off.png';
 	var needle_on = 'image/arrow_on.png'
+	this.obj = obj;
 	
 	this.htmlObj = obj;	
 
@@ -198,7 +228,7 @@ function Compass(obj) {
             _this.htmlObj.style.height = '20px';
     }
 
-	obj.onclick = function (){
+	this.obj.onclick = function (){
 		_this.toggle();
 	};
 	
@@ -296,27 +326,32 @@ function Compass(obj) {
 	};   
 }
 
-function Map() {
-	/*var fiu;
-	var lat = 25.75906, lng = -80.37388, zoom=14; rad=1;
-	var mypos;
-	var mymarker;
+
+//STATIC Class(Object) MAP
+var Map = {
+	//15 = 1/2, 14 = 1, 13 = 2, 12 = 4, 11 = 8, 10 = 16
+	//-1 = 1/2, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
+	//2^(14-zoom) = radius
+	//ln(x^y) = y*ln(x)
+	//ln(2^(14-zoom)) = ln(radius) = (14-zoom) * ln(2)
+	//ln(radius)/ln(2) -14 = -zoom
+	//zoom = 14 - ln(radius)/ln(2)
+	//throw  round on there to make sure we get an integer
+	//and don't make the g-maps API angry
 	
-	this.add = function (item) {
-		this.list.push(item);
-	};
-    this.getLatLng = function() {
-        return this.lat+","+this.lng;
-    };*/
-}
+	rad2zoom: function (radius){
+		return Math.round(14-Math.log(radius)/Math.LN2);
+	},
+	zoom2rad: function (zoom){
+		return Math.round(Math.pow(Math.E,(14-zoom)/Math.LN2));
+	}
+} 
+
+
+
+
 
 //https://developers.google.com/maps/documentation/javascript/reference#Map
-
-
-
-
-
-
 
 
 
@@ -325,6 +360,7 @@ function initialize() {
 
 	zipshow = document.getElementById('zipshow');
 	legend = new Legend(document.getElementById('legend'));
+	
 	
 	//TODO 
 	//do better error check here FIX THIS
@@ -364,8 +400,8 @@ function initialize() {
 
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
-        if (infowindow)
-            infowindow.close();
+        if (Markers.window)
+            Markers.window.close();
     });
 	google.maps.event.addListener(map, 'dragend', function(){
 		refresh();
@@ -471,17 +507,13 @@ function fpl() {
                 title: status
             });
 
-
-//			markers.push(marker);
-//			markerst.push(filter);
-
-//			document.getElementById("mcount").innerHTML=count++;				
-			markers.push(marker);
-			markerst.push(filter);
+			
+			Markers.push(marker,filter,contentString);
+	
+			
 			manager.addMarker(marker,12);
 			manager.refresh();
 					
-            infobubble(marker, contentString);
             
 
         }		}
@@ -492,7 +524,7 @@ function fpl() {
 	//alert(s);
 	olat=lat;
 	olng=lng;
-	orad=zoom2rad(zoom);
+	orad=Map.zoom2rad(zoom);
 	
     xmlHttp.open("GET", s, true);
     
@@ -563,6 +595,9 @@ function refresh() {
 								'<div id="footer" style="float:right;border:0px solid black;">' +
 									'<p>' + date + '</p>'+
 								'</div>' +
+								
+								//http://stackoverflow.com/questions/12823579/
+								//Open iOS 6 native map from URL
 								'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr='+user+'@'+x+','+y+'">Go here</a> | ' +
 
 								'<a href="javascript:showSearch();">Search Nearby</a>' +
@@ -572,10 +607,7 @@ function refresh() {
 									
 							'</div>' +
 						'</div>';
-
-
-				
-				
+	
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
@@ -584,12 +616,15 @@ function refresh() {
 					title: text
 				});
 
-				markers.push(marker);
+				/*markers.push(marker);
 				markerst.push(filter);
+				*/
+				Markers.push(marker,filter,contentString);
+				
 				manager.addMarker(marker,12);
 				manager.refresh();
 					
-				infobubble(marker, contentString);
+				//infobubble(marker, contentString);
 			}
 		}
 	}
@@ -597,7 +632,7 @@ function refresh() {
 	lat=map.getCenter().lat();
 	lng=map.getCenter().lng();
 	zoom=map.getZoom();
-	rad=zoom2rad(zoom);
+	rad=Map.zoom2rad(zoom);
 	
 	
 	var s = "refresh.php?lat="+lat+"&lng="+lng+"&rad="+rad+"&olat="+olat+"&olng="+olng+"&orad="+orad+"&filter="+legend.getFilters();
@@ -609,55 +644,19 @@ function refresh() {
     xmlHttp.send(null);
 }
 
-// When legend item is clicked that category is toggled here
-function toggleMarkers(category, t){ 
-	if (infowindow)
-		infowindow.close();
-	
-	for (var i = 0; i < markers.length; i++)      
-		if(markerst[i]==category)
-			markers[i].setVisible(t);        
-}
 
-
-//15 = 1/2, 14 = 1, 13 = 2, 12 = 4, 11 = 8, 10 = 16
-//-1 = 1/2, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
-//2^(14-zoom) = radius
-//ln(x^y) = y*ln(x)
-//ln(2^(14-zoom)) = ln(radius) = (14-zoom) * ln(2)
-//ln(radius)/ln(2) -14 = -zoom
-//zoom = 14 - ln(radius)/ln(2)
-//throw  round on there to make sure we get an integer
-//and don't make the g-maps API angry
-function rad2zoom(radius){
-    return Math.round(14-Math.log(radius)/Math.LN2);
-}
-
-function zoom2rad(zoom){
-    return Math.round(Math.pow(Math.E,(14-zoom)/Math.LN2));
+function showSearch(){
+	document.getElementById('detail').style.visibility='';
 }
 
 
 
-function infobubble(marker, contentString) {
 
-    // add click event
-    google.maps.event.addListener(marker, 'click', function() {
 
-        //close infobubble if we click on other bubble
-        if (infowindow)
-            infowindow.close();
 
-        infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            arrowStyle: 2,
-            arrowSize: 10,
-            ShadowStyle: 1
+//EVENTS
 
-        });
-        infowindow.open(map, marker);
-    });
-}
+google.maps.event.addDomListener(window, 'load', initialize);
 
 
 /*
@@ -682,17 +681,3 @@ function disableMovement(disable) {
     }
     map.setOptions(mapOptions);
 }*/
-
-
-function showSearch(){
-	document.getElementById('detail').style.visibility='';
-}
-
-
-
-
-
-
-//EVENTS
-
-google.maps.event.addDomListener(window, 'load', initialize);
