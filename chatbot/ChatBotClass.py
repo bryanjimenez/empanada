@@ -103,15 +103,16 @@ class ChatBot():
             if self.debug: print "DEBUG - " + tweet['user']['screen_name'] + " came from same user"
             return -1 # tweet won't get a reply
         
-        # for key in self.keyword: # this could be remove or we could add more keywords
+        # for key in self.keyword: 
+        # this could be remove or we could add more keywords
         # if the tweet mentions @empanada305 then we move on to find the filter in the text
         if ( str.upper(self.keyword) in tweet['text'].upper() ): 
             
             # iterate through all the filters
             for filter_key in self.filter:
-                # here add another for loop to iterate
+                # here we added another for loop to iterate
                 # for synonyms for example fuel = gas = diesel
-                # for synonym in self.filter['synonyms']
+                # for synonym in self.filter[filter_key]['synonyms']
                 ####
                 for syno in self.filter[filter_key]['synonyms']:
                     
@@ -125,7 +126,9 @@ class ChatBot():
                         self.keys.append(filter_key)
                         # here add another variable for synonym used
                         # self.synonym_used.append(synonym)
-                        ######
+                        # added the synonym being used to detect the question
+                        # could be different from category
+                        #####
                         self.synonyms.append(syno)
                         # find out whether the question needs a close location
                         if self.debug: print "DEBUG - This question requires a close point response " + str(self.analyze_question(tweet['text']))                    
@@ -322,7 +325,11 @@ class ChatBot():
             
             # if the data returned by the refresh 
             # is not empty then we go on
-            ####
+            # double check this condition sicne it may not be working
+            # test case
+            # when location is required in the answer and there are
+            # no issues close to the location being requested
+            ###
             if (json_data['t']):
                 # here if pin_needed is true
                 # we need to call a function that returns the
