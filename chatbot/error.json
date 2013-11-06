@@ -1,9 +1,11 @@
 {
-"-1": "Latitude and Longitude is not available. Please refer to <<URL>>.",
+"-10": "Latitude and Longitude is not available. Please refer to <<URL>>.",
+"-11": "Could not determine you exact location. Please refer to <<URL>>.",
 "-50": "The closest issue reported about <<FILTER>> is <<LOCATION>>",
-"-51": "Your location is not available. Please refer to <<URL>> for more information.",
+"-30": "Your location is not available. Please refer to <<URL>> for more information.",
+"-31": "Your location is not available. Please enable it and try again.",
 "-52": "Please refer to <<URL>> for more information.",
 "-53": "You mentioned something about <<FILTER>>.",
-"-54": "There <<ISARE>> <<ISSUES>> about <<FILTER>> reported. The closest being <<LOCATION>>",
+"-54": "There <<ISARE>> <<ISSUES>> mentions about <<FILTER>> reported. The closest being <<LOCATION>>",
 "-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>"
 }
