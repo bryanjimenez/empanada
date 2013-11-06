@@ -46,10 +46,18 @@ def update_status_with(oauth, message):
 
 
 def streamer():
+	import ssl
+	from time import sleep
+	
 	oauth = get_oauthentication()
 	stream = MyStreamer(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
 	# stream.statuses.filter(track='gas')
-	stream.user()
+	while True:
+		try:
+			stream.user()
+		except SSLError as e:
+			print e
+			sleep(30)
 
 
 def sleep(time):
