@@ -8,9 +8,10 @@ class ChatBot():
         #
         self.debug = True
 
-        self.MAX_DISTANCE = 1000    # this could be so because the max distance         
+        self.MAX_DISTANCE = 1000    # this could be so because the max distance
+        self.MSG_LAT_LON_NOT_AVAILABLE = -10         
         self.MSG_CON_PIN_LOCATION_NEEDED = -50
-        self.MSG_GEN_NO_LOCATION = -51
+        self.MSG_GEN_NO_LOCATION = -30
         self.MSG_REFER  = -52
         self.MSG_GEN_MENTION = -53
         self.MSG_NUM_ISS_N_LOC = -54
@@ -180,7 +181,7 @@ class ChatBot():
             
             if ( self.current_mention['user']['geo_enabled'] == False ):
                 # add time stamp to this message
-                self.message = self.generate_message(result={'code': self.MSG_GEN_NO_LOCATION}, username=self.current_mention['user']['screen_name']) 
+                self.message = self.generate_message(result={'code': self.MSG_GEN_NO_LOCATION+self.random(-1, 0)}, username=self.current_mention['user']['screen_name']) 
             else:
                 # make a querry to get incidents around the location?????                    
                 # call to generate result - this makes a call to refresh 
@@ -283,6 +284,7 @@ class ChatBot():
             return current_time + " " + username + " " + self.format_message(self.error[str_code], website=self.website_address)
         elif (code == self.MSG_NUM_ISS_N_LOC or code == self.MSG_NUM_ISS_N_LOC_1):
             # "-54": "There <<ISARE>> <<ISSUES>> about <<FILTER>> reported. The closest being <<LOCATION>>"
+            # "-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>"
             location_url = self.tiny_url( "http://" + self.website_url + "?lat=" + str(result['closest_location'][0]) + "&lng=" + str(result['closest_location'][1]) + "&filter=" + item )
             return current_time + " " + username + " " + self.format_message(self.error[str_code], issues_count=result['count'], filter=self.current_synonym, location=location_url)
         
@@ -340,7 +342,7 @@ class ChatBot():
         # latitude and longitude not available
         ###
         if (latitude == -1 and longitude == -1):
-            result['code'] = -1
+            result['code'] = self.MSG_LAT_LON_NOT_AVAILABLE+random(-1,0)
             return result
             
         # we will analyze the question to see whether
@@ -350,7 +352,7 @@ class ChatBot():
         # HTTP request initialization
         ####
         conn = httplib.HTTPConnection(self.website_url)
-        conn.request("GET", "/refresh.php?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
+        conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
         http_result = conn.getresponse()
         # DEBUG message
         if self.debug: print "DEBUG - RESPONSE FROM getresponse() - " + http_result.reason
