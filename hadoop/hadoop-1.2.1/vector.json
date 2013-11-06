@@ -4,26 +4,29 @@
     },
     "key1": {
 	"category":"hurricane",
-        "keywords": "hurricane wind rain cyclone storm",
-	"falseKeywords": "sports @hurricanesports football coach sport",
-	"bigrams": "tropical storm, ",
+        "keywords": "raining weather windy hurricane wind rain cyclone storm #rain #hurricane category",
+	"falseKeywords": "sports @hurricanesports football coach sport #hurricanes",
+	"bigrams": "Hurricane season, tropical storm, ",
 	"falseBigram": "go canes, football coach, miami hurricanes",
 	"synonyms": null
     },
     "key2": {
 	"category":"accident",
-        "keywords": "motorcyclist accident delays vehicles vehicles car cars truck trucks bike bikes #traffic st Hwy Rd highway boulevard lane",
+        "keywords": "#crash #accident Pedestrian police auto motorcycle motorcyclist accident delays vehicles vehicles car cars bus truck trucks bike bikes #traffic st Hwy Rd highway boulevard lane driver drivers",
 	"falseKeywords": null,
-	"bigrams": "Driving on, highway patrol, car accident, accident at, accident on, hit and run, there been, there an",
-	"falseBigram": "got into, get into, got in, by accident, on accident",
+	"bigrams": "TRAFFIC STOP, lanes blocked, driving on, highway patrol, car accident, accident at, accident on, accident blocks, auto accident, traffic jam, #accident on, accident @",
+	"trigrams": "hit and run,", 
+	"falseBigram": "Auto Sales, got into, get into, got in, by accident, on accident",
+	"falseTrigram": "not an accident, ",
 	"synonyms": null        
     },
     "key3": {
-	"category": "powerout",
-        "keywords": "electricity powerout power",
-	"falseKeywords": null,
-	"bigrams": "power outage,",
-	"falseBigram": null,
+	"category": "poweroutage",
+        "keywords": "electricity powerout power #electricity energy flashlight #poweroutage fpl",
+	"falseKeywords": "bill, bills",
+	"bigrams": "power outage, power out, without power, powers out,",
+	"trigrams": "electricity went out, electricity goes out, out of power, power is out, power goes of, power goes off", 
+	"falseBigram": "electricity bill, power bill, power rangers, power chargers,",
 	"synonyms": null   
     },
     "key4": {
@@ -33,5 +36,25 @@
 	"bigrams": "gas station, Fuel Center,",
 	"falseBigram": null,
 	"synonyms": null
+    },
+    "key5": {
+	"category": "flood",
+        "keywords": "#swamp #flooded flooded flood rain water river",
+	"falseKeywords": null,
+	"bigrams": "flooding on, flash flood, flood watch, flash floods, flood advisory, flood damage,",
+	"falseBigram": null,
+	"synonyms": null
+    },
+    "key6": {
+	"category": "fire",
+        "keywords": "#arsonfire alarm fire firefighters firefighter blaze wildfire",
+	"falseKeywords": null,
+	"bigrams": "gas leak, fire alarm, fire @, rescue officials",
+	"falseBigram": null,
+	"synonyms": null
     }
+
+
+
+
 }
