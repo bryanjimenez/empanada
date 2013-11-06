@@ -15,7 +15,7 @@ class MyStreamer(TwythonStreamer):
         			print "DEBUG - RESPONDING TO MENTION"
         			bot.respond_to_mention()
         		 	print "DEBUG - " + bot.get_message()
-        		  	# update_status_with(get_oauthentication(), bot.get_message())
+        		  	update_status_with(get_oauthentication(), bot.get_message())
 
 	def on_error(self, status_code, data):
 		print status_code

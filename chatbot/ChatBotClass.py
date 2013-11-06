@@ -342,7 +342,7 @@ class ChatBot():
         # latitude and longitude not available
         ###
         if (latitude == -1 and longitude == -1):
-            result['code'] = self.MSG_LAT_LON_NOT_AVAILABLE+random(-1,0)
+            result['code'] = self.MSG_LAT_LON_NOT_AVAILABLE+self.random(-1,0)
             return result
             
         # we will analyze the question to see whether
