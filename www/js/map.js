@@ -90,6 +90,14 @@ function Legend(parent) {
         }
     };
 
+    document.getElementById('legendtitle').onclick = function() {
+
+        if (_this.div.style.height == '20px')
+            _this.div.style.height = '';
+        else
+            _this.div.style.height = '20px';
+    }
+    
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function(par) {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -219,13 +227,7 @@ function Compass(obj) {
 
     this.htmlObj = obj;
 
-    document.getElementById('legendtitle').onclick = function() {
 
-        if (_this.htmlObj.style.height == '20px')
-            _this.htmlObj.style.height = '';
-        else
-            _this.htmlObj.style.height = '20px';
-    }
 
     this.obj.onclick = function() {
         _this.toggle();

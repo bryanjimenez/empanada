@@ -3,5 +3,7 @@
 "-50": "The closest issue reported about <<FILTER>> is <<LOCATION>>",
 "-51": "Your location is not available. Please refer to <<URL>> for more information.",
 "-52": "Please refer to <<URL>> for more information.",
-"-53": "You mentioned something about <<FILTER>>."
+"-53": "You mentioned something about <<FILTER>>.",
+"-54": "There <<ISARE>> <<ISSUES>> about <<FILTER>> reported. The closest being <<LOCATION>>",
+"-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>"
 }

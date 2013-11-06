@@ -15,7 +15,7 @@ class MyStreamer(TwythonStreamer):
         			print "DEBUG - RESPONDING TO MENTION"
         			bot.respond_to_mention()
         		 	print "DEBUG - " + bot.get_message()
-        		  	update_status_with(get_oauthentication(), bot.get_message())
+        		  	# update_status_with(get_oauthentication(), bot.get_message())
 
 	def on_error(self, status_code, data):
 		print status_code
@@ -47,17 +47,16 @@ def update_status_with(oauth, message):
 
 def streamer():
 	import ssl
-	from time import sleep
-	
+		
 	oauth = get_oauthentication()
 	stream = MyStreamer(oauth['APP_KEY'], oauth['APP_SECRET'], oauth['ACCESS_TOKEN'], oauth['ACCESS_TOKEN_SECRET'])
 	# stream.statuses.filter(track='gas')
 	while True:
 		try:
 			stream.user()
-		except SSLError as e:
+		except ssl.SSLError as e:
 			print e
-			sleep(30)
+			time.sleep(30)
 
 
 def sleep(time):
