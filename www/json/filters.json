@@ -27,19 +27,19 @@
         "name": "Power Outage",
         "icon": "poweroutage.png",
         "shadow": "",
-        "synonyms": ["poweroutage"]
+        "synonyms": ["poweroutage", "power outage"]
     },
     "linedown": {
         "name": "Line Down",
         "icon": "linedown.png",
         "shadow": "",
-        "synonyms": ["linedown"]
+        "synonyms": ["linedown", "line down"]
     },    
     "treedown": {
         "name": "Tree Down",
         "icon": "treedown.png",
         "shadow": "",
-        "synonyms": ["treedown"]
+        "synonyms": ["treedown", "tree down"]
     },
     "shelter": {
         "name": "Shelter",
