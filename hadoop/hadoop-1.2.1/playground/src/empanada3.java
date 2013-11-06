@@ -65,14 +65,15 @@ import org.json.simple.parser.JSONParser;
 
 public class empanada3 {
 	
-	private static java.util.TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
-	private static java.util.TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
-	private static java.util.TreeMap<String,String> keywordsMap = new TreeMap<String, String>();
-	private static java.util.TreeMap<String,String> falseKeywordsMap = new TreeMap<String, String>();
-	private static java.util.TreeMap<String,String> bigramMap = new TreeMap<String, String>();
+	private static TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
+	private static TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
+	private static TreeMap<String,String> keywordsMap = new TreeMap<String, String>();
+	private static TreeMap<String,String> falseKeywordsMap = new TreeMap<String, String>();
+	private static TreeMap<String,String> bigramMap = new TreeMap<String, String>();
 	
-	private static TreeMap<String,Integer> getCategoryMap(){
-		return categoryMap;
+	private static  TreeMap<String,Integer> getCategoryMap(){
+		TreeMap<String,Integer> categoryMap1 = categoryMap;
+		return categoryMap1;
 	}
 	
 	private static  TreeMap<String,Integer> getFalseCategoryMap(){
@@ -119,13 +120,21 @@ public class empanada3 {
 		}
     	/*FINISH READING TWEET*/ 
     	
-    	java.util.TreeMap<String,Integer> categoryMap = getCategoryMap();
-    	java.util.TreeMap<String,Integer> falseCategoryMap = getFalseCategoryMap();
-    	java.util.TreeMap<String,String> keywordsMap =  getKeywordsMap();
-    	java.util.TreeMap<String,String> falseKeywordsMap = getFalseKeywordsMap();
-    	java.util.TreeMap<String,String> bigramMap = getBigramMap();
+    	java.util.TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
+    	java.util.TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
+    	java.util.TreeMap<String,String> keywordsMap =  new TreeMap<String, String>();
+    	java.util.TreeMap<String,String> falseKeywordsMap = new TreeMap<String, String>();
+    	java.util.TreeMap<String,String> bigramMap = new TreeMap<String, String>();
     	
-    
+    	categoryMap.putAll(empanada3.categoryMap);
+    	falseCategoryMap.putAll(empanada3.falseCategoryMap);
+    	keywordsMap.putAll(empanada3.keywordsMap);
+    	falseKeywordsMap.putAll(empanada3.falseKeywordsMap);
+    	bigramMap.putAll(empanada3.bigramMap);
+    	
+    	System.out.println("This is the filter " + categoryMap.toString());
+    	System.out.println("These are the keywords " + keywordsMap.toString());
+    	
 
     	String bigram;
     	String tweetCategory = "";
@@ -334,6 +343,7 @@ public class empanada3 {
     		String allContent = scanner1.useDelimiter("//A").next();
     		vector = new JSONObject(allContent);
     		numberOfKeys = vector.length(); 		
+    		
         }
         catch( IOException e )
         {
@@ -354,7 +364,7 @@ public class empanada3 {
     		String nextKey = vectorItr.next().toString();
     		JSONObject vectorField;
 			try {
-				vectorField = (JSONObject) vector.get(nextKey);
+				vectorField = vector.getJSONObject(nextKey);
 	    		if (!nextKey.equals("profanity")){
 	    			String category = "";
 	    			category = vectorField.get("category").toString();
