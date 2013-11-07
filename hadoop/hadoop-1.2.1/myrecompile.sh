@@ -23,36 +23,13 @@
 #jar -cvf playground/empanada2.jar -C playground/classes/ .
 
 
-javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:lib/json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada3.java 
+javac -classpath hadoop-core-1.2.1.jar:lib/commons-logging-1.1.1.jar:lib/commons-logging-api-1.0.4.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada3.java 
 
 jar -cvf playground/empanada3.jar -C playground/classes/ .
 
 javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes playground/src/MyWordCount.java
 
 jar -cvf playground/mywordcount.jar -C playground/classes/ .
-
-javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes playground/src/TweetFileCombiner.java
-
-jar -cvf playground/tweetfilecombiner.jar -C playground/classes/ .
-
-
-javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:lib/json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes2/ playground/src/empanada3.java 
-
-jar -cvf playground/empanada3.jar -C playground/classes/ .
-
-
-#javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada3.java 
-
-#jar -cvf playground/empanada3.jar -C playground/classes/ .
-
-
-
-
-
-#javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes playground/src/TweetFileCombiner.java
-
-#jar -cvf playground/tweetfilecombiner.jar -C playground/classes/ .
-
 
 #javac -classpath hadoop-core-1.2.1.jar:lib/commons-cli-1.2.jar:./json-simple-1.1.1.jar:lib/java-json.jar -d playground/classes/ playground/src/empanada4.java 
 

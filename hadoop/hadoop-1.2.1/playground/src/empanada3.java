@@ -61,9 +61,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 //import org.json.simple.parser.ParseException;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class empanada3 {
+	private static final Log LOG = LogFactory.getLog(empanada3.class);
 	
 	private static TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
 	private static TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
@@ -115,10 +117,15 @@ public class empanada3 {
     	try {
     		JSONObject tweet = new JSONObject(value.toString());
     		tweetText = tweet.get("text").toString();			
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	/*FINISH READING TWEET*/ 
+    	
+    	
+
+    	
+    	
     	
     	java.util.TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
     	java.util.TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
@@ -132,8 +139,11 @@ public class empanada3 {
     	falseKeywordsMap.putAll(empanada3.falseKeywordsMap);
     	bigramMap.putAll(empanada3.bigramMap);
     	
-    	System.out.println("This is the filter " + categoryMap.toString());
-    	System.out.println("These are the keywords " + keywordsMap.toString());
+    	LOG.info(categoryMap.toString());
+		LOG.info(keywordsMap.toString());
+    	
+    	//System.out.println("This is the filter " + categoryMap.toString());
+    	//System.out.println("These are the keywords " + keywordsMap.toString());
     	
 
     	String bigram;
@@ -331,7 +341,11 @@ public class empanada3 {
 			System.exit(2);
 		}
 		
-		String vectorFile = "vector.json";
+
+    			String vectorFile = "/usr/local/hadoop/vector.json";
+		
+		
+		
     	JSONObject vector = new JSONObject();
     	int numberOfKeys = 0;
 		
@@ -341,16 +355,17 @@ public class empanada3 {
         	File f1 = new File(vectorFile);
     		Scanner scanner1 = new Scanner(f1);
     		String allContent = scanner1.useDelimiter("//A").next();
+    		LOG.info(allContent);
     		vector = new JSONObject(allContent);
     		numberOfKeys = vector.length(); 		
     		
         }
         catch( IOException e )
         {
-            System.err.println( "Error handling file " + vectorFile + ":" + e );
+            LOG.info( "Error handling file " + vectorFile + ":" + e );
         } catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.info(e);
 		}    	
     	/*FINISH READING VECTOR FILE*/
     	
@@ -359,6 +374,8 @@ public class empanada3 {
 
     	Iterator<?> vectorItr = vector.keys();
 
+
+		
     	//CREATES MAPS TO APPLY VECTOR
     	while (vectorItr.hasNext()){
     		String nextKey = vectorItr.next().toString();
@@ -394,8 +411,10 @@ public class empanada3 {
 			}   
     	}
     	//FINISH CREATING MAPS TO APPLY VECTOR
-		
-		
+    	
+		LOG.info(categoryMap.toString());
+		LOG.info(keywordsMap.toString());
+
 		
 		Job job = new Job(conf, "empanada");
 		job.setJarByClass(empanada3.class);

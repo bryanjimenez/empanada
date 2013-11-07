@@ -95,8 +95,6 @@ public class MyWordCount {
         		  context.write(new Text(previousWord), one);
         	  }
         	  
-        	  previousWord = myWord;
-        	  
         	  for (int i = 0; i < myDeadWords.size(); i++){
         		  if (myWord.equals(myDeadWords.get(i))){ 	  
         			  isDead = true;
@@ -110,7 +108,7 @@ public class MyWordCount {
         		  context.write(word, one);
         	  }
         	  
-        	  
+        	  previousWord = myWord;
     		  
     	  }
     	    
