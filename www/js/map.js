@@ -632,8 +632,7 @@ function refresh() {
 
 
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
-    //alert(s);
-
+	console.log(s);
 
 
     xmlHttp.open("GET", s, true);
