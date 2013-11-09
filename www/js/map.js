@@ -559,7 +559,7 @@ function refresh() {
                 var time = tweet.created_at;
                 //var d = new Date(time.split[);
                 //var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
-                var date = time.split[1]+" "+time.split[2]+" "+time.split[1];
+                var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[1];
                 DEBUG&&console.log(time + " " +date); 
 
                 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
