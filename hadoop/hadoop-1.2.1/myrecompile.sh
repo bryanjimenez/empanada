@@ -35,3 +35,4 @@ jar -cvf playground/mywordcount.jar -C playground/classes/ .
 
 #jar -cvf playground/empanada4.jar -C playground/classes/ .
 
+sudo cp playground/empanada3.jar /usr/local/hadoop/elsa

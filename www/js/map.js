@@ -130,7 +130,7 @@ function Legend(parent) {
             //Do a refresh once filters are up
             //alert(legend.getFilters());
             refresh();
-            fpl();
+            //fpl();
         }
     }
     xmlHttp.open("GET", "json/filters.json", true);
@@ -390,7 +390,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
-    var mgrOptions = {borderPadding: 50, maxZoom: 15};
+    var mgrOptions = {borderPadding: 50, maxZoom: 1};
     manager = new MarkerManager(map, mgrOptions);
 
 
@@ -407,7 +407,7 @@ function initialize() {
     });
     google.maps.event.addListener(map, 'dragend', function() {
         refresh();
-        fpl();
+//        fpl();
 
         compass.off();
     });
@@ -616,8 +616,7 @@ function refresh() {
                  markerst.push(filter);
                  */
                 Markers.push(marker, filter, contentString);
-
-                manager.addMarker(marker, 12);
+                manager.addMarker(marker, 1);
                 manager.refresh();
 
                 //infobubble(marker, contentString);
@@ -629,6 +628,7 @@ function refresh() {
     lng = map.getCenter().lng();
     zoom = map.getZoom();
     rad = Map.zoom2rad(zoom);
+
 
 
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
