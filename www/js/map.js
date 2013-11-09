@@ -4,11 +4,10 @@ var map;
 var manager;
 
 //EMPANADA Globals
-var lat = 25.75906, lng = -80.37388, zoom = 14;
-rad = 1;
-var olat = 0, olng = 0, ozoom = 14;
-orad = 0;
+var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
+var olat = 0, olng = 0, ozoom = 14, orad = 0;
 var mypos;
+var DEBUG=true;
 
 //SINGLETON
 var Markers = {
@@ -560,6 +559,7 @@ function refresh() {
                 var time = tweet.created_at;
                 var d = new Date(time);
                 var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
+                DEBUG&&console.log(time + " " +date); 
 
                 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
                 if (tweet.geo) {
@@ -632,7 +632,7 @@ function refresh() {
 
 
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
-	console.log(s);
+	DEBUG&&console.log(s);
 
 
     xmlHttp.open("GET", s, true);
