@@ -128,7 +128,9 @@ function Legend(parent) {
 
             //Do a refresh once filters are up
             //alert(legend.getFilters());
-            refresh();
+			google.maps.event.addListener(map, "tilesloaded", function() { 
+				refresh();
+			});
             //fpl();
         }
     }
@@ -371,7 +373,7 @@ function initialize() {
         lng = location.search.split('lng=')[1].split('&')[0];
     if (location.search.indexOf('filter=') > -1)
         legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
-   if (location.search.indexOf('zoom=') > -1)
+	if (location.search.indexOf('zoom=') > -1)
         zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
 
 
@@ -411,6 +413,10 @@ function initialize() {
 
         compass.off();
     });
+    
+ 
+    
+    
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
