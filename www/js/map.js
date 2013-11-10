@@ -372,7 +372,7 @@ function initialize() {
     if (location.search.indexOf('filter=') > -1)
         legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
    if (location.search.indexOf('zoom=') > -1)
-        zoom = +location.search.split('zoom=')[1].split('&')[0];
+        zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
 
 
     compass = new Compass(document.getElementById('findme'));
@@ -545,6 +545,7 @@ function refresh() {
 
             var tweets = JSON.parse(xmlHttp.responseText);
 
+			DEBUG&&console.log(tweets.t.length);
 
             //alert(tweets.t.length);
 
