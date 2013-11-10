@@ -371,7 +371,8 @@ function initialize() {
         lng = location.search.split('lng=')[1].split('&')[0];
     if (location.search.indexOf('filter=') > -1)
         legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
-
+   if (location.search.indexOf('zoom=') > -1)
+        zoom = location.search.split('zoom=')[1].split('&')[0];
 
 
     compass = new Compass(document.getElementById('findme'));
@@ -559,8 +560,7 @@ function refresh() {
                 var time = tweet.created_at;
                 //var d = new Date(time.split[);
                 //var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
-                var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[1];
-                DEBUG&&console.log(time + " " +date); 
+                var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[5];
 
                 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
                 if (tweet.geo) {
