@@ -550,12 +550,14 @@ function refresh() {
             //	return;
 
             var tweets = JSON.parse(xmlHttp.responseText);
-
-			DEBUG&&console.log(tweets.t.length);
+			
+			if(tweets)
+				DEBUG&&console.log(tweets.t.length);
 
             //alert(tweets.t.length);
 
             for (var i in tweets.t) {
+				
                 //alert(i);
                 var filter = tweets.f[i];
                 var tweet = tweets.t[i];

@@ -6,7 +6,7 @@ header('Content-type: application/json');
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
-error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL ^ E_NOTICE);
 
 ini_set('display_errors', '1');
 
