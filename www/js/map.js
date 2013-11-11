@@ -556,7 +556,7 @@ function refresh() {
 
             var tweets = JSON.parse(xmlHttp.responseText);
 			
-			if(tweets)
+			if(tweets.t!=null)
 				DEBUG&&console.log(tweets.t.length);
 
             //alert(tweets.t.length);
