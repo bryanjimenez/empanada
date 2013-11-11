@@ -8,7 +8,7 @@ header('Content-type: application/json');
 // This is the default value set in php.ini
 //error_reporting(E_ALL ^ E_NOTICE);
 
-ini_set('display_errors', '1');
+//ini_set('display_errors', '1');
 
 //DANGER!!
 ini_set('memory_limit','-1');
