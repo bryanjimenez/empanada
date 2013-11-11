@@ -14,6 +14,10 @@ var Markers = {
     markers: [],
     markerst: [],
     window: null,
+    closeAll: function(){
+		if (Markers.window)
+            Markers.window.close();
+	},
     toggle: function(category, t) {
         if (this.window)
             this.window.close();
@@ -404,12 +408,13 @@ function initialize() {
 
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
-        if (Markers.window)
-            Markers.window.close();
+        Markers.closeAll();
+            
     });
     google.maps.event.addListener(map, 'dragend', function() {
+        Markers.closeAll();
         refresh();
-//        fpl();
+//      fpl();
 
         compass.off();
     });
