@@ -7,5 +7,6 @@
 "-52": "Please refer to <<URL>> for more information.",
 "-53": "You mentioned something about <<FILTER>>.",
 "-54": "There <<ISARE>> <<ISSUES>> mentions about <<FILTER>> reported. The closest being <<LOCATION>>",
-"-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>"
+"-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>",
+"-100": "The system is under maintenance right now. Please try again later."
 }

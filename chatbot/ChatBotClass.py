@@ -359,7 +359,11 @@ class ChatBot():
         # if response is OK then http was good
         # we can proceed
         ####
-        if (http_result.reason == "OK"):
+        if (http_result.reason == "Not Found"):
+            result['code'] = -100
+            conn.close()
+            return result
+        elif (http_result.reason == "OK"):
             data = http_result.read()
             # if self.debug: print "DEBUG - " + data
             json_data = json.loads(data)
