@@ -350,7 +350,8 @@ var Map = {
         return Math.round(14 - Math.log(radius) / Math.LN2);
     },
     zoom2rad: function(zoom) {
-        return Math.round(Math.pow(Math.E, (14 - zoom) / Math.LN2));
+		var r = Math.round(Math.pow(Math.E, (14 - zoom) / Math.LN2));
+        return (r<1)?1:r;
     }
 }
 
