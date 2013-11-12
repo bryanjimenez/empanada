@@ -624,7 +624,7 @@ function refresh() {
                     position: new google.maps.LatLng(x, y),
                     //map: map,
                     icon: "image/red/" + legend.getIcons(filter),
-                    animation: google.maps.Animation.DROP,
+                    //animation: google.maps.Animation.DROP,
                     title: text
                 });
 
