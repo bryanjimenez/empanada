@@ -421,7 +421,7 @@ function initialize() {
     
  
     
-    
+    setTimeout(refresh,10);
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
@@ -649,9 +649,10 @@ function refresh() {
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
 	DEBUG&&console.log(s);
 
-    olat = lat;
-    olng = lng;
-    orad = Map.zoom2rad(zoom);
+	//need to take these out because if new tweets are in the result they will be ommited
+    //olat = lat;
+    //olng = lng;
+    //orad = Map.zoom2rad(zoom);
 
     xmlHttp.open("GET", s, true);
     xmlHttp.send(null);
