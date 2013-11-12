@@ -649,6 +649,9 @@ function refresh() {
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
 	DEBUG&&console.log(s);
 
+    olat = lat;
+    olng = lng;
+    orad = Map.zoom2rad(zoom);
 
     xmlHttp.open("GET", s, true);
     xmlHttp.send(null);
