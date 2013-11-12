@@ -421,7 +421,7 @@ function initialize() {
     
  
     
-    setTimeout(refresh,10);
+    setInterval(refresh,10);
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
