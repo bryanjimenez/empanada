@@ -127,16 +127,6 @@ function Legend(parent) {
                 }
                 parent.appendChild(div);
             }
-            for (var i in prefilters) {
-                //alert(i);
-            }
-
-            //Do a refresh once filters are up
-            //alert(legend.getFilters());
-			google.maps.event.addListener(map, "tilesloaded", function() { 
-				refresh();
-			});
-            //fpl();
         }
     }
     xmlHttp.open("GET", "json/filters.json", true);
@@ -319,17 +309,14 @@ function Compass(obj) {
         // tracking mode OFF
         if (watching) {
             _this.htmlObj.style.backgroundImage = 'url(\'' + needle_off + '\')';
-            //disableMovement(false);
             navigator.geolocation.clearWatch(watching);
             watching = null;
             _this.dropPin(false);
         }
         // tracking mode ON
         else {
-            //disableMovement(true);
             _this.htmlObj.style.backgroundImage = 'url(\'' + needle_on + '\')';
             watching = navigator.geolocation.watchPosition(success, error, options);
-            //refresh(); 	
         }
     };
 }
@@ -417,13 +404,12 @@ function initialize() {
         Markers.closeAll();
             
     });
-    google.maps.event.addListener(map, 'dragend', function() {
-        Markers.closeAll();
-        refresh();
-//      fpl();
-        compass.off();
-    });
     
+	//Do a refresh once filters are up
+	//alert(legend.getFilters());
+    google.maps.event.addListener(map, "tilesloaded", function() { 
+		update();
+	});
  
     //only if live
     live&&setInterval(refresh,10000);
@@ -451,7 +437,7 @@ function codeAddress() {
 
             mypos = results[0].geometry.location;
             map.setCenter(mypos);
-            refresh();
+            update();
 
         } else {
             alert("Geocode was not successful for the following reason: " + status);
@@ -548,125 +534,126 @@ function fpl() {
     xmlHttp.send(null);
 }
 
-function refresh() {
+function update() {
+	
+   
+	var xmlHttp = new XMLHttpRequest();
 
-    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function()
+	{
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
+		{
+			//if(!xmlHttp.responseText)
+			//	return;
 
-    xmlHttp.onreadystatechange = function()
-    {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
-        {
-            //if(!xmlHttp.responseText)
-            //	return;
-
-            var tweets = JSON.parse(xmlHttp.responseText);
+			var tweets = JSON.parse(xmlHttp.responseText);
 			
 			if(tweets.t!=null)
 				DEBUG&&console.log("Results: "+tweets.t.length);
 
-            //alert(tweets.t.length);
+			//alert(tweets.t.length);
 
-            for (var i in tweets.t) {
+			for (var i in tweets.t) {
 				
-                //alert(i);
-                var filter = tweets.f[i];
-                var tweet = tweets.t[i];
+				//alert(i);
+				var filter = tweets.f[i];
+				var tweet = tweets.t[i];
 
-                var user = tweet.user.screen_name;
-                var pic = tweet.user.profile_image_url;
-                var text = tweet.text;
-                var follow = tweet.user.followers_count;
-                var friends = tweet.user.friends_count;
-                var c = new Date(tweet.created_at);
-                
-                var d=c.toDateString().split(" ");
-                var t=c.toLocaleTimeString().split(":");
-                var ampm = c.toLocaleTimeString().split(" ")[1];
-                var created = d[0]+", "+d[1]+" "+d[2]+" "+t[0]+":"+t[1]+" "+ampm;
+				var user = tweet.user.screen_name;
+				var pic = tweet.user.profile_image_url;
+				var text = tweet.text;
+				var follow = tweet.user.followers_count;
+				var friends = tweet.user.friends_count;
+				var c = new Date(tweet.created_at);
+				
+				var d=c.toDateString().split(" ");
+				var t=c.toLocaleTimeString().split(":");
+				var ampm = c.toLocaleTimeString().split(" ")[1];
+				var created = d[0]+", "+d[1]+" "+d[2]+" "+t[0]+":"+t[1]+" "+ampm;
 
-                //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
-                if (tweet.geo) {
-                    var x = tweet.geo.coordinates[0];
-                    var y = tweet.geo.coordinates[1];
-                }
-                else {
-                    //TODO we need to come up with something better here
-                    var x = -81.68738214;
-                    var y = 27.96855823;
-                }
+				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
+				if (tweet.geo) {
+					var x = tweet.geo.coordinates[0];
+					var y = tweet.geo.coordinates[1];
+				}
+				else {
+					//TODO we need to come up with something better here
+					var x = -81.68738214;
+					var y = 27.96855823;
+				}
 
-                var contentString = '' +
-                        '<div id="content" style="width:304px; height:176px;">' +
-                        '<div id="siteNotice">' +
-                        '<div style="float:left;border:0px solid blue;">' +
-                        '<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
-                        '</div>' +
-                        '<div style="float:right;border:0px solid red;width=50%;">' +
-                        '<p>Followers: ' + follow + '<br/>' +
-                        'Friends: ' + friends + '</p>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-                        '<div style="float:left;border:0px solid blue;width:204px;">' +
-                        '<p style="max-width:200px">' + text + '</p>' +
-                        '</div>' +
-                        '<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
-                        '<img name="userpic" src="' + pic + '"></img>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div id="options" style="float:left;border:0px solid blue;width:100%;">' +
-                        '<div id="footer" style="float:right;border:0px solid black;">' +
-                        '<p>' + created + '</p>' +
-                        '</div>' +
-                        //http://stackoverflow.com/questions/12823579/
-                        //Open iOS 6 native map from URL
-                        '<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '">Go here</a> | ' +
-                        '<a href="javascript:showSearch();">Search Nearby</a>' +
-                        '<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
-                        '<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>' +
-                       '</div>' +
-                        '</div>' +
-                        '</div>';
+				var contentString = '' +
+						'<div id="content" style="width:304px; height:176px;">' +
+						'<div id="siteNotice">' +
+						'<div style="float:left;border:0px solid blue;">' +
+						'<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
+						'</div>' +
+						'<div style="float:right;border:0px solid red;width=50%;">' +
+						'<p>Followers: ' + follow + '<br/>' +
+						'Friends: ' + friends + '</p>' +
+						'</div>' +
+						'</div>' +
+						'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
+						'<div style="float:left;border:0px solid blue;width:204px;">' +
+						'<p style="max-width:200px">' + text + '</p>' +
+						'</div>' +
+						'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
+						'<img name="userpic" src="' + pic + '"></img>' +
+						'</div>' +
+						'</div>' +
+						'<div id="options" style="float:left;border:0px solid blue;width:100%;">' +
+						'<div id="footer" style="float:right;border:0px solid black;">' +
+						'<p>' + created + '</p>' +
+						'</div>' +
+						//http://stackoverflow.com/questions/12823579/
+						//Open iOS 6 native map from URL
+						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '">Go here</a> | ' +
+						'<a href="javascript:showSearch();">Search Nearby</a>' +
+						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
+						'<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>' +
+					   '</div>' +
+						'</div>' +
+						'</div>';
 
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(x, y),
-                    //map: map,
-                    icon: "image/red/" + legend.getIcons(filter),
-                    animation: google.maps.Animation.DROP,
-                    title: text
-                });
+				var marker = new google.maps.Marker({
+					position: new google.maps.LatLng(x, y),
+					//map: map,
+					icon: "image/red/" + legend.getIcons(filter),
+					animation: google.maps.Animation.DROP,
+					title: text
+				});
 
-                /*markers.push(marker);
-                 markerst.push(filter);
-                 */
-                
-                if(manager.getMarker(x,y,0)==null){
+				/*markers.push(marker);
+				 markerst.push(filter);
+				 */
+				
+				if(manager.getMarker(x,y,0)==null){
 					Markers.push(marker, filter, contentString);
 					manager.addMarker(marker,0);
 					manager.refresh();
 				}
-                //infobubble(marker, contentString);
-            }
-        }
-    }
-    //PARAMETERS
-    lat = map.getCenter().lat();
-    lng = map.getCenter().lng();
-    zoom = map.getZoom();
-    rad = Map.zoom2rad(zoom);
+				//infobubble(marker, contentString);
+			}
+		}
+	}
+	//PARAMETERS
+	lat = map.getCenter().lat();
+	lng = map.getCenter().lng();
+	zoom = map.getZoom();
+	rad = Map.zoom2rad(zoom);
 
 
 
-    var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
+	var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
 	DEBUG&&console.log("Request: "+s);
 
 	//need to take these out because if new tweets are in the result they will be ommited
-    //olat = lat;
-    //olng = lng;
-    //orad = Map.zoom2rad(zoom);
+	//olat = lat;
+	//olng = lng;
+	//orad = Map.zoom2rad(zoom);
 
-    xmlHttp.open("GET", s, true);
-    xmlHttp.send(null);
+	xmlHttp.open("GET", s, true);
+	xmlHttp.send(null);
 }
 
 
