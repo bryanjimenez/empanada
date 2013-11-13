@@ -448,16 +448,22 @@ MarkerManager.prototype.getMarker = function (lat, lng, zoom) {
   var mPoint = new google.maps.LatLng(lat, lng); 
   var gridPoint = this.getTilePoint_(mPoint, zoom, new google.maps.Size(0, 0, 0, 0));
 
-  var marker = new google.maps.Marker({position: mPoint}); 
+  //var marker = new google.maps.Marker({position: mPoint}); 
+  var marker = null; 
     
   var cellArray = this.getGridCellNoCreate_(gridPoint.x, gridPoint.y, zoom);
   if (cellArray !== undefined) {
-    for (var i = 0; i < cellArray.length; i++) 
+    /*for (var i = 0; i < cellArray.length; i++) 
     { 
       if (lat === cellArray[i].getPosition().lat() && lng === cellArray[i].getPosition().lng()) {
+		  console.log
         marker = cellArray[i]; 
       } 
-    } 
+    } */
+    for (var i = 0; i < cellArray.length; i++) {
+		if (mPoint.equals(cellArray[i].getPosition()))
+		marker = cellArray[i];
+	} 
   } 
   return marker; 
 }; 

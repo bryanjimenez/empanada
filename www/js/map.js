@@ -400,7 +400,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
-    var mgrOptions = {borderPadding: 50, maxZoom: 1};
+    var mgrOptions = {borderPadding: 0, maxZoom: 1};
     manager = new MarkerManager(map, mgrOptions);
 
 
@@ -562,7 +562,7 @@ function refresh() {
             var tweets = JSON.parse(xmlHttp.responseText);
 			
 			if(tweets.t!=null)
-				DEBUG&&console.log(tweets.t.length);
+				DEBUG&&console.log("Results: "+tweets.t.length);
 
             //alert(tweets.t.length);
 
@@ -632,18 +632,19 @@ function refresh() {
                     position: new google.maps.LatLng(x, y),
                     //map: map,
                     icon: "image/red/" + legend.getIcons(filter),
-                    //animation: google.maps.Animation.DROP,
+                    animation: google.maps.Animation.DROP,
                     title: text
                 });
 
                 /*markers.push(marker);
                  markerst.push(filter);
                  */
-                Markers.push(marker, filter, contentString);
-                manager.removeMarker(marker);
-                manager.addMarker(marker, 1);
-                manager.refresh();
-
+                
+                if(manager.getMarker(x,y,0)==null){
+					Markers.push(marker, filter, contentString);
+					manager.addMarker(marker,0);
+					manager.refresh();
+				}
                 //infobubble(marker, contentString);
             }
         }
@@ -657,7 +658,7 @@ function refresh() {
 
 
     var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
-	DEBUG&&console.log(s);
+	DEBUG&&console.log("Request: "+s);
 
 	//need to take these out because if new tweets are in the result they will be ommited
     //olat = lat;
