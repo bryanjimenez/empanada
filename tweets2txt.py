@@ -6,6 +6,7 @@ import ConfigParser
 import sys
 import json
 from datetime import datetime
+import os
 
 
 config = ConfigParser.ConfigParser()
@@ -15,13 +16,14 @@ APP_KEY = config.get('twitter', 'APP_KEY')
 APP_SECRET = config.get('twitter', 'APP_SECRET')
 OAUTH_TOKEN = config.get('twitter', 'OAUTH_TOKEN')
 OAUTH_TOKEN_SECRET = config.get('twitter', 'OAUTH_TOKEN_SECRET')
-LINE_MAX=1000
+LINE_MAX=1
 DATE_FORMAT='%Y%m%d_%H%M%S'
-PATH2LOG='hadoop/tweets/'
+PATH2LOG='tweets/'
 
 
 tstamp= datetime.now().strftime(DATE_FORMAT)
 linecount=0
+
 
 class MyStreamer(TwythonStreamer):
 	def on_success(self, data):
@@ -32,15 +34,17 @@ class MyStreamer(TwythonStreamer):
 				global linecount
 				
 				print data['user']['screen_name'].encode('utf-8') + ": " +data['text'].encode('utf-8')
-
 				
 				if(linecount<LINE_MAX):
 					linecount+=1
 				else:
 					linecount=0
+					os.rename(PATH2LOG+tstamp+'.temp',PATH2LOG+tstamp+'.txt')
 					tstamp= datetime.now().strftime(DATE_FORMAT)
+					os.system("/usr/local/hadoop/bin/hadoop fs -put tweets/*.txt /user/jonathan/tweets/pending/")
+					os.system("rm tweets/*.txt")
 
-				with open(PATH2LOG+tstamp+'.txt', 'a') as outfile:
+				with open(PATH2LOG+tstamp+'.temp', 'a') as outfile:
 					json.dump(data, outfile)
 					outfile.write('\n')
 					
@@ -53,27 +57,14 @@ class MyStreamer(TwythonStreamer):
 		self.disconnect()
 		db.close()
 
-        # Want to stop trying to get data because of the error?
-        # Uncomment the next line!
-        # self.disconnect()
 
 stream = MyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-#stream.statuses.filter(track = 'storm')
+#stream.statuses.filter(locations = '-126.2109375,24.491523,-50.625,49.95121991')
 stream.statuses.filter(locations = '-82.177734,24.491523,-79.736023,27.009891')
-#~ stream.statuses.filter(follow = 'justinbieber')
 
-###### UNCOMMENT TO USE THE REST/SEARCH API
-#~ 
-#~ twitter = Twython(APP_KEY, APP_SECRET,OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-#~ 
-#~ try:
-    #~ user_timeline = twitter.get_user_timeline(screen_name='AwesomeAndy')
-#~ except TwythonError as e:
-    #~ print e
-#~ 
-#~ for tweet in user_timeline :
-	#~ 
-	#~ print tweet['user']['screen_name'] + ": " + tweet['text']
-	#~ if tweet['place']:
-		#~ print tweet['place']['name']
+#~ Sample Coordinates:
+#~ Key West:
+#~ 24.491523 -82.177734
+#~ Jupiter:
+#~ 27.009891 -79.736023
