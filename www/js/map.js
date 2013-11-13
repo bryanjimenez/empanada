@@ -406,10 +406,12 @@ function initialize() {
 
     // EVENT HANDLERS
 
+    /*
     zipshow.onchange = function() {
         document.getElementById('zip').style.display = zipshow.checked ? "inline" : "none";
     }
-
+	*/
+	
     google.maps.event.addListener(map, 'click', function() {
         //close infobubble if we click on  map
         Markers.closeAll();
