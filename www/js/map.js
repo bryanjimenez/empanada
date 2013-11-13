@@ -8,6 +8,7 @@ var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
 var olat = 0, olng = 0, ozoom = 14, orad = 0;
 var mypos;
 var DEBUG=true;
+var live=false;
 
 //SINGLETON
 var Markers = {
@@ -380,6 +381,8 @@ function initialize() {
         legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
 	if (location.search.indexOf('zoom=') > -1)
         zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
+	if (location.search.indexOf('live=') > -1)
+        live = location.search.split('live=')[1].split('&')[0]=='true';						//this needs to be a boolean
 
 
     compass = new Compass(document.getElementById('findme'));
@@ -421,8 +424,8 @@ function initialize() {
     });
     
  
-    
-    setInterval(refresh,10000);
+    //only if live
+    live&&setInterval(refresh,10000);
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
