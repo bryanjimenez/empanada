@@ -392,27 +392,31 @@ function initialize() {
 
 
     // EVENT HANDLERS
-
-    /*
-    zipshow.onchange = function() {
-        document.getElementById('zip').style.display = zipshow.checked ? "inline" : "none";
-    }
-	*/
-	
-    google.maps.event.addListener(map, 'click', function() {
-        //close infobubble if we click on  map
-        Markers.closeAll();
-            
-    });
     
-	//Do a refresh once filters are up
-	//alert(legend.getFilters());
+    
+    
+	//Do an update every time AFTER the map is moved
     google.maps.event.addListener(map, "tilesloaded", function() { 
 		update();
 	});
  
-    //only if live
-    live&&setInterval(refresh,10000);
+	
+	//Clear all windows BEFORE the map is changed
+    google.maps.event.addListener(map, "zoom_changed", function() { 
+		Markers.closeAll();
+	});
+	
+    google.maps.event.addListener(map, "dragend", function() { 
+		Markers.closeAll();
+	});    
+	google.maps.event.addListener(map, 'click', function() {
+        Markers.closeAll();
+    });
+	
+	
+	
+	//only if live
+    live&&setInterval(update,5000);
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
@@ -430,8 +434,7 @@ function initialize() {
 //https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
 //maps.google.com/maps/api/geocode/json?latlng=25.705501,-80.359855&components=postal_code&sensor=false
 
-function codeAddress() {
-    var address = document.getElementById("zip").value;
+function codeAddress(address) {
     geocoder.geocode({'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
 
@@ -448,6 +451,7 @@ function codeAddress() {
 /* Thanks to
  * http://www.fplmaps.com/
  */
+ /*
 function fpl() {
 
     var xmlHttp = null;
@@ -533,9 +537,9 @@ function fpl() {
     //xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
     xmlHttp.send(null);
 }
+*/
 
 function update() {
-	
    
 	var xmlHttp = new XMLHttpRequest();
 
@@ -657,6 +661,7 @@ function update() {
 }
 
 
+//used by info bubbles for search nearby
 function showSearch() {
     document.getElementById('detail').style.visibility = '';
 }
