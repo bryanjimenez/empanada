@@ -577,10 +577,11 @@ function refresh() {
                 var pic = tweet.user.profile_image_url;
                 var text = tweet.text;
                 var follow = tweet.user.followers_count;
+                var friends = tweet.user.friends_count;
                 var time = tweet.created_at;
-                //var d = new Date(time.split[);
-                //var date = d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
-                var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[5];
+                var date = new Date(tweet.created_at);
+                //d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
+                //var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[5];
 
                 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
                 if (tweet.geo) {
@@ -600,7 +601,8 @@ function refresh() {
                         '<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
                         '</div>' +
                         '<div style="float:right;border:0px solid red;width=50%;">' +
-                        '<p>+/-' + follow + '</p>' +
+                        '<p>Followers: ' + follow + '</p>' +
+                        '<p>Friends: ' + friends + '</p>' +
                         '</div>' +
                         '</div>' +
                         '<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
