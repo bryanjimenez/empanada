@@ -578,10 +578,12 @@ function refresh() {
                 var text = tweet.text;
                 var follow = tweet.user.followers_count;
                 var friends = tweet.user.friends_count;
-                var timestamp = new Date(tweet.created_at);
-                var nicedate = timestamp.getMonth() + 1 + "/" + timestamp.getDay() + "/" + timestamp.getFullYear();
-                //d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
-                //var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[5];
+                var c = new Date(tweet.created_at);
+                
+                var d=c.toDateString().split(" ");
+                var t=c.toLocaleTimeString().split(":");
+                var ampm = c.toLocaleTimeString().split(" ")[1];
+                var created = d[0]+", "+d[1]+" "+d[2]+" "+t[0]+":"+t[1]+" "+ampm;
 
                 //"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
                 if (tweet.geo) {
@@ -615,7 +617,7 @@ function refresh() {
                         '</div>' +
                         '<div id="options" style="float:left;border:0px solid blue;width:100%;">' +
                         '<div id="footer" style="float:right;border:0px solid black;">' +
-                        '<p>' + nicedate + '</p>' +
+                        '<p>' + created + '</p>' +
                         '</div>' +
                         //http://stackoverflow.com/questions/12823579/
                         //Open iOS 6 native map from URL
