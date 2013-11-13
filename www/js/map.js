@@ -421,7 +421,6 @@ function initialize() {
         Markers.closeAll();
         refresh();
 //      fpl();
-
         compass.off();
     });
     
@@ -641,6 +640,7 @@ function refresh() {
                  markerst.push(filter);
                  */
                 Markers.push(marker, filter, contentString);
+                manager.removeMarker(marker);
                 manager.addMarker(marker, 1);
                 manager.refresh();
 
