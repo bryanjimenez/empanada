@@ -578,8 +578,8 @@ function refresh() {
                 var text = tweet.text;
                 var follow = tweet.user.followers_count;
                 var friends = tweet.user.friends_count;
-                var time = tweet.created_at;
-                var date = new Date(tweet.created_at);
+                var timestamp = new Date(tweet.created_at);
+                var nicedate = timestamp.getMonth() + 1 + "/" + timestamp.getDay() + "/" + timestamp.getFullYear();
                 //d.getMonth() + 1 + "/" + d.getDay() + "/" + d.getFullYear();
                 //var date = time.split(" ")[1]+" "+time.split(" ")[2]+" "+time.split(" ")[5];
 
@@ -601,8 +601,8 @@ function refresh() {
                         '<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
                         '</div>' +
                         '<div style="float:right;border:0px solid red;width=50%;">' +
-                        '<p>Followers: ' + follow + '</p>' +
-                        '<p>Friends: ' + friends + '</p>' +
+                        '<p>Followers: ' + follow + '<br/>' +
+                        'Friends: ' + friends + '</p>' +
                         '</div>' +
                         '</div>' +
                         '<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
