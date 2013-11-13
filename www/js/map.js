@@ -615,7 +615,7 @@ function refresh() {
                         '</div>' +
                         '<div id="options" style="float:left;border:0px solid blue;width:100%;">' +
                         '<div id="footer" style="float:right;border:0px solid black;">' +
-                        '<p>' + date + '</p>' +
+                        '<p>' + nicedate + '</p>' +
                         '</div>' +
                         //http://stackoverflow.com/questions/12823579/
                         //Open iOS 6 native map from URL
