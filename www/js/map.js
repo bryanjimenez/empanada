@@ -5,7 +5,7 @@ var manager;
 
 //EMPANADA Globals
 var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
-var olat = 0, olng = 0, ozoom = 14, orad = 0;
+//var olat = 0, olng = 0, ozoom = 14, orad = 0;
 var mypos;
 var DEBUG=true;
 var live=false;
@@ -59,7 +59,7 @@ function Legend(parent) {
     var filters = [];
     var prefilters;
     var icons;
-    this.div = parent;
+    this.htmlObj = parent;
 
     this.add = function(item) {
         filters.push(item);
@@ -96,10 +96,10 @@ function Legend(parent) {
 
     document.getElementById('legendtitle').onclick = function() {
 
-        if (_this.div.style.height == '20px')
-            _this.div.style.height = '';
+        if (_this.htmlObj.style.height == '20px')
+            _this.htmlObj.style.height = '';
         else
-            _this.div.style.height = '20px';
+            _this.htmlObj.style.height = '20px';
     }
     
     var xmlHttp = new XMLHttpRequest();
@@ -217,19 +217,17 @@ function Compass(obj) {
     var _this = this;
     var mymarker;
     var watching = null;
+    
+    this.status = watching==null;
+	
+    
     var needle_off = 'image/arrow_off.png';
     var needle_on = 'image/arrow_on.png'
-    this.obj = obj;
-
     this.htmlObj = obj;
 
-
-
-    this.obj.onclick = function() {
+    this.htmlObj.onclick = function() {
         _this.toggle();
     };
-
-
 
     /*
      * Great place to test google api code
@@ -338,89 +336,13 @@ var Map = {
         return Math.round(14 - Math.log(radius) / Math.LN2);
     },
     zoom2rad: function(zoom) {
-		var r = Math.round(Math.pow(Math.E, (14 - zoom) / Math.LN2));
-        return (r<1)?1:r;
+        return (Math.pow(2, (14 - zoom)));
     }
 }
 
 
 
 
-
-//https://developers.google.com/maps/documentation/javascript/reference#Map
-
-
-
-
-function initialize() {
-
-    zipshow = document.getElementById('zipshow');
-    legend = new Legend(document.getElementById('legend'));
-
-
-    //TODO 
-    //do better error check here FIX THIS
-    if (location.search.indexOf('lat=') > -1)
-        lat = location.search.split('lat=')[1].split('&')[0];
-    if (location.search.indexOf('lng=') > -1)
-        lng = location.search.split('lng=')[1].split('&')[0];
-    if (location.search.indexOf('filter=') > -1)
-        legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
-	if (location.search.indexOf('zoom=') > -1)
-        zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
-	if (location.search.indexOf('live=') > -1)
-        live = location.search.split('live=')[1].split('&')[0]=='true';						//this needs to be a boolean
-
-
-    compass = new Compass(document.getElementById('findme'));
-    places = new Places();
-
-    geocoder = new google.maps.Geocoder();
-
-    var mapOptions = {
-        zoom: zoom,
-        center: new google.maps.LatLng(lat, lng),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        //mapTypeId: google.maps.MapTypeId.SATELLITE,
-        disableDefaultUI: true
-    };
-    map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-
-    var mgrOptions = {borderPadding: 0, maxZoom: 1};
-    manager = new MarkerManager(map, mgrOptions);
-
-
-    // EVENT HANDLERS
-    
-    
-    
-	//Do an update every time AFTER the map is moved
-    google.maps.event.addListener(map, "tilesloaded", function() { 
-		update();
-	});
- 
-	
-	//Clear all windows BEFORE the map is changed
-    google.maps.event.addListener(map, "zoom_changed", function() { 
-		Markers.closeAll();
-	});
-	
-    google.maps.event.addListener(map, "dragend", function() { 
-		Markers.closeAll();
-	});    
-	google.maps.event.addListener(map, 'click', function() {
-        Markers.closeAll();
-    });
-	
-	
-	
-	//only if live
-    live&&setInterval(update,5000);
-
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.div);
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
-}
 
 
 
@@ -448,96 +370,6 @@ function codeAddress(address) {
     });
 }
 
-/* Thanks to
- * http://www.fplmaps.com/
- */
- /*
-function fpl() {
-
-    var xmlHttp = null;
-
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function()
-    {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
-        {
-
-            //alert(xmlHttp.responseText);
-
-            var fpl = JSON.parse(xmlHttp.responseText);
-            //alert(tweets.f[0]);
-
-            for (var i in fpl.o) {
-                var filter = "poweroutage";
-                var outage = fpl.o[i];
-
-                if (!outage.status)
-                    continue;
-
-                var cause = outage.Cause;
-                var pic = "http://www.fpl.com/fplcommon/wrapper/1024images/w_topLogo.gif";
-                var status = outage.status;
-                var reported = "Reported " + outage.dateReported;
-                var updated = "Updated " + outage.lastUpdated;
-
-
-                var x = outage.lat;
-                var y = outage.lng;
-                var contentString = '' +
-                        '<div id="content" style="width:304px; height:176px;">' +
-                        '<div id="siteNotice">' +
-                        '<div style="float:left;border:0px solid blue;">' +
-                        '<h4 id="firstHeading" class="firstHeading">' + cause + '</h4>' +
-                        '</div>' +
-                        '<div style="float:right;border:0px solid red;width=50%;">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div id="left" style="float:center;border:0px solid green;width:100%;">' +
-                        '</div>' +
-                        '<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
-                        '<div style="float:left;border:0px solid blue;width:204px;">' +
-                        '<p style="max-width:200px">' + status + '</p>' +
-                        '</div>' +
-                        '<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
-                        '<img name="userpic" src="' + pic + '"></img>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div id="footer" style="float:right;">' +
-                        '<p>' + reported + '<br/>' + updated + '</p>' +
-                        '</div>' +
-                        '</div>';
-
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(x, y),
-                    //map: map,
-                    icon: "image/orange/" + legend.getIcons(filter),
-                    //animation: google.maps.Animation.DROP,
-                    title: status
-                });
-
-
-                Markers.push(marker, filter, contentString);
-
-
-                manager.addMarker(marker, 12);
-                manager.refresh();
-            }
-        }
-    }
-
-
-    var s = "fpl.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad;
-    //alert(s);
-    olat = lat;
-    olng = lng;
-    orad = Map.zoom2rad(zoom);
-
-    xmlHttp.open("GET", s, true);
-
-    //xmlHttp.open("GET", "StormFeedRestoreZoom2.json", true);
-    xmlHttp.send(null);
-}
-*/
 
 function update() {
    
@@ -611,10 +443,11 @@ function update() {
 						'</div>' +
 						//http://stackoverflow.com/questions/12823579/
 						//Open iOS 6 native map from URL
-						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '">Go here</a> | ' +
-						'<a href="javascript:showSearch();">Search Nearby</a>' +
+						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position">Go here</a> | ' +
+						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a>' +
 						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
-						'<input id="target" type="text"><button id="search" onclick="places.searchNear(this.previousSibling)" >Search</button>' +
+						'<form  role="search" onsubmit="places.searchNear(this.children[0]);return false;">' +
+						'<input id="target" type="text"><img src="image/x.png" style="margin-left:5px;" onclick="showSearch(false);">' +
 					   '</div>' +
 						'</div>' +
 						'</div>';
@@ -648,10 +481,11 @@ function update() {
 
 
 
-	var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
+	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
+	var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&filter=" + legend.getFilters();
 	DEBUG&&console.log("Request: "+s);
 
-	//need to take these out because if new tweets are in the result they will be ommited
+	//need to take these out because if NEW tweets are in the result they will be ommited
 	//olat = lat;
 	//olng = lng;
 	//orad = Map.zoom2rad(zoom);
@@ -662,39 +496,88 @@ function update() {
 
 
 //used by info bubbles for search nearby
-function showSearch() {
-    document.getElementById('detail').style.visibility = '';
+function showSearch(t) {
+    document.getElementById('detail').style.visibility = (t==true)?'':'hidden';
 }
 
 
 
 
+//https://developers.google.com/maps/documentation/javascript/reference#Map
 
 
-//EVENTS
 
+
+function initialize() {
+
+	// URL PARAMETERS
+	
+    if (location.search.indexOf('lat=') > -1)
+        lat = location.search.split('lat=')[1].split('&')[0];
+    if (location.search.indexOf('lng=') > -1)
+        lng = location.search.split('lng=')[1].split('&')[0];
+    if (location.search.indexOf('filter=') > -1)
+        legend.setPreFilters(location.search.split('filter=')[1].split('&')[0]);
+	if (location.search.indexOf('zoom=') > -1)
+        zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
+	if (location.search.indexOf('live=') > -1)
+        live = location.search.split('live=')[1].split('&')[0]=='true';						//this needs to be a boolean
+
+
+	// OBJECT INITIALIZATIONS
+	
+    legend = new Legend(document.getElementById('legend'));
+    compass = new Compass(document.getElementById('findme'));
+    places = new Places();
+    geocoder = new google.maps.Geocoder();
+
+    var mapOptions = {
+        zoom: zoom,
+        center: new google.maps.LatLng(lat, lng),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        //mapTypeId: google.maps.MapTypeId.SATELLITE,
+        disableDefaultUI: true
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+    var mgrOptions = {borderPadding: 0, maxZoom: 1};
+    manager = new MarkerManager(map, mgrOptions);
+
+
+    // EVENT HANDLERS
+    
+	// Do an update every time AFTER the map is moved
+    google.maps.event.addListener(map, "tilesloaded", function() { 
+		update();
+	});
+ 
+	
+	// Clear all windows BEFORE the map is changed
+    google.maps.event.addListener(map, "zoom_changed", function() { 
+		Markers.closeAll();
+	});
+    google.maps.event.addListener(map, "dragend", function() { 
+		Markers.closeAll();
+	});    
+	google.maps.event.addListener(map, 'click', function() {
+        Markers.closeAll();
+    });
+	
+	
+	
+	// If map is 'live' update every ...
+    live&&setInterval(update,5000);
+
+
+	// MISC
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.htmlObj);
+    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
+    
+    return 0;
+}
+
+
+// UI EVENTS
 google.maps.event.addDomListener(window, 'load', initialize);
 
-
-/*
- function disableMovement(disable) {
- var mapOptions;
- 
- 
- if (disable) {
- mapOptions = {
- //draggable: false,
- //scrollwheel: false,
- disableDoubleClickZoom: true,
- //zoomControl: false
- };
- } else {
- mapOptions = {
- //draggable: true,
- //scrollwheel: true,
- disableDoubleClickZoom: false,
- //zoomControl: true
- };
- }
- map.setOptions(mapOptions);
- }*/

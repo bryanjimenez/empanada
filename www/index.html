@@ -67,10 +67,11 @@
             <li><div id="mcount" style="color:red;"></div></li>
             <li><div id="zoom" style="color:orange;"></div></li>
 			<!--li><input id="target" type="text" class="form-control" onblur="searchNear(this)"></li-->
+			
           </ul>
 			<form  role="search" onsubmit="codeAddress(document.getElementById('search').value);return false;">
-				<div class="form-group" style="padding-left:90%;padding-top:10px;">
-					<input id="search" type="text" class="form-control">
+				<div id="search_div" class="form-group" >
+					<input id="search" type="text" >
 				</div>
 				<!--button type="submit" class="btn btn-default" data-toggle="collapse" data-target=".navbar-collapse">Submit</button-->
 			</form>
