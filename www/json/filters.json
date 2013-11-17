@@ -12,7 +12,7 @@
         "synonyms": ["fire"]
     },
     "accident": {
-        "name": "Accident",
+        "name": "Traffic Warning",
         "icon": "caraccident.png",
         "shadow": "",
         "synonyms": ["accident"]
@@ -29,18 +29,6 @@
         "shadow": "",
         "synonyms": ["poweroutage", "power outage"]
     },
-    "linedown": {
-        "name": "Line Down",
-        "icon": "linedown.png",
-        "shadow": "",
-        "synonyms": ["linedown", "line down"]
-    },    
-    "treedown": {
-        "name": "Tree Down",
-        "icon": "treedown.png",
-        "shadow": "",
-        "synonyms": ["treedown", "tree down"]
-    },
     "shelter": {
         "name": "Shelter",
         "icon": "shelter.png",
@@ -52,11 +40,5 @@
         "icon": "fuel.png",
         "shadow": "",
         "synonyms": ["fuel", "gas", "diesel", "combustible", "oil"]
-    },
-    "zombies": {
-        "name": "Zombie",
-        "icon": "zombies.png",
-        "shadow": "",
-        "synonyms": ["zombies"]
     }
 }

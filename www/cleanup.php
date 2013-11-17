@@ -4,7 +4,7 @@
 
 function main(){
 	//echo exec('./cleanup.sh');
-	echo exec('echo "" > /home/jonathan/result.txt');
+	echo exec('> /home/jonathan/result.txt');
 }
 
 

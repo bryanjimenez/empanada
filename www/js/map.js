@@ -5,7 +5,9 @@ var manager;
 
 //EMPANADA Globals
 var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
-//var olat = 0, olng = 0, ozoom = 14, orad = 0;
+var refresh="refresh.php";
+var jsonF="json/filters.json";
+
 var mypos;
 var DEBUG=true;
 var live=false;
@@ -59,6 +61,19 @@ function Legend(parent) {
     var filters = [];
     var prefilters;
     var icons;
+    var collapsed=false;
+    
+    this.isCollapsed = function(){return collapsed};
+    this.setCollapsed = function(v){
+		//alert(_this.htmlObj.style.height);
+		if(v)
+			_this.htmlObj.style.height = '20px';
+		else
+			_this.htmlObj.style.height = '';
+		
+		collapsed=v;
+	};
+    
     this.htmlObj = parent;
 
     this.add = function(item) {
@@ -94,14 +109,22 @@ function Legend(parent) {
         }
     };
 
-    document.getElementById('legendtitle').onclick = function() {
 
-        if (_this.htmlObj.style.height == '20px')
-            _this.htmlObj.style.height = '';
-        else
-            _this.htmlObj.style.height = '20px';
-    }
     
+    
+    var lTitle = document.createElement('div');
+    lTitle.innerHTML="Legend"
+	parent.appendChild(lTitle);
+
+	lTitle.onclick = function() {
+		//alert(_this.isCollapsed());
+		if (!_this.isCollapsed())
+			_this.setCollapsed(true);
+		else
+			_this.setCollapsed(false);
+	} 
+    
+     
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function(par) {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -129,7 +152,7 @@ function Legend(parent) {
             }
         }
     }
-    xmlHttp.open("GET", "json/filters.json", true);
+    xmlHttp.open("GET", jsonF, true);
     xmlHttp.send(null);
 }
 
@@ -218,7 +241,9 @@ function Compass(obj) {
     var mymarker;
     var watching = null;
     
-    this.status = watching==null;
+    this.status = function(){
+		return watching!=null;
+	};
 	
     
     var needle_off = 'image/arrow_off.png';
@@ -305,7 +330,7 @@ function Compass(obj) {
 
     this.toggle = function() {
         // tracking mode OFF
-        if (watching) {
+        if (watching!=null) {
             _this.htmlObj.style.backgroundImage = 'url(\'' + needle_off + '\')';
             navigator.geolocation.clearWatch(watching);
             watching = null;
@@ -414,8 +439,9 @@ function update() {
 				}
 				else {
 					//TODO we need to come up with something better here
-					var x = -81.68738214;
-					var y = 27.96855823;
+					var x = 25.75906;
+					var y = -80.37388;
+					//geocode stuff here
 				}
 
 				var contentString = '' +
@@ -465,6 +491,7 @@ function update() {
 				 */
 				
 				if(manager.getMarker(x,y,0)==null){
+					console.log(""+x+","+y);
 					Markers.push(marker, filter, contentString);
 					manager.addMarker(marker,0);
 					manager.refresh();
@@ -482,7 +509,7 @@ function update() {
 
 
 	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
-	var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&filter=" + legend.getFilters();
+	var s = refresh+"?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&filter=" + legend.getFilters();
 	DEBUG&&console.log("Request: "+s);
 
 	//need to take these out because if NEW tweets are in the result they will be ommited
@@ -527,7 +554,7 @@ function initialize() {
 	// OBJECT INITIALIZATIONS
 	
     legend = new Legend(document.getElementById('legend'));
-    compass = new Compass(document.getElementById('findme'));
+    compass = new Compass(document.getElementById('compass'));
     places = new Places();
     geocoder = new google.maps.Geocoder();
 
