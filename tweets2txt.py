@@ -41,8 +41,8 @@ class MyStreamer(TwythonStreamer):
 					json.dump(data, outfile)
 					outfile.write('\n')
 					
-				#~ os.system("/usr/local/hadoop/bin/hadoop fs -put tweets/*.txt /user/jonathan/tweets/pending/")
-				#~ os.system("rm tweets/*.txt")
+				os.system("/usr/local/hadoop/bin/hadoop fs -put tweets/*.txt /user/jonathan/tweets/pending/")
+				os.system("rm tweets/*.txt")
 					
 					
 		except:
