@@ -35,14 +35,18 @@ class MyStreamer(TwythonStreamer):
 				
 				print data['user']['screen_name'].encode('utf-8') + ": " +data['text'].encode('utf-8')
 				
-				tstamp= datetime.now().strftime(DATE_FORMAT)
-					
-				with open(PATH2LOG+tstamp+'.txt', 'a') as outfile:
+				if(linecount<LINE_MAX):
+					linecount+=1
+				else:
+					linecount=0
+					os.rename(PATH2LOG+tstamp+'.temp',PATH2LOG+tstamp+'.txt')
+					tstamp= datetime.now().strftime(DATE_FORMAT)
+					os.system("/usr/local/hadoop/bin/hadoop fs -put tweets/*.txt /user/jonathan/tweets/pending/")
+					os.system("rm tweets/*.txt")
+
+				with open(PATH2LOG+tstamp+'.temp', 'a') as outfile:
 					json.dump(data, outfile)
 					outfile.write('\n')
-					
-				#~ os.system("/usr/local/hadoop/bin/hadoop fs -put tweets/*.txt /user/jonathan/tweets/pending/")
-				#~ os.system("rm tweets/*.txt")
 					
 					
 		except:
