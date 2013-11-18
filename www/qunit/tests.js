@@ -172,3 +172,22 @@ module('Google Geocoding System Test');
 			start();
 		}, 5000);
 	});
+
+module('Google Map System Test');
+	asyncTest( "moving the map test: 10 second later!", function() {
+		var x=26.0;
+		var y=-81.0;
+
+		var newcenter=new google.maps.LatLng(x, y);	
+		
+		notEqual( map.getCenter(),newcenter, "map initially not at lat="+x+" lng="+y );
+	
+		map.setCenter(newcenter);
+		
+		equal( map.getCenter(),newcenter, "map is moved to lat="+x+" lng="+y );
+
+		google.maps.event.addListener(map, "tilesloaded", function() { 
+			notEqual(true,0, "map tiles finished loading" );
+			start();
+		});
+	});

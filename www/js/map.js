@@ -419,11 +419,21 @@ function update() {
 				var friends = tweet.user.friends_count;
 				var c = new Date(tweet.created_at);
 				
-				var d=c.toDateString().split(" ");
-				var t=c.toLocaleTimeString().split(":");
-				var ampm = c.toLocaleTimeString().split(" ")[1];
-				var created = d[0]+", "+d[1]+" "+d[2]+" "+t[0]+":"+t[1]+" "+ampm;
+				
+				//alert(tweet.created_at);
 
+				//need to cleanup by Andres
+				if(tweet.created_at.indexOf("lastUpdated :")<0){
+					var d=c.toDateString().split(" ");
+					var t=c.toLocaleTimeString().split(":");
+					var ampm = c.toLocaleTimeString().split(" ")[1];
+					var created = d[0]+", "+d[1]+" "+d[2]+" "+t[0]+":"+t[1]+" "+ampm;
+				}
+				else{
+					var created="";
+					text = text.split("**")[0]+text.split("**")[1]+text.split("**")[3];
+
+				}
 				//"coordinates": {"type": "Point", "coordinates": [-81.68738214, 27.96855823]}
 				if (tweet.geo) {
 					var x = tweet.geo.coordinates[0];
