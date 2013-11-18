@@ -537,6 +537,9 @@ function showSearch(t) {
 
 function initialize() {
 
+	//Need legend up here since its being used in URL parameters below
+    legend = new Legend(document.getElementById('legend'));
+
 	// URL PARAMETERS
 	
     if (location.search.indexOf('lat=') > -1)
@@ -553,7 +556,6 @@ function initialize() {
 
 	// OBJECT INITIALIZATIONS
 	
-    legend = new Legend(document.getElementById('legend'));
     compass = new Compass(document.getElementById('compass'));
     places = new Places();
     geocoder = new google.maps.Geocoder();
