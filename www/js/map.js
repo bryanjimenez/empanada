@@ -537,7 +537,11 @@ function showSearch(t) {
 
 function initialize() {
 
-	//Need legend up here since its being used in URL parameters below
+	// OBJECT INITIALIZATIONS
+	
+    compass = new Compass(document.getElementById('compass'));
+    places = new Places();
+    geocoder = new google.maps.Geocoder();
     legend = new Legend(document.getElementById('legend'));
 
 	// URL PARAMETERS
@@ -554,11 +558,7 @@ function initialize() {
         live = location.search.split('live=')[1].split('&')[0]=='true';						//this needs to be a boolean
 
 
-	// OBJECT INITIALIZATIONS
-	
-    compass = new Compass(document.getElementById('compass'));
-    places = new Places();
-    geocoder = new google.maps.Geocoder();
+
 
     var mapOptions = {
         zoom: zoom,
