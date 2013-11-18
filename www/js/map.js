@@ -362,38 +362,30 @@ var Map = {
     },
     zoom2rad: function(zoom) {
         return (Math.pow(2, (14 - zoom)));
-    }
+    },
+    /* geocoding
+	 * 
+	 * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
+	 */
+
+	// REVERSE GEOCODING
+	//https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
+	//maps.google.com/maps/api/geocode/json?latlng=25.705501,-80.359855&components=postal_code&sensor=false
+    codeAddress: function(address){
+		geocoder.geocode({'address': address}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+
+				mypos = results[0].geometry.location;
+				map.setCenter(mypos);
+				update();
+
+			} else {
+				alert("Geocode was not successful for the following reason: " + status);
+			}
+		});
+	}
 }
 
-
-
-
-
-
-
-
-/* geocoding
- * 
- * https://developers.google.com/maps/documentation/javascript/geocoding?csw=1
- */
-
-// REVERSE GEOCODING
-//https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
-//maps.google.com/maps/api/geocode/json?latlng=25.705501,-80.359855&components=postal_code&sensor=false
-
-function codeAddress(address) {
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-
-            mypos = results[0].geometry.location;
-            map.setCenter(mypos);
-            update();
-
-        } else {
-            alert("Geocode was not successful for the following reason: " + status);
-        }
-    });
-}
 
 
 function update() {
@@ -496,7 +488,6 @@ function update() {
 					manager.addMarker(marker,0);
 					manager.refresh();
 				}
-				//infobubble(marker, contentString);
 			}
 		}
 	}
@@ -609,4 +600,3 @@ function initialize() {
 
 // UI EVENTS
 google.maps.event.addDomListener(window, 'load', initialize);
-

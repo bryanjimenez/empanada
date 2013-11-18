@@ -2,6 +2,7 @@
 //http://qunitjs.com/
 
 
+
 module('Compass Module');
 	test( "Constructor", function() {
 		var htmlobject = document.getElementById('compass');
@@ -99,14 +100,7 @@ module('Map Module');
 		}
 
 	});
-/*
-module('Places Module');
-	test( "places", function() {
-
-		equal(1,1,"1");
-
-	});
-*/	
+	
 module('Module A');
 	test( "initialize() Completes", function() {
 		notEqual(undefined,map, "initialize() defined a google.maps.Map object" );
@@ -119,36 +113,62 @@ module('Module A');
 
 	});
 	
-	
-	
-	
-module('System Test1');
-	test( "map refresh", function() {
-		refresh="../refresh.php";
-		jsonF="../json/filters.json";
 
-		//lat=25.6;
-		//lng=-80.6;
+module('EmPANaDa map System Test');
+	asyncTest( "moving the map test: 15 second later!", function() {
+		var x=25.7588981;
+		var y=-80.37406669;
+
+		var newcenter=new google.maps.LatLng(x, y);	
 		
-		lat=25.7588981;
-		lng=-80.37406669;
-			
-		zoom = map.getZoom();
-		rad = Map.zoom2rad(zoom);
+		notEqual( map.getCenter(),newcenter, "map initially not at lat="+x+" lng="+y );
+	
+		map.setCenter(newcenter);
 		
-		notEqual( map.getCenter().lat(),lat, "map is not initially at this location" );
-				
-		equal(update(),null,"update worked");
+		equal( map.getCenter(),newcenter, "map is moved to lat="+x+" lng="+y );
 
-		equal( map.getCenter().lat(),lat, "map is moved to new coordinates" );
-
-
-
-		alert(Markers.markers.length);
-		//equal( manager.getMarkerCount(0),1, "got markers" );
-		//manager.getMarker(x,y,0)==null
-		
-
+		setTimeout(function() {
+			notEqual(Markers.markers.length,0, "markers requested, got " +Markers.markers.length+" markers" );
+			start();
+		}, 15000);
 	});
+
 	
-	
+
+module('Google Places System Test');
+	asyncTest( "nearby search", function() {
+		
+		places.searchNear = function(obj) {
+			var request = {
+				location: new google.maps.LatLng(lat, lng),
+				radius: 500,
+				keyword: obj.value
+			};
+			var service = new google.maps.places.PlacesService(map);
+			service.nearbySearch(request, mycallback );
+		};
+		
+		function mycallback(results, status) {
+			//alert(results.length);
+			notEqual(results.length,0, "querying for nearby google places, got " +results.length+" results" );
+			start();
+		}
+
+		places.searchNear({value:""});
+	});
+
+
+module('Google Geocoding System Test');
+	asyncTest( "place name to location: 5 second later!", function() {
+
+		var center=map.getCenter();
+		
+		equal(map.getCenter(),center, "map's initial lat="+map.getCenter().lat()+" lng="+map.getCenter().lng() );
+		
+		equal(Map.codeAddress("MIA Airport"),null,"queried Google's reverse geocode API");
+		
+		setTimeout(function() {
+			notEqual(map.getCenter(),center, "map's final lat="+map.getCenter().lat()+" lng="+map.getCenter().lng() );
+			start();
+		}, 5000);
+	});
