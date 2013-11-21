@@ -6,7 +6,7 @@
 	"category":"hurricane",
         "keywords": "raining weather windy hurricane wind rain cyclone storm #rain #hurricane category",
 	"falseKeywords": "sports @hurricanesports football coach sport #hurricanes",
-	"bigrams": "Hurricane season, tropical storm, ",
+	"bigrams": "Hurricane season, tropical storm, hurricane is",
 	"falseBigram": "go canes, football coach, miami hurricanes",
 	"synonyms": null
     },
@@ -24,7 +24,7 @@
 	"category": "poweroutage",
         "keywords": "electricity powerout power #electricity energy flashlight #poweroutage fpl",
 	"falseKeywords": "bill, bills",
-	"bigrams": "power outage, power out, without power, powers out,",
+	"bigrams": "power outage, power out, without power, powers out, fire trucks",
 	"trigrams": "electricity went out, electricity goes out, out of power, power is out, power goes of, power goes off", 
 	"falseBigram": "electricity bill, power bill, power rangers, power chargers,",
 	"synonyms": null   
@@ -47,7 +47,7 @@
     },
     "key6": {
 	"category": "fire",
-        "keywords": "#arsonfire alarm fire firefighters firefighter blaze wildfire",
+        "keywords": "#arsonfire alarm fire firefighters firefighter blaze wildfire evacuated house building",
 	"falseKeywords": null,
 	"bigrams": "gas leak, fire alarm, fire @, rescue officials",
 	"falseBigram": null,
