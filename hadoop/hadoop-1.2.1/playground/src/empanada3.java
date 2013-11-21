@@ -61,11 +61,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 //import org.json.simple.parser.ParseException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 
 public class empanada3 {
-	private static final Log LOG = LogFactory.getLog(empanada3.class);
 	
 	private static TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
 	private static TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
@@ -117,89 +115,11 @@ public class empanada3 {
     	try {
     		JSONObject tweet = new JSONObject(value.toString());
     		tweetText = tweet.get("text").toString();			
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
     	/*FINISH READING TWEET*/ 
     	
-    	
-
-    			String vectorFile = "/usr/local/hadoop/vector.json";
-		
-		
-		
-    	JSONObject vector = new JSONObject();
-    	int numberOfKeys = 0;
-		
-		/*READING VECTOR FILE*/
-    	try
-        {
-        	File f1 = new File(vectorFile);
-    		Scanner scanner1 = new Scanner(f1);
-    		String allContent = scanner1.useDelimiter("//A").next();
-    		LOG.info(allContent);
-    		vector = new JSONObject(allContent);
-    		numberOfKeys = vector.length(); 		
-    		
-        }
-        catch( IOException e )
-        {
-            LOG.info( "Error handling file " + vectorFile + ":" + e );
-        } catch (JSONException e) {
-			// TODO Auto-generated catch block
-			LOG.info(e);
-		}    	
-    	/*FINISH READING VECTOR FILE*/
-    	
-
-    	
-
-    	Iterator<?> vectorItr = vector.keys();
-
-
-		
-    	//CREATES MAPS TO APPLY VECTOR
-    	while (vectorItr.hasNext()){
-    		String nextKey = vectorItr.next().toString();
-    		JSONObject vectorField;
-			try {
-				vectorField = vector.getJSONObject(nextKey);
-	    		if (!nextKey.equals("profanity")){
-	    			String category = "";
-	    			category = vectorField.get("category").toString();
-	    			categoryMap.put(category, 0);
-	    			falseCategoryMap.put(category, 0);
-	    			if (!vectorField.isNull("keywords")){
-	        	    	Scanner keywordsScanner = new Scanner(vectorField.get("keywords").toString());
-	        	    	while (keywordsScanner.hasNext()){
-	        	    		keywordsMap.put(keywordsScanner.next(), category);	        	    			
-	        	    	}   					        	    	
-	    			}
-	    			if (!vectorField.isNull("falseKeywords")){
-	        	    	Scanner falseKeywordsScanner = new Scanner(vectorField.get("falseKeywords").toString());
-	        	    	while (falseKeywordsScanner.hasNext()){
-	        	    		falseKeywordsMap.put(falseKeywordsScanner.next(), category);
-	        	    	}
-	    			}
-	    			if (!vectorField.isNull("bigram")){
-	        	    	Scanner bigramScanner = new Scanner(vectorField.get("bigram").toString());
-	        	    	while (bigramScanner.hasNext()){
-	        	    		bigramMap.put(bigramScanner.next(), category);
-	        	    	}
-	    			}
-	    		}  
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}   
-    	}
-    	//FINISH CREATING MAPS TO APPLY VECTOR
-    	
-	//	LOG.info(categoryMap.toString());
-//		LOG.info(keywordsMap.toString());
-
-    	
-    	
-    	/*
     	java.util.TreeMap<String,Integer> categoryMap = new TreeMap<String, Integer>();
     	java.util.TreeMap<String,Integer> falseCategoryMap = new TreeMap<String, Integer>();
     	java.util.TreeMap<String,String> keywordsMap =  new TreeMap<String, String>();
@@ -212,11 +132,8 @@ public class empanada3 {
     	falseKeywordsMap.putAll(empanada3.falseKeywordsMap);
     	bigramMap.putAll(empanada3.bigramMap);
     	
-    	LOG.info(categoryMap.toString());
-		LOG.info(keywordsMap.toString()); */
-    	
-    	//System.out.println("This is the filter " + categoryMap.toString());
-    	//System.out.println("These are the keywords " + keywordsMap.toString());
+    //	System.out.println("This is the filter " + categoryMap.toString());
+    //	System.out.println("These are the keywords " + keywordsMap.toString());
     	
 
     	String bigram;
@@ -414,7 +331,72 @@ public class empanada3 {
 			System.exit(2);
 		}
 		
+		String vectorFile = "vector.json";
+    	JSONObject vector = new JSONObject();
+    	int numberOfKeys = 0;
+		
+		/*READING VECTOR FILE*/
+    	try
+        {
+        	File f1 = new File(vectorFile);
+    		Scanner scanner1 = new Scanner(f1);
+    		String allContent = scanner1.useDelimiter("//A").next();
+    	//	System.out.println("This is the content of the vector " +allContent);
+    		vector = new JSONObject(allContent);
+    		numberOfKeys = vector.length(); 		
+    		
+        }
+        catch( IOException e )
+        {
+            System.err.println( "Error handling file " + vectorFile + ":" + e );
+        } catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    	
+    	/*FINISH READING VECTOR FILE*/
+    	
 
+    	
+
+    	Iterator<?> vectorItr = vector.keys();
+
+    	//CREATES MAPS TO APPLY VECTOR
+    	while (vectorItr.hasNext()){
+    		String nextKey = vectorItr.next().toString();
+    		JSONObject vectorField;
+			try {
+				vectorField = vector.getJSONObject(nextKey);
+	    		if (!nextKey.equals("profanity")){
+	    			String category = "";
+	    			category = vectorField.get("category").toString();
+	    			categoryMap.put(category, 0);
+	    			falseCategoryMap.put(category, 0);
+	    			if (!vectorField.isNull("keywords")){
+	        	    	Scanner keywordsScanner = new Scanner(vectorField.get("keywords").toString());
+	        	    	while (keywordsScanner.hasNext()){
+	        	    		keywordsMap.put(keywordsScanner.next(), category);	        	    			
+	        	    	}   					        	    	
+	    			}
+	    			if (!vectorField.isNull("falseKeywords")){
+	        	    	Scanner falseKeywordsScanner = new Scanner(vectorField.get("falseKeywords").toString());
+	        	    	while (falseKeywordsScanner.hasNext()){
+	        	    		falseKeywordsMap.put(falseKeywordsScanner.next(), category);
+	        	    	}
+	    			}
+	    			if (!vectorField.isNull("bigram")){
+	        	    	Scanner bigramScanner = new Scanner(vectorField.get("bigram").toString());
+	        	    	while (bigramScanner.hasNext()){
+	        	    		bigramMap.put(bigramScanner.next(), category);
+	        	    	}
+	    			}
+	    		}  
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}   
+    	}
+    	//FINISH CREATING MAPS TO APPLY VECTOR
+		
+		
 		
 		Job job = new Job(conf, "empanada");
 		job.setJarByClass(empanada3.class);

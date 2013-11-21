@@ -13,7 +13,7 @@
  */
 
 
-package org.apache.hadoop.examples;
+package empanada;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class MyWordCount {
     	
     	String previousWord = "";
     	
-      StringTokenizer itr = new StringTokenizer(tweetText, " \t\n\r\f,.:;?![]'\"()-");
+      StringTokenizer itr = new StringTokenizer(tweetText, " \t\n\r\f,.:;?![]\"()-");
       while (itr.hasMoreTokens()) {
     	      	  
     	  String myWord = itr.nextToken().toLowerCase();
@@ -94,6 +94,8 @@ public class MyWordCount {
         		  previousWord = myCategory.concat("_" + previousWord);
         		  context.write(new Text(previousWord), one);
         	  }
+        	  
+        	  previousWord = myWord;
         	  
         	  for (int i = 0; i < myDeadWords.size(); i++){
         		  if (myWord.equals(myDeadWords.get(i))){ 	  
@@ -108,7 +110,7 @@ public class MyWordCount {
         		  context.write(word, one);
         	  }
         	  
-        	  previousWord = myWord;
+        	  
     		  
     	  }
     	    
@@ -139,17 +141,17 @@ public class MyWordCount {
   }
   
 
-  public static class MyReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+  public static class MyReducer extends Reducer<Text,IntWritable,IntWritable,Text> {
 	  
-	  String generateFileName(Text k, IntWritable v) {
+	  String generateFileName(IntWritable v, Text k) {
 		   return k.toString() + "_" + v.toString();
 		 }
 	  	  
-	  private MultipleOutputs<Text,IntWritable> mos;
+	  private MultipleOutputs<IntWritable,Text> mos;
 	  private IntWritable result = new IntWritable();
 	  
 	  public void setup(Context context) {
-		  mos = new MultipleOutputs<Text, IntWritable>(context);
+		  mos = new MultipleOutputs<IntWritable, Text>(context);
 	  }
 	  
 	  public void reduce(Text key, Iterable<IntWritable> values, Context context
@@ -163,10 +165,10 @@ public class MyWordCount {
 		  
 		  String myString = key.toString();
 		  if (myString.contains(" ")){
-			  mos.write("bigram", key, result);	  
+			  mos.write("bigram", result, key);	  
 		  }
 		  else{
-			  mos.write("keywords", key, result);
+			  mos.write("keywords", result, key);
 		  }
 	      //context.write(key, result);
 		  
@@ -252,9 +254,9 @@ public class MyWordCount {
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		
-		MultipleOutputs.addNamedOutput(job, "keywords", TextOutputFormat.class, Text.class, IntWritable.class);
+		MultipleOutputs.addNamedOutput(job, "keywords", TextOutputFormat.class, IntWritable.class, Text.class);
 		 // Defines additional sequence-file based output 'sequence' for the job
-		MultipleOutputs.addNamedOutput(job, "bigram", TextOutputFormat.class, Text.class, IntWritable.class);
+		MultipleOutputs.addNamedOutput(job, "bigram", TextOutputFormat.class, IntWritable.class, Text.class);
 		 
 		// Submit the job, then poll for progress until the job is complete
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
