@@ -58,35 +58,34 @@ function main(){
 	$lines = file("/home/jonathan/result.txt");
 
 	foreach ($lines as $line) {
-		$split= explode("\t",$line);
+		
+		$split= explode("\t",str_replace("\n","",$line));
 		
 
-		$tweet = json_decode($split[1]);
+		$tweet 	= json_decode($split[1]);
 		$filter = $split[0];
+		$rank	= $split[2];
 		
 		if(!is_null($tweet->geo)){
 			$lat=$tweet->geo->coordinates[0];
 			$lng=$tweet->geo->coordinates[1];
 		}
 
-		$odelta=distance($_GET['olat'],$_GET['olng'],$lat,$lng, 'M');
 		$delta=distance($_GET['lat'],$_GET['lng'],$lat,$lng, 'M');
-		
 
-		if($delta<$_GET['rad'] && $odelta>$_GET['orad'] && strrpos($_GET['filter'],$filter)>-1){
+		if($delta<$_GET['rad'] && strrpos($_GET['filter'],$filter)>-1){
 			$filters[] = $filter;
 			$tweets[] = $tweet;
-			//echo ($delta<$_GET['rad'])."\n";
-			//echo "true\n";
+			$ranks[] = $rank;
 
 		}
 
 	}
-	//echo `./dohadoop.sh`;
+
 	//BUILD response JSON
 	$json['t']= $tweets;
 	$json['f']= $filters;
-	//$json['z']= $zipcode;
+	$json['r']= $ranks;
 
 	//if($tweets)
 	echo json_encode($json);

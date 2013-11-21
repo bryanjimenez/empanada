@@ -6,11 +6,28 @@ var manager;
 //EMPANADA Globals
 var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
 var refresh="refresh.php";
+//var refresh="http://empanada.cs.fiu.edu:81/cache";
 var jsonF="json/filters.json";
 
 var mypos;
 var DEBUG=true;
 var live=false;
+
+var color={
+	15:"red",
+	12:"red",
+	11:"red",
+	10:"red",
+	9:"red",
+	8:"red",
+	7:"red",
+	6:"orange",
+	5:"orange",
+	4:"green",
+	3:"green",
+	
+};
+
 
 //SINGLETON
 var Markers = {
@@ -411,6 +428,7 @@ function update() {
 				//alert(i);
 				var filter = tweets.f[i];
 				var tweet = tweets.t[i];
+				var rank = tweets.r[i];
 
 				var user = tweet.user.screen_name;
 				var pic = tweet.user.profile_image_url;
@@ -441,9 +459,10 @@ function update() {
 				}
 				else {
 					//TODO we need to come up with something better here
-					var x = 25.75906;
-					var y = -80.37388;
+					var x = 25.758102;
+					var y = -80.373633;
 					//geocode stuff here
+					//25.758102, -80.373633 middle of fiu's pond
 				}
 
 				var contentString = '' +
@@ -483,7 +502,8 @@ function update() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/red/" + legend.getIcons(filter),
+					icon: "image/"+color[rank]+"/" + legend.getIcons(filter),
+					//icon: "image/red/" + legend.getIcons(filter),
 					animation: google.maps.Animation.DROP,
 					title: text
 				});
@@ -493,10 +513,12 @@ function update() {
 				 */
 				
 				if(manager.getMarker(x,y,0)==null){
-					console.log(""+x+","+y);
 					Markers.push(marker, filter, contentString);
 					manager.addMarker(marker,0);
 					manager.refresh();
+				}else{
+					//TODO
+					// do something to avoid tweets with same location appearing right ontop of eachother
 				}
 			}
 		}
@@ -505,6 +527,8 @@ function update() {
 	lat = map.getCenter().lat();
 	lng = map.getCenter().lng();
 	zoom = map.getZoom();
+	//TODO
+	// rad cannot be < 1 if not there wont be resultsd
 	rad = Map.zoom2rad(zoom);
 
 
