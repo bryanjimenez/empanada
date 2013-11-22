@@ -16,19 +16,6 @@ ini_set('memory_limit','-1');
 
 
 
-function getZipcode($x, $y){
-	//GOOGLE API URL with lat & lng inserted
-	$s="http://maps.google.com/maps/api/geocode/json?latlng=".$x.",".$y."&components=postal_code&sensor=false";
-
-	//RESPONSE IS JSON with results
-	$response = json_decode(file_get_contents($s));
-
-	//PARSE JSON and return zip only
-	$zip=$response->results[0]->address_components[5]->long_name;
-
-	return $zip;
-}
-
 //http://stackoverflow.com/questions/1502590/calculate-distance-between-two-points-in-google-maps-v3
 function distance($lat1, $lon1, $lat2, $lon2, $unit='N') 
 { 
@@ -55,7 +42,7 @@ function main(){
 	//$zipcode=getZipcode($_GET["lat"],$_GET["lng"]);
 
 	//OPEN results file and insert into an array of lines
-	$lines = file("/home/jonathan/demo.txt");
+	$lines = file("/home/jonathan/raw.txt");
 
 	foreach ($lines as $line) {		
 

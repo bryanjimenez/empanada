@@ -494,8 +494,9 @@ function update() {
 						'</div>' +
 						//http://stackoverflow.com/questions/12823579/
 						//Open iOS 6 native map from URL
-						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position">Go here</a> | ' +
-						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a>' +
+						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position" target="_blank">Go here</a> | ' +
+						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a> | ' +
+						'<a href="javascript:alert("TODO");" title="Vote up/down this tweet">Vote</a>' +
 						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
 						'<form  role="search" onsubmit="places.searchNear(this.children[0]);return false;">' +
 						'<input id="target" type="text"><img src="image/x.png" style="margin-left:5px;" onclick="showSearch(false);">' +
@@ -549,7 +550,27 @@ function update() {
 	xmlHttp.open("GET", s, true);
 	xmlHttp.send(null);
 }
+function vote(ballot,id) {
+   
+	var xmlHttp = new XMLHttpRequest();
 
+	xmlHttp.onreadystatechange = function()
+	{
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
+		{
+			alert("vote placed");
+	
+		}
+	}
+
+	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
+	var s = "vote.php?t="+id;
+	DEBUG&&console.log("Request: "+s);
+
+
+	xmlHttp.open("GET", s, true);
+	xmlHttp.send(null);
+}
 
 //used by info bubbles for search nearby
 function showSearch(t) {
@@ -619,7 +640,7 @@ function initialize() {
 	});
     google.maps.event.addListener(map, "dragend", function() { 
 		Markers.closeAll();
-		compass.off();
+		//compass.off();
 	});    
 	google.maps.event.addListener(map, 'click', function() {
         Markers.closeAll();

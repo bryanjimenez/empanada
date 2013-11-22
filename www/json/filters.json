@@ -15,7 +15,7 @@
         "name": "Traffic Warning",
         "icon": "caraccident.png",
         "shadow": "",
-        "synonyms": ["accident"]
+        "synonyms": ["accident","car accident","car crash"]
     },
     "flood": {
         "name": "Flood",
