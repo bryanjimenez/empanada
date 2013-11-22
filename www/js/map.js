@@ -14,17 +14,18 @@ var DEBUG=true;
 var live=false;
 
 var color={
-	15:"red",
-	12:"red",
-	11:"red",
-	10:"red",
-	9:"red",
-	8:"red",
-	7:"red",
-	6:"orange",
-	5:"orange",
-	4:"green",
-	3:"green",
+	666:"",
+	15:"red/",
+	12:"red/",
+	11:"red/",
+	10:"red/",
+	9:"red/",
+	8:"red/",
+	7:"red/",
+	6:"orange/",
+	5:"orange/",
+	4:"green/",
+	3:"green/",
 	
 };
 
@@ -105,7 +106,10 @@ function Legend(parent) {
         return filters;
     };
     this.getIcons = function(key) {
-        return icons[key].icon;
+		if(key=='raw')
+			return 'letter_t.png'
+		else	
+			return icons[key].icon;
     };
     this.setPreFilters = function(f) {
         prefilters = f.split(",");
@@ -502,7 +506,7 @@ function update() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/"+color[rank]+"/" + legend.getIcons(filter),
+					icon: "image/"+color[rank] + legend.getIcons(filter),
 					//icon: "image/red/" + legend.getIcons(filter),
 					animation: google.maps.Animation.DROP,
 					title: text
@@ -570,7 +574,9 @@ function initialize() {
     legend = new Legend(document.getElementById('legend'));
 
 	// URL PARAMETERS
-	
+
+    if (location.search.indexOf('raw=') > -1)
+        refresh = location.search.split('raw=')[1].split('&')[0]=='true'?'raw.php':refresh;	//this needs to be a boolean
     if (location.search.indexOf('lat=') > -1)
         lat = location.search.split('lat=')[1].split('&')[0];
     if (location.search.indexOf('lng=') > -1)
