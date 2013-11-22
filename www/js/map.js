@@ -619,6 +619,7 @@ function initialize() {
 	});
     google.maps.event.addListener(map, "dragend", function() { 
 		Markers.closeAll();
+		compass.off();
 	});    
 	google.maps.event.addListener(map, 'click', function() {
         Markers.closeAll();
