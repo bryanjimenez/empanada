@@ -26,8 +26,23 @@ var color={
 	5:"orange/",
 	4:"green/",
 	3:"green/",
-	
 };
+function color(n){
+	switch(true)
+	{
+		case (n>6):
+			return "red/";
+			break;
+		case (n>4 && n<7):
+			return "orange/";
+			break;
+		case (n<5):
+			return "green/";
+			break;
+		default:
+			return "";
+	}
+}
 
 
 //SINGLETON
@@ -507,7 +522,7 @@ function update() {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/"+color[rank] + legend.getIcons(filter),
+					icon: "image/"+color(rank) + legend.getIcons(filter),
 					//icon: "image/red/" + legend.getIcons(filter),
 					animation: google.maps.Animation.DROP,
 					title: text
