@@ -474,7 +474,7 @@ function update() {
 						'<div id="content" style="width:304px; height:176px;">' +
 						'<div id="siteNotice">' +
 						'<div style="float:left;border:0px solid blue;">' +
-						'<a href="https://twitter.com/' + user + '" target="_blank"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
+						'<a href="https://twitter.com/' + user + '" target="_blank" title="Visit '+user+'\'s profile"><h4 id="firstHeading" class="firstHeading">' + user + '</h4></a>' +
 						'</div>' +
 						'<div style="float:right;border:0px solid red;width=50%;">' +
 						'<p>Followers: ' + follow + '<br/>' +
