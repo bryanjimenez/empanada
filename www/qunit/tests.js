@@ -1,7 +1,8 @@
 //http://net.tutsplus.com/tutorials/javascript-ajax/how-to-test-your-javascript-code-with-qunit/
 //http://qunitjs.com/
 
-
+if (typeof QUnit =='undefined')
+	QUnit = require('qunit-cli');
 
 module('Compass Module');
 	test( "Constructor", function() {
