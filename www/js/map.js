@@ -13,20 +13,6 @@ var mypos;
 var DEBUG=true;
 var live=false;
 
-var color={
-	666:"",
-	15:"red/",
-	12:"red/",
-	11:"red/",
-	10:"red/",
-	9:"red/",
-	8:"red/",
-	7:"red/",
-	6:"orange/",
-	5:"orange/",
-	4:"green/",
-	3:"green/",
-};
 function color(n){
 	switch(true)
 	{
