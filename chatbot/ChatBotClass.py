@@ -352,8 +352,15 @@ class ChatBot():
         # HTTP request initialization
         ####
         conn = httplib.HTTPConnection(self.website_url+":81")
-        conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
-        http_result = conn.getresponse()
+        try:
+            conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
+            http_result = conn.getresponse()
+        except:
+            print "ERROR"
+            result['code'] = -100
+            conn.close()
+            return result
+            
         # DEBUG message
         if self.debug: print "DEBUG - RESPONSE FROM getresponse() - " + http_result.reason
         # if response is OK then http was good
