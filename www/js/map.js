@@ -10,7 +10,7 @@ var refresh="refresh.php";
 var jsonF="json/filters.json";
 
 var mypos;
-var DEBUG=true;
+var LOG=false;
 var live=false;
 
 function color(n){
@@ -424,7 +424,7 @@ function update() {
 			var tweets = JSON.parse(xmlHttp.responseText);
 			
 			if(tweets.t!=null)
-				DEBUG&&console.log("Results: "+tweets.t.length);
+				LOG&&console.log("Results: "+tweets.t.length);
 
 			//alert(tweets.t.length);
 
@@ -541,7 +541,7 @@ function update() {
 
 	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
 	var s = refresh+"?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&filter=" + legend.getFilters();
-	DEBUG&&console.log("Request: "+s);
+	LOG&&console.log("Request: "+s);
 
 	//need to take these out because if NEW tweets are in the result they will be ommited
 	//olat = lat;
@@ -566,7 +566,7 @@ function vote(ballot,id) {
 
 	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
 	var s = "vote.php?t="+id;
-	DEBUG&&console.log("Request: "+s);
+	LOG&&console.log("Request: "+s);
 
 
 	xmlHttp.open("GET", s, true);
@@ -609,6 +609,8 @@ function initialize() {
         zoom = parseInt(location.search.split('zoom=')[1].split('&')[0]);					//this needs to be a number
 	if (location.search.indexOf('live=') > -1)
         live = location.search.split('live=')[1].split('&')[0]=='true';						//this needs to be a boolean
+	if (location.search.indexOf('log=') > -1)
+        LOG = location.search.split('log=')[1].split('&')[0]=='true';					//this needs to be a boolean
 
 
 
