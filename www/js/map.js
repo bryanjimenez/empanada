@@ -497,7 +497,7 @@ function update() {
 						//Open iOS 6 native map from URL
 						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position" target="_blank">Go here</a> | ' +
 						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a> | ' +
-						'<a href="javascript:alert("TODO");" title="Vote up/down this tweet">Vote</a>' +
+						'<a href="javascript:alert("TODO");" title="Vote up/down this tweet">Dismiss</a>' +
 						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
 						'<form  role="search" onsubmit="places.searchNear(this.children[0]);return false;">' +
 						'<input id="target" type="text"><img src="image/x.png" style="margin-left:5px;" onclick="showSearch(false);">' +
