@@ -1,7 +1,9 @@
 <?php
 //header('Expires: Sun, 20 Jan 1985 00:00:00 GMT'); // date in the past
 header('Cache-Control: no-cache, must-revalidate');
-header('Content-type: application/json');
+header('Content-type: text/html');
+//header('Content-type: application/json');
+
 //header('Pragma: no-cache');
 
 // Report all errors except E_NOTICE
@@ -15,48 +17,43 @@ ini_set('memory_limit','-1');
 
 
 
-//http://stackoverflow.com/questions/1502590/calculate-distance-between-two-points-in-google-maps-v3
-function distance($lat1, $lon1, $lat2, $lon2, $unit='N') 
-{ 
-	//if(is_null($lat2)) return 0;
-
-	$theta = $lon1 - $lon2; 
-	$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
-	$dist = acos($dist); 
-	$dist = rad2deg($dist); 
-	$miles = $dist * 60 * 1.1515;
-	$unit = strtoupper($unit);
-
-	if ($unit == "K") {
-		return ($miles * 1.609344); 
-	} else if ($unit == "N") {
-		return ($miles * 0.8684);
-	} else {
-		return $miles;
-	}
-}
 
 function main(){
 
 	//$zipcode=getZipcode($_GET["lat"],$_GET["lng"]);
 
 	//OPEN results file and insert into an array of lines
-	$lines = file("vector.json");
+	echo exec('jar xf /usr/local/hadoop/elsa/empanada.jar empanada/vector2.json');
+
+	$lines = file("empanada/vector2.json");
 
 	$json = json_decode(implode ("",$lines),true);
 
-	//foreach ($json as $key => $value){
-	//	echo  $key . ':' . $value;
-	//}
+//	foreach ($json as $key => $value){
+//		echo  $key . ':' . $value;
+//	}
 	//echo "profanity: ".$json['profanity']['words']."\n";
-	//echo "categories: ".$json['categories']."\n";
-/*
+
+	echo "<br/><h1>CATEGORIES</h1><br/><br/>".$json['categories'];
+
+	echo "<br/><h1>KEYWORDS</h1><br/><br/>";
+
 	foreach($json['keywords'] as $key => $value){
-		echo $key.' : '.$value['category']."\n";
+		echo $key.' : '.$value['category']."<br/>";
 	}
-*/	
+
+	echo "<br/><h1>BIGRAMS</h1><br/><br/>";
+        foreach($json['bigrams'] as $key => $value){
+                echo $key.' : '.$value['category']."<br/>";
+        }
+
+	echo "<br/><h1>TRIGRAMS</h1><br/><br/>";
+        foreach($json['trigrams'] as $key => $value){
+                echo $key.' : '.$value['category']."<br/>";
+        }
+	
 	//echo "\n";
-	echo json_encode($json);
+//	echo json_encode($json);
 }
 
 

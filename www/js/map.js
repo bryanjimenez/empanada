@@ -16,6 +16,9 @@ var live=false;
 function color(n){
 	switch(true)
 	{
+		case (n==666):
+			return "";
+			break;
 		case (n>6):
 			return "red/";
 			break;
@@ -497,7 +500,7 @@ function update() {
 						//Open iOS 6 native map from URL
 						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position" target="_blank">Go here</a> | ' +
 						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a> | ' +
-						'<a href="javascript:alert("TODO");" title="Vote up/down this tweet">Vote</a>' +
+						'<a href="javascript:vote('+x+','+y+');" title="Vote up/down this tweet">Vote</a>' +
 						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
 						'<form  role="search" onsubmit="places.searchNear(this.children[0]);return false;">' +
 						'<input id="target" type="text"><img src="image/x.png" style="margin-left:5px;" onclick="showSearch(false);">' +
@@ -505,19 +508,28 @@ function update() {
 						'</div>' +
 						'</div>';
 
+			
+				
+				
+				var image = {
+					url: pic,
+					size: new google.maps.Size(71, 71),
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(17, 34),
+					scaledSize: new google.maps.Size(25, 25)
+				};
+
+
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(x, y),
 					//map: map,
-					icon: "image/"+color(rank) + legend.getIcons(filter),
-					//icon: "image/red/" + legend.getIcons(filter),
+					icon: refresh!="raw.php"?"image/"+color(rank) + legend.getIcons(filter):image,
 					animation: google.maps.Animation.DROP,
 					title: text
 				});
-
-				/*markers.push(marker);
-				 markerst.push(filter);
-				 */
 				
+			
+
 				if(manager.getMarker(x,y,0)==null){
 					Markers.push(marker, filter, contentString);
 					manager.addMarker(marker,0);
@@ -551,6 +563,16 @@ function update() {
 	xmlHttp.open("GET", s, true);
 	xmlHttp.send(null);
 }
+function vote(x,y){
+	//alert(manager.getMarker(x,y,0)==null);
+	
+	var m = manager.getMarker(x,y,0);
+	m.setMap(null);
+	manager.removeMarker(m);
+	manager.refresh();
+
+}
+/*
 function vote(ballot,id) {
    
 	var xmlHttp = new XMLHttpRequest();
@@ -572,7 +594,7 @@ function vote(ballot,id) {
 	xmlHttp.open("GET", s, true);
 	xmlHttp.send(null);
 }
-
+*/
 //used by info bubbles for search nearby
 function showSearch(t) {
     document.getElementById('detail').style.visibility = (t==true)?'':'hidden';
@@ -634,6 +656,7 @@ function initialize() {
 	// Do an update every time AFTER the map is moved
     google.maps.event.addListener(map, "tilesloaded", function() { 
 		update();
+		garbagecollect();
 	});
  
 	
@@ -652,7 +675,7 @@ function initialize() {
 	
 	
 	// If map is 'live' update every ...
-    live&&setInterval(update,5000);
+    live&&setInterval(function(){update();garbagecollect();},5000);
 
 
 	// MISC
@@ -660,6 +683,16 @@ function initialize() {
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
     
     return 0;
+}
+
+function garbagecollect(){
+	LOG&&console.log("GC Before:"+manager.getMarkerCount(0));
+
+	while(manager.getMarkerCount(0)>1000){
+		manager.removeMarker(Markers.markers.shift());
+	}		
+	LOG&&console.log("GC After:"+manager.getMarkerCount(0));
+
 }
 
 
