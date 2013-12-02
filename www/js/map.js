@@ -486,7 +486,7 @@ function update() {
 						'</div>' +
 						'<div id="bodyContent" style="float:left;border:0px solid blue;height:100px;">' +
 						'<div style="float:left;border:0px solid blue;width:204px;">' +
-						'<p style="max-width:200px">' + text + '</p>' +
+						'<p style="max-width:200px">' + tagAnchors(text) + '</p>' +
 						'</div>' +
 						'<div style="float:right;border:0px solid red;width=100%;height=100%;">' +
 						'<img name="userpic" src="' + pic + '"></img>' +
@@ -563,6 +563,18 @@ function update() {
 	xmlHttp.open("GET", s, true);
 	xmlHttp.send(null);
 }
+
+function tagAnchors(s) {
+var p = /https?:[^ ]*/;
+
+	if (p.test(s)){
+		var newValue = s.replace(p,"<a href='"+s.match(p)+"' target='_blank'>" + s.match(p) + "</a>");
+		return newValue;
+	}
+	else
+		return s
+}
+
 function vote(x,y){
 	//alert(manager.getMarker(x,y,0)==null);
 	
@@ -681,6 +693,7 @@ function initialize() {
 	// MISC
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend.htmlObj);
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(compass.htmlObj);
+    
     
     return 0;
 }
