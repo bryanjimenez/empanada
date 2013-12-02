@@ -564,15 +564,20 @@ function update() {
 	xmlHttp.send(null);
 }
 
+
+// good regex info
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FRegExp
+// https://support.google.com/a/answer/1371417?hl=en
+// http://www.cheatography.com/davechild/cheat-sheets/regular-expressions/
+
 function tagAnchors(s) {
-var p = /https?:[^ ]*/;
+var p = /https?:[^( |,|”|“|")]*/g;
 
 	if (p.test(s)){
-		var newValue = s.replace(p,"<a href='"+s.match(p)+"' target='_blank'>" + s.match(p) + "</a>");
-		return newValue;
+		s = s.replace(p,"<a href=$& target='_blank'>$&</a>");
 	}
-	else
-		return s
+	
+	return s
 }
 
 function vote(x,y){
