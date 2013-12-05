@@ -1,6 +1,6 @@
 {
     "hurricane": {
-        "name": "Hurricane",
+        "name": "Weather Cond.",
         "icon": "hurricane.png",
         "shadow": "",
         "synonyms": ["hurricane", "tornado"]
@@ -28,12 +28,6 @@
         "icon": "poweroutage.png",
         "shadow": "",
         "synonyms": ["poweroutage", "power outage"]
-    },
-    "shelter": {
-        "name": "Shelter",
-        "icon": "shelter.png",
-        "shadow": "",
-        "synonyms": ["shelter"]
     },
     "fuel": {
         "name": "Fuel",
