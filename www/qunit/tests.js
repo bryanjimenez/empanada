@@ -117,14 +117,15 @@ module('Module A');
 
 module('EmPANaDa map System Test');
 	asyncTest( "moving the map test: 15 second later!", function() {
-		var x=25.778;
-		var y=-80.337;
+		var x=25.762;
+		var y=-80.375;
 
 		var newcenter=new google.maps.LatLng(x, y);	
 		
 		notEqual( map.getCenter(),newcenter, "map initially not at lat="+x+" lng="+y );
 	
 		map.setCenter(newcenter);
+//		map.setZoom(5);
 		
 		equal( map.getCenter(),newcenter, "map is moved to lat="+x+" lng="+y );
 
@@ -151,7 +152,7 @@ module('Google Places System Test');
 		
 		function mycallback(results, status) {
 			//alert(results.length);
-			notEqual(results.length,0, "querying for nearby google places, got " +results.length+" results" );
+			notEqual(results.length,0, "querying for nearby(lat:"+lat+",lng:"+lng+") google places, got " +results.length+" results" );
 			start();
 		}
 
@@ -162,11 +163,13 @@ module('Google Places System Test');
 module('Google Geocoding System Test');
 	asyncTest( "place name to location: 5 second later!", function() {
 
+		var placename="MIA Airport";
+
 		var center=map.getCenter();
 		
 		equal(map.getCenter(),center, "map's initial lat="+map.getCenter().lat()+" lng="+map.getCenter().lng() );
 		
-		equal(Map.codeAddress("MIA Airport"),null,"queried Google's reverse geocode API");
+		equal(Map.codeAddress(placename),null,"queried Google's reverse geocode API with '"+placename+"'");
 		
 		setTimeout(function() {
 			notEqual(map.getCenter(),center, "map's final lat="+map.getCenter().lat()+" lng="+map.getCenter().lng() );

@@ -5,8 +5,8 @@ var manager;
 
 //EMPANADA Globals
 var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
-var refresh="refresh.php";
-//var refresh="http://empanada.cs.fiu.edu:81/cache";
+//var refresh="refresh.php";
+var refresh="cache";
 var jsonF="json/filters.json";
 
 var mypos;
@@ -14,27 +14,28 @@ var LOG=false;
 var live=false;
 
 function color(n){
+	var c;
 	switch(true)
 	{
 		case (n==666):
-			return "";
+			c = "";
 			break;
 		case (n>6):
-			return "red/";
+			c = "red/";
 			break;
 		case (n>4 && n<7):
-			return "orange/";
+			c = "orange/";
 			break;
 		case (n<5):
-			return "green/";
+			c = "green/";
 			break;
 		default:
-			return "";
+			c = "";
 	}
+	return c;
 }
 
 
-//SINGLETON
 var Markers = {
     markers: [],
     markerst: [],
@@ -181,13 +182,8 @@ function Legend(parent) {
     xmlHttp.send(null);
 }
 
-function User() {
-    var _this = this;
-
-}
 
 
-//SINGLETON
 var places;
 function Places() {
 
@@ -651,7 +647,8 @@ function initialize() {
 	if (location.search.indexOf('log=') > -1)
         LOG = location.search.split('log=')[1].split('&')[0]=='true';					//this needs to be a boolean
 
-
+	if (location.port == '81')
+		refresh="refresh.php";
 
 
     var mapOptions = {
