@@ -1,0 +1,69 @@
+{
+    "outages": [
+        {
+            "lat": 26.591,
+            "lng": -81.8765,
+            "Number of outages": 2
+        },
+        {
+            "lat": 25.791281249999997,
+            "lng": -80.3080625,
+            "Number of outages": 15
+        },
+        {
+            "lat": 26.754583333333336,
+            "lng": -80.1218611111111,
+            "Number of outages": 9
+        },
+        {
+            "lat": 26.791,
+            "lng": -80.23229166666667,
+            "Number of outages": 6
+        },
+        {
+            "lat": 27.871,
+            "Cause": "Under investigation",
+            "lng": -80.497,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 106,
+            "dateReported": "10/13/13 09:03 PM",
+            "status": "We have dispatched a power restoration specialist to investigate and restore your power.",
+            "etr": "10/13/13 10:45 PM"
+        },
+        {
+            "lat": 26.9695,
+            "lng": -82.18350000000001,
+            "Number of outages": 2
+        },
+        {
+            "lat": 25.915999999999997,
+            "lng": -80.14333333333333,
+            "Number of outages": 3
+        },
+        {
+            "lat": 27.4605,
+            "lng": -82.5695,
+            "Number of outages": 2
+        },
+        {
+            "lat": 29.258,
+            "Cause": "Damage to FPL equipment",
+            "lng": -81.085,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 9,
+            "dateReported": "10/13/13 08:27 PM",
+            "status": "We have dispatched a power restoration team to help restore your power.",
+            "etr": "10/14/13 12:15 AM"
+        },
+        {
+            "lat": 27.911,
+            "Cause": "Under investigation",
+            "lng": -80.674,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 1,
+            "dateReported": "10/13/13 08:59 PM",
+            "status": "We will be dispatching a power restoration specialist to the area as soon as possible.",
+            "etr": "10/13/13 10:45 PM"
+        }
+    ]
+}

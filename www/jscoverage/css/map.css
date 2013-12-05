@@ -1,0 +1,75 @@
+  html,body, #map-canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+	body {
+		padding-top: 50px;
+	}
+	#search_div{
+		margin-left:88%;
+		margin-top:10px;
+	}
+
+
+	#legend {
+		background: white;
+		padding: 5px;
+		/*margin: 0px;*/
+		border: 1px solid black;
+
+	}
+	img[name=userpic] {    
+		width: 100px;
+	}
+	#compass {
+		/*background: orange;*/
+		padding: 5px;
+		/*margin: 0px;*/
+		background-image: url(/image/arrow_off.png); 
+		background-size: contain;
+		height: 40px; 
+		width: 40px; 
+		/*border: 1px solid black;*/
+	}
+/*	#target{
+		height: 2em; 
+		width: 10em; 
+	}
+*/	#zippy{
+		padding-top:12px;
+	}
+
+	input {
+		/*display: block;*/
+		width: 15em;
+		height: 2em;
+		/*padding: 6px 12px;*/
+		font-size: 14px;
+		line-height: 1.428571429;
+		color: #555555;
+		vertical-align: middle;
+		background-color: #ffffff;
+		border: 1px solid #cccccc;
+		border-radius: 4px;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+			  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		-webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+			  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+	}
+	input:focus {
+		border-color: #66afe9;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	}
+	@media (max-width: 767px) {
+		/*body {
+			padding-top: 50px;
+		}*/
+		#search_div{
+			margin-left:0px;
+			margin-top:10px;
+		}
+	}

@@ -1,0 +1,44 @@
+{
+    "hurricane": {
+        "name": "Hurricane",
+        "icon": "hurricane.png",
+        "shadow": "",
+        "synonyms": ["hurricane", "tornado"]
+    },
+    "fire": {
+        "name": "Fire",
+        "icon": "fire.png",
+        "shadow": "",
+        "synonyms": ["fire"]
+    },
+    "accident": {
+        "name": "Traffic Warning",
+        "icon": "caraccident.png",
+        "shadow": "",
+        "synonyms": ["accident","car accident","car crash"]
+    },
+    "flood": {
+        "name": "Flood",
+        "icon": "flood.png",
+        "shadow": "",
+        "synonyms": ["flood", "water"]
+    },
+    "poweroutage": {
+        "name": "Power Outage",
+        "icon": "poweroutage.png",
+        "shadow": "",
+        "synonyms": ["poweroutage", "power outage"]
+    },
+    "shelter": {
+        "name": "Shelter",
+        "icon": "shelter.png",
+        "shadow": "",
+        "synonyms": ["shelter"]
+    },
+    "fuel": {
+        "name": "Fuel",
+        "icon": "fuel.png",
+        "shadow": "",
+        "synonyms": ["fuel", "gas", "diesel", "combustible", "oil"]
+    }
+}
