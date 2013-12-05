@@ -117,8 +117,8 @@ module('Module A');
 
 module('EmPANaDa map System Test');
 	asyncTest( "moving the map test: 15 second later!", function() {
-		var x=25.7588981;
-		var y=-80.37406669;
+		var x=25.778;
+		var y=-80.337;
 
 		var newcenter=new google.maps.LatLng(x, y);	
 		
