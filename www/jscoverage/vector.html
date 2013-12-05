@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <title>EMergency Preparedness Against NAtural DisAsters</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+    
+	<link href="css/map.css" rel="stylesheet">
+
+	<script>
+		function update() {
+		   
+			var xmlHttp = new XMLHttpRequest();
+
+			xmlHttp.onreadystatechange = function()
+			{				
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
+				{
+					var tweets = JSON.parse(xmlHttp.responseText);	
+					document.getElementById("container").innerHTML=tweets['profanity']['words'];
+					document.getElementById("container").innerHTML+=tweets['categories'];
+				}
+			}
+
+			var s = "vector.php";
+			xmlHttp.open("GET", s, true);
+			xmlHttp.send(null);
+		}
+	
+	window.onload=update;
+	
+	</script>
+
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">EmPANaDa</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li class="active"><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+ 
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+	
+	<div id="about" class="container">
+
+      <div id="container" class="starter-template" style="text-align:left;">
+
+        
+      </div>
+	</div>
+	  
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

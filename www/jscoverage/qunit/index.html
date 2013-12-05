@@ -1,0 +1,36 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>QUnit Tests for EmPANaDa UI</title>
+	<link rel="stylesheet" href="qunit-theme-ninja.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="qunit-1.12.0.js"></script>
+	<script src="tests.js"></script>
+	
+	
+    <script src="../../../assets/js/jquery.js"></script>
+    
+    
+	<!-- Google Maps API-->
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDMSjJYMcDPwZtwZCnCtZTI1gDNPrxVzZ4&sensor=true&libraries=places"></script>
+	<!-- Marker Manager -->
+	<script src="../js/markermanager.js"></script>
+
+	<script src="../js/map.js"></script>
+	<script>
+		refresh="../refresh.php";
+		jsonF="../json/filters.json";
+	</script>
+	
+	
+	<!-- STUFF NEEDED TO TEST -->
+	<div id="map-canvas"></div>
+	<div id="legend" style="width:0;"></div>
+	<div id="compass" style="width:0;"></div>
+	<input id="search" style="width:0;" type="text" >
+
+</body>
+</html>

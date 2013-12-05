@@ -1,0 +1,38 @@
+{
+    "feedData": {
+        "relTracker": "99.989",
+        "lastUpdated": "10/13/2013 09:47 PM"
+    },
+    "outages": [
+        {
+            "lat": 26.780250000000002,
+            "lng": -82.03,
+            "Number of outages": 4
+        },
+        {
+            "lat": 27.871,
+            "Cause": "Under investigation",
+            "lng": -80.497,
+            "lastUpdated": "10/13/2013 09:47 PM",
+            "customersAffected": 106,
+            "dateReported": "10/13/13 09:03 PM",
+            "status": "We have dispatched a power restoration specialist to investigate and restore your power.",
+            "etr": "10/13/13 10:45 PM"
+        },
+        {
+            "lat": 28.5845,
+            "lng": -80.87950000000001,
+            "Number of outages": 2
+        },
+        {
+            "lat": 26.31321614583333,
+            "lng": -80.20138715277778,
+            "Number of outages": 33
+        },
+        {
+            "lat": 27.4605,
+            "lng": -82.5695,
+            "Number of outages": 2
+        }
+    ]
+}
