@@ -351,7 +351,7 @@ class ChatBot():
         if self.debug: print "DEBUG - This question requires a close point response " + str(pin_needed)
         # HTTP request initialization
         ####
-        conn = httplib.HTTPConnection(self.website_url+":81")
+        conn = httplib.HTTPConnection(self.website_url)
         try:
             conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
             http_result = conn.getresponse()
