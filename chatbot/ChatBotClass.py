@@ -152,6 +152,7 @@ class ChatBot():
                         self.synonyms.append(syno)
                         # find out whether the question needs a close location                                            
                         return 0; # tweet had the self.keyword in it and one of the synonyms
+            return -200 + self.random(-2, 0)
         # return value
         return -1 # tweet won't get a reply   
 
