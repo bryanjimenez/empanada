@@ -632,8 +632,6 @@ function initialize() {
 
 	// URL PARAMETERS
 
-    if (location.search.indexOf('raw=') > -1)
-        refresh = location.search.split('raw=')[1].split('&')[0]=='true'?'raw.php':refresh;	//this needs to be a boolean
     if (location.search.indexOf('lat=') > -1)
         lat = location.search.split('lat=')[1].split('&')[0];
     if (location.search.indexOf('lng=') > -1)
@@ -647,9 +645,10 @@ function initialize() {
 	if (location.search.indexOf('log=') > -1)
         LOG = location.search.split('log=')[1].split('&')[0]=='true';					//this needs to be a boolean
 
-	if (location.port == '81')
+	if (location.port == '8080')
 		refresh="refresh.php";
-
+    if (location.search.indexOf('raw=') > -1)
+        refresh = location.search.split('raw=')[1].split('&')[0]=='true'?'raw.php':refresh;	//this needs to be a boolean
 
     var mapOptions = {
         zoom: zoom,
