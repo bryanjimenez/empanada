@@ -9,5 +9,8 @@
 "-54": "There <<ISARE>> <<ISSUES>> mentions about <<FILTER>> reported. The closest being <<LOCATION>>",
 "-55": "<<ISSUES>> mentions about <<FILTER>> have been found close to you. Find out more at <<LOCATION>>",
 "-100": "The system is under maintenance right now. Please try again later.",
-"-101": "The system could not be reached. Try again later."
+"-101": "The system could not be reached. Try again later.",
+"-200": "We could not gather enough information to answer your question. Please visit <<URL>>",
+"-201": "There is not enough information in our system to generate an answer.",
+"-202": "We could not find relevant information to answer you question. You could visit <<URL>>"
 }

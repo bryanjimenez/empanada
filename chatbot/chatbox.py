@@ -16,6 +16,11 @@ class MyStreamer(TwythonStreamer):
         			bot.respond_to_mention()
         		 	print "DEBUG - " + bot.get_message()
         		  	update_status_with(get_oauthentication(), bot.get_message())
+        		if ( post_back >= -202 and post_back <= -200):
+        			print "DEBUG - THE FILTER WAS NOT FOUND IN THE SYSTEM"
+        			print bot.generate_message(result={"code": post_back}, username=data['user']['screen_name'])
+        			update_status_with(get_oauthentication(), bot.generate_message(result={"code": post_back}, username=data['user']['screen_name']))
+        			        			
 
 	def on_error(self, status_code, data):
 		print status_code

@@ -152,6 +152,7 @@ class ChatBot():
                         self.synonyms.append(syno)
                         # find out whether the question needs a close location                                            
                         return 0; # tweet had the self.keyword in it and one of the synonyms
+            return -200 + self.random(-2, 0)
         # return value
         return -1 # tweet won't get a reply   
 
@@ -351,7 +352,7 @@ class ChatBot():
         if self.debug: print "DEBUG - This question requires a close point response " + str(pin_needed)
         # HTTP request initialization
         ####
-        conn = httplib.HTTPConnection(self.website_url+":81")
+        conn = httplib.HTTPConnection(self.website_url)
         try:
             conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
             http_result = conn.getresponse()
