@@ -53,14 +53,46 @@
 
       <div class="starter-template">
         <h1>API</h1>
-        <p class="lead">
-			Below is EmPANaDa's UI Appication Programming Interface<br/><br/>
-        live=[true/false]<br/>
-        raw=[true/false]<br/>
-        lat=[latitude]<br/>
-        lng=[longitude]<br/>
-        zoom=[1-20]<br/>
-        filter=[filters1,fiter2,...,filterN]<br/>
+        <hr/>
+		
+		<h4>Below is EmPANaDa's UI Application Programming Interface</h4><br/>
+		 
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr><td><strong>Parameter</strong></td><td><strong>Description</strong></td></tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td><code>live=[true/false]</code></td>
+				<td>Turn continuous polling for the map. The map will poll every 5 seconds.</td>
+			</tr>
+			<tr>
+				<td><code>raw=[true/false]</code></td>
+				<td>Turns on raw tweets. No filtering will be done. (experimental)</td>
+			</tr>
+			<tr>
+				<td><code>lat=[latitude]</code><br/>
+					<code>lng=[longitude]</code><br/>
+				</td>
+				<td>Focuses the map on the desired location.</td>
+			</tr>
+			<tr>
+				<td><code>zoom=[1-20]</code></td>
+				<td>Zoom to the desired level.</td>
+			</tr>
+			<tr>
+				<td><code>filter=[filters1,fiter2,...,filterN]</code></td>
+				<td>Filters will be set accordingly.</td>
+			</tr>	
+			</tbody>		
+		</table>
+
+        <br/>
+        <strong>Example:</strong><br/><br/>
+		<code>http://empanada.cs.fiu.edu?raw=true&live=true</code>
+		<br/>
+		
+        
         </p>
       </div>
 
