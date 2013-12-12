@@ -122,16 +122,20 @@ function Legend(parent) {
     }
     this.toggle = function(obj) {
         var name = obj.id.toLowerCase().split('_')[0];
+        
+        // Dissable
         if (obj.innerHTML == '') {
             obj.innerHTML = '<img src="' + forbidden + '">';
             this.remove(name);
             //toggleMarkers(name,false);
             Markers.toggle(name, false);
         }
+        // Enable
         else {
             obj.innerHTML = '';
             this.add(name);
             Markers.toggle(name, true);
+            update();
         }
     };
 
@@ -440,7 +444,7 @@ function update() {
 				var follow = tweet.user.followers_count;
 				var friends = tweet.user.friends_count;
 				var c = new Date(tweet.created_at);
-				
+
 				
 				//alert(tweet.created_at);
 
@@ -469,6 +473,9 @@ function update() {
 					//25.758102, -80.373633 middle of fiu's pond
 				}
 
+				//var s =	"cache/downvote?filter="+filter+"&lat="+x+"&lng="+y+"&id="+tweet.id_str;
+
+
 				var contentString = '' +
 						'<div id="content" style="width:304px; height:176px;">' +
 						'<div id="siteNotice">' +
@@ -496,7 +503,7 @@ function update() {
 						//Open iOS 6 native map from URL
 						'<a href="http://maps.google.com/maps/?saddr=Current%20Location&daddr=' + user + '@' + x + ',' + y + '" title="Navigate here from current position" target="_blank">Go here</a> | ' +
 						'<a href="javascript:showSearch(true);" title="Search for places near here">Search Nearby</a> | ' +
-						'<a href="javascript:vote('+x+','+y+');" title="Vote up/down this tweet">Vote</a>' +
+						'<a href="javascript:vote(\''+filter+'\','+x+','+y+',\''+tweet.id_str+'\');" title="Vote up/down this tweet">Vote</a>' +
 						'<div id="detail" style="visibility:hidden;float:left;border:0px solid blue;width:100%;">' +
 						'<form  role="search" onsubmit="places.searchNear(this.children[0]);return false;">' +
 						'<input id="target" type="text"><img src="image/x.png" style="margin-left:5px;" onclick="showSearch(false);">' +
@@ -524,7 +531,8 @@ function update() {
 					title: text
 				});
 				
-			
+				//LOG&&console.log("tweet: "+xmlHttp.responseText);
+
 
 				if(manager.getMarker(x,y,0)==null){
 					Markers.push(marker, filter, contentString);
@@ -575,8 +583,8 @@ var p = /https?:[^( |,|”|“|")]*/g;
 	
 	return s
 }
-
-function vote(x,y){
+/*
+function vote(x,y,filter,id){
 	//alert(manager.getMarker(x,y,0)==null);
 	
 	var m = manager.getMarker(x,y,0);
@@ -585,29 +593,40 @@ function vote(x,y){
 	manager.refresh();
 
 }
-/*
-function vote(ballot,id) {
-   
+* */
+
+function vote(filter,x,y,id) {
+	var s =	"cache/downvote?filter="+filter+"&lat="+x+"&lng="+y+"&id="+id;
+
 	var xmlHttp = new XMLHttpRequest();
 
 	xmlHttp.onreadystatechange = function()
 	{
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && xmlHttp.responseText)
 		{
-			alert("vote placed");
-	
+			
+			LOG&&console.log("Cache Response: "+xmlHttp.responseText);
+			var cacheResponse =xmlHttp.responseText.split(': ')[1];
+
+			var x = s.split('lat=')[1].split('&')[0];
+			var y = s.split('lng=')[1].split('&')[0];
+			
+			if(cacheResponse==0){
+				var m = manager.getMarker(x,y,0);
+				m.setMap(null);
+				manager.removeMarker(m);
+				manager.refresh();
+			}	
 		}
 	}
-
-	//var s = "refresh.php?lat=" + lat + "&lng=" + lng + "&rad=" + rad + "&olat=" + olat + "&olng=" + olng + "&orad=" + orad + "&filter=" + legend.getFilters();
-	var s = "vote.php?t="+id;
 	LOG&&console.log("Request: "+s);
 
 
 	xmlHttp.open("GET", s, true);
 	xmlHttp.send(null);
 }
-*/
+
+
 //used by info bubbles for search nearby
 function showSearch(t) {
     document.getElementById('detail').style.visibility = (t==true)?'':'hidden';
