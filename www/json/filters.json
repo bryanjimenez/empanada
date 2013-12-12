@@ -27,7 +27,7 @@
         "name": "Power Outage",
         "icon": "poweroutage.png",
         "shadow": "",
-        "synonyms": ["poweroutage", "power outage"]
+        "synonyms": ["poweroutage", "power outage", "no power", "no electricity", "power is out", "electricity is out"]
     },
     "fuel": {
         "name": "Fuel",
