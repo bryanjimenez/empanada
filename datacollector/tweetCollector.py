@@ -16,7 +16,7 @@ APP_KEY = config.get('twitter', 'APP_KEY')
 APP_SECRET = config.get('twitter', 'APP_SECRET')
 OAUTH_TOKEN = config.get('twitter', 'OAUTH_TOKEN')
 OAUTH_TOKEN_SECRET = config.get('twitter', 'OAUTH_TOKEN_SECRET')
-LINE_MAX=1
+LINE_MAX=250
 DATE_FORMAT='%Y%m%d_%H%M%S'
 PATH2LOG='tweets/'
 
@@ -55,13 +55,14 @@ class MyStreamer(TwythonStreamer):
 	def on_error(self, status_code, data):
 		print status_code
 		self.disconnect()
-		db.close()
+#		db.close()
 
 
 stream = MyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-#stream.statuses.filter(locations = '-126.2109375,24.491523,-50.625,49.95121991')
-stream.statuses.filter(locations = '-82.177734,24.491523,-79.736023,27.009891')
+stream.statuses.filter(locations = '-126.2109375,24.491523,-50.625,49.95121991')
+#~ stream.statuses.filter(locations = '-86.443738,24.726875,-79.736023,27.009891')
+
 
 #~ Sample Coordinates:
 #~ Key West:

@@ -55,7 +55,7 @@ function main(){
 	//$zipcode=getZipcode($_GET["lat"],$_GET["lng"]);
 
 	//OPEN results file and insert into an array of lines
-	$lines = file("/home/jonathan/result.txt");
+	$lines = file("/home/jonathan/results/result.txt");
 
 	foreach ($lines as $line) {
 		

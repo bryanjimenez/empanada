@@ -1,0 +1,5 @@
+To run the tweetCollector, run "python tweetCollector.py" in bash. This will begin the tweet collection and upload process.
+
+Next, run fplCollector.jar followed immediately by fplPush.sh for the best synchronized results. To run fplCollector, type "java -jar fplCollector.jar" in bash and then to run fplPush type "./fplPush.sh".
+
+All neccesary scripts are now running.
