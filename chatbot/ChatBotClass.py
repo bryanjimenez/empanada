@@ -354,7 +354,7 @@ class ChatBot():
         ####
         conn = httplib.HTTPConnection(self.website_url)
         try:
-            conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter)
+            conn.request("GET", "/cache?lat="+latitude+"&lng="+longitude+"&rad="+self.radius+"&olat=0&olng=0&orad=0&filter="+filter, timeout=10)
             http_result = conn.getresponse()
         except:
             print "ERROR"
