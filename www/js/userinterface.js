@@ -11,7 +11,7 @@ var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
 // refresh.php is a backup/experimental
 //var refresh="refresh.php";
 var refresh="cache";
-Var vote =	"cache/downvote";
+var vote =	"cache/downvote";
 
 
 var jsonF="json/filters.json";
