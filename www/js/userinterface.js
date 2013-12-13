@@ -9,9 +9,10 @@ var lat = 25.75906, lng = -80.37388, zoom = 14, rad = 1;
 
 // refresh.php will be used if you point the browser to :8080
 // refresh.php is a backup/experimental
-//var refresh="refresh.php";
-var refresh="cache";
-var vote =	"cache/downvote";
+var refresh="refresh.php";
+//var refresh="cache";
+//var vote =	"voting.php";
+//var vote =	"cache/downvote";
 
 
 var jsonF="json/filters.json";
@@ -603,7 +604,7 @@ function vote(x,y,filter,id){
 * */
 
 function vote(filter,x,y,id) {
-	var s =	vote+"?filter="+filter+"&lat="+x+"&lng="+y+"&id="+id;
+	var s =	"cache/downvote?filter="+filter+"&lat="+x+"&lng="+y+"&id="+id;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -673,8 +674,8 @@ function initialize() {
 
 	// BACKUP PORT
 	if (location.port == '8080'){
-		refresh="refresh.php";
-		vote="voting.php";
+		refresh="cache";
+		//vote="cache/downvote";
 	}	
     if (location.search.indexOf('raw=') > -1)
         refresh = location.search.split('raw=')[1].split('&')[0]=='true'?'raw.php':refresh;	//this needs to be a boolean
