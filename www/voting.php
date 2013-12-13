@@ -12,7 +12,7 @@ function main(){
 	//$t=401765119618609153;
 	
 	//echo exec("sed '/".$_GET['t']"/d' result.txt");
-	echo exec("sed /$_GET['t']/d result.txt | tee result.txt");
+	echo exec("sed /$_GET['id']/d /home/jonathan/results/result.txt | tee /home/jonathan/results/result.txt");
 
 	
 	
