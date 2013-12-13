@@ -97,13 +97,19 @@ def tiny_url():
     conn.close()
     """
     
+def random_test():
+    from random import randint
+    
+    print randint(-1, 0)    
+    
 def main():
-    # results_read()
+    results_read()
     # json_read()
     # generate_result()
     # time()
     # str_format()
-    tiny_url()
+    # tiny_url()
+    # random_test()
     
     
 if __name__ == "__main__":
