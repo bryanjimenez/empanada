@@ -1,0 +1,199 @@
+aboard
+about
+above
+across
+after
+against
+ahead of
+along
+amid
+amidst
+among
+around
+as
+as far as
+as of
+aside from
+at
+athwart
+atop
+barring
+because of
+before
+behind
+below
+beneath
+beside
+besides
+between
+beyond
+but
+by
+by means of
+circa
+concerning
+despite
+down
+during
+except
+except for
+excluding
+far from
+following
+for
+from
+I
+in
+in accordance with
+in addition to
+in case of
+in front of
+in lieu of
+in place of
+in spite of
+including
+inside
+instead of
+into
+like
+minus
+near
+next to
+of
+off
+on
+on account of
+on behalf of
+on top of
+onto
+opposite
+out
+out of
+outside
+over
+past
+plus
+prior to
+regarding
+regardless of
+save
+since
+than
+through
+till
+to
+toward
+towards
+under
+underneath
+unlike
+until
+up
+upon
+versus
+via
+with
+with regard to
+within
+without
+
+for
+and
+nor
+but
+or
+yet
+so
+
+
+
+
+I
+me
+we
+us
+you
+she
+her
+he
+him
+it
+they
+them
+
+that
+which
+who
+whom
+whose
+whichever
+whoever
+whomever
+
+this
+these
+that
+those
+
+anybody
+anyone
+anything
+each
+either
+everybody
+everyone
+everything
+neither
+nobody
+no one
+nothing
+one
+somebody
+someone
+something
+
+both
+few
+many
+several
+all
+any
+most
+none
+some
+
+myself
+ourselves
+yourself
+yourselves
+himself
+herself
+itself
+themselves
+
+what
+who
+which
+whom
+whose
+
+my
+your
+his
+her
+its
+our
+your
+their
+mine
+yours
+his
+hers
+ours
+yours
+theirs
+
+
+the
+a
+an
