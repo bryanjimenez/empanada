@@ -1,0 +1,1508 @@
+{
+    "categories": "hurricane accident poweroutage fuel fire flood",
+    "keywords": {
+        "hurricane": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "#hurricane": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "cyclone": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "tornado": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "typhoon": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "weather": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "rain": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "#rain": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "raining": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "wind": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "windy": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "barometer": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "temperature": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "temperatures": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "cold": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 1
+        },
+        "hot": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 1
+        },
+        "mild": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 1
+        },
+        "humidity": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "windstorm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "monsoon": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "twister": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "precipitation": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 3
+        },
+        "thunderstorms": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "#wx": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "showers": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 1
+        },
+        "accumulation": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "blizard": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "conditions": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "accidents": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "crash": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "#crash": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "#accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "auto": {
+            "category": "accident",
+            "synonyms": "motorcycle car cars bus truck trucks bike bikes vehicles",
+            "value": 1
+        },
+        "motorcycle": {
+            "category": "accident",
+            "synonyms": "auto car cars bus truck trucks bike bikes vehicles",
+            "value": 1
+        },
+        "car": {
+            "category": "accident",
+            "synonyms": "auto motorcycle cars bus truck trucks bike bikes vehicles",
+            "value": 1
+        },
+        "cars": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car bus truck trucks bike bikes vehicles",
+            "value": 1
+        },
+        "bus": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars truck trucks bike bikes vehicles",
+            "value": 1
+        },
+        "truck": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus trucks bike bikes vehicles",
+            "value": 1
+        },
+        "trucks": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus truck bike bikes vehicles",
+            "value": 1
+        },
+        "bike": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus truck trucks bikes vehicles",
+            "value": 1
+        },
+        "bikes": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus truck trucks bike vehicles",
+            "value": 1
+        },
+        "vehicles": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus truck trucks bike bikes",
+            "value": 1
+        },
+        "cycle": {
+            "category": "accident",
+            "synonyms": "auto motorcycle car cars bus truck trucks bike bikes",
+            "value": 1
+        },
+        "motorcyclist": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "pedestrian": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "delays": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "#traffic": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "street": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "st": {
+            "category": "accident",
+            "synonyms": "street ave avenue hwy highway rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "ave": {
+            "category": "accident",
+            "synonyms": "street st avenue hwy highway rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "avenue": {
+            "category": "accident",
+            "synonyms": "street st ave hwy highway rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "hwy": {
+            "category": "accident",
+            "synonyms": "street st ave avenue highway rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "highway": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy rd road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "rd": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway road boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "road": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd boulevard blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "boulevard": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road blvd circle cir court ct lane lanes",
+            "value": 1
+        },
+        "blvd": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard circle cir court ct lane lanes",
+            "value": 1
+        },
+        "circle": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd cir court ct lane lanes",
+            "value": 1
+        },
+        "cir": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle court ct lane lanes",
+            "value": 1
+        },
+        "court": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle cir ct lane lanes",
+            "value": 1
+        },
+        "ct": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle cir court lane lanes",
+            "value": 1
+        },
+        "lane": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle cir ct court lanes",
+            "value": 1
+        },
+        "lanes": {
+            "category": "accident",
+            "synonyms": "street st ave avenue hwy highway rd road boulevard blvd circle cir ct court lane",
+            "value": 1
+        },
+        "police": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "injury": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "injured": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "injuries": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "killed": {
+            "category": "accident fire",
+            "synonyms": "dead",
+            "value": 1
+        },
+        "dead": {
+            "category": "accident fire",
+            "synonyms": "dead",
+            "value": 1
+        },
+        "northbound": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "southbound": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "eastbound": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "westbound": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "poweroutage": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 4
+        },
+        "#poweroutage": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 6
+        },
+        "powerout": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 4
+        },
+        "electricity": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 1
+        },
+        "#electricity": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 2
+        },
+        "power": {
+            "category": "poweroutage",
+            "synonyms": "energy",
+            "value": 1
+        },
+        "energy": {
+            "category": "poweroutage",
+            "synonyms": "power",
+            "value": 2
+        },
+        "generator": {
+            "category": "poweroutage",
+            "synonyms": "power",
+            "value": 1
+        },
+        "fuel": {
+            "category": "fuel",
+            "synonyms": "gas gasoline oil",
+            "value": 1
+        },
+        "#gas": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        },
+        "gas": {
+            "category": "fuel",
+            "synonyms": "gasoline diesel oil combustible",
+            "value": 1
+        },
+        "gasoline": {
+            "category": "fuel",
+            "synonyms": "gas diesel fuel oil combustible",
+            "value": 2
+        },
+        "diesel": {
+            "category": "fuel",
+            "synonyms": "gas gasoline fuel oil combustible",
+            "value": 2
+        },
+        "combustible": {
+            "category": "fuel",
+            "synonyms": "gas gasoline fuel oil combustible",
+            "value": 1
+        },
+        "oil": {
+            "category": "fuel",
+            "synonyms": "gas gasoline fuel combustible",
+            "value": 1
+        },
+        "gallon": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        },
+        "711": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "$": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "paid": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "cheap": {
+            "category": "fuel",
+            "synonyms": "cheapest cheaper expensive",
+            "value": 1
+        },
+        "cheapest": {
+            "category": "fuel",
+            "synonyms": "cheap cheaper expensive",
+            "value": 1
+        },
+        "cheaper": {
+            "category": "fuel",
+            "synonyms": "cheap cheapest expensive",
+            "value": 1
+        },
+        "expensive": {
+            "category": "fuel",
+            "synonyms": "cheap cheapest cheaper",
+            "value": 1
+        },
+        "price": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "pump": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "#swamp": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 3
+        },
+        "flood": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "#flood": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 3
+        },
+        "flooded": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "#flooded": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "water": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 1
+        },
+        "river": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 1
+        },
+        "inundation": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "saturated": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 2
+        },
+        "fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 1
+        },
+        "#fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "blaze": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "#arsonfire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "wildfire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "burning": {
+            "category": "fire",
+            "synonyms": "burn burned",
+            "value": 1
+        },
+        "burned": {
+            "category": "fire",
+            "synonyms": "burning burn",
+            "value": 1
+        },
+        "burn": {
+            "category": "fire",
+            "synonyms": "burned burning",
+            "value": 1
+        },
+        "alarm": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "alert": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 1
+        },
+        "firefighter": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 1
+        },
+        "explode": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "explosion": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "flames": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "evacuated": {
+            "category": "fire flood",
+            "synonyms": "evacuate",
+            "value": 2
+        },
+        "evacuate": {
+            "category": "fire flood",
+            "synonyms": "evacuated",
+            "value": 2
+        },
+        "evacuation": {
+            "category": "fire flood",
+            "synonyms": "evacuated",
+            "value": 2
+        },
+        "building": {
+            "category": "fire",
+            "synonyms": "house houses",
+            "value": 1
+        },
+        "house": {
+            "category": "fire",
+            "synonyms": "houses building",
+            "value": 1
+        },
+        "houses": {
+            "category": "fire",
+            "synonyms": "house building",
+            "value": 1
+        },
+        "#gasleak": {
+            "category": "fire",
+            "synonyms": "house building",
+            "value": 4
+        },
+        "warning": {
+            "category": "hurricane flood fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "watch": {
+            "category": "hurricane flood fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "advisory": {
+            "category": "hurricane flood fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "collided": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "casualty": {
+            "category": "hurricane fire accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "casualties": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 3
+        },
+        "destroyed": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "destroying": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "damage": {
+            "category": "flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "damaged": {
+            "category": "flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "catastrophes": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "emergency": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "disaster": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "disasters": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "happening": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "occurred": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "occurring": {
+            "category": "accident flood hurricane fire",
+            "synonyms": null,
+            "value": 2
+        }
+
+    },
+    "falseKeywords": {
+        "@hurricanesports": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 10
+        },
+        "#hurricanes": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "sport": {
+            "category": "hurricane",
+            "synonyms": "sports",
+            "value": 3
+        },
+        "sports": {
+            "category": "hurricane",
+            "synonyms": "sport",
+            "value": 3
+        },
+        "football": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 2
+        },
+        "coach": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "bill": {
+            "category": "poweroutage",
+            "synonyms": "bills",
+            "value": 2
+        },
+        "bills": {
+            "category": "poweroutage",
+            "synonyms": "bill",
+            "value": 2
+        },
+        "carwash": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "carrental": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "rental": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "fireplace": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 3
+        },
+        "candles": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 3
+        },
+        "candle": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 3
+        }
+    },
+    "bigrams": {
+        "hurricane season": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "hurricane advisory": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "hurricane warning": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "hurricane watch": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "hurricane alert": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "tropical storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "weather report": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 4
+        },
+        "weather forecast": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 4
+        },
+        "wind blowing": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 3
+        },
+        "it's rainning": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 6
+        },
+        "its rainning": {
+            "category": "hurricane flood",
+            "synonyms": null,
+            "value": 6
+        },
+        "cold front": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 4
+        },
+        "tornado watch": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "tropical depression": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "tropical disturbance": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "storm surge": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "snow storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "ice storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "winter storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 4
+        },
+        "heavy snow": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "plodding storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "natural disaster": {
+            "category": "hurricane flood fire",
+            "synonyms": null,
+            "value": 4
+        },
+        "accident at": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accidents at": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accident on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "crash on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "crash at": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "crash in": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "collision on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accidents on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accident blocks": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accident blocking": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accidents blocking": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "lane blocked": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "#accident on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "accident @": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "#accident @": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "accidents @": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "car accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "car accidents": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "auto accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "road accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "traffic accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "lanes blocked": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 4
+        },
+        "traffic incident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "traffic stop": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 2
+        },
+        "traffic jam": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "disabled vehicle": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "accident cleared": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "police activity": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "pile up": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "power outage": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 5
+        },
+        "power out": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 5
+        },
+        "powers out": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 5
+        },
+        "without power": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 2
+        },
+        "flooding on": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "flash flood": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "flash floods": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "flood watch": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "flood advisory": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "ice jam": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 4
+        },
+        "ice dam": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 5
+        },
+        "flood damage": {
+            "category": "flood",
+            "synonyms": null,
+            "value": 3
+        },
+        "gas leak": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "fire alarm": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "#fire alarm": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "#fire alert": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 6
+        },
+        "fire alert": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 6
+        },
+        "fire @": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "#fire @": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "rescue officials": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 3
+        },
+        "fire fighters": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 3
+        },
+        "fire trucks": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 4
+        },
+        "house fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        },
+        "fire department": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 2
+        },
+        "outside fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 6
+        },
+        "gas price": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 3
+        },
+        "gas is": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 3
+        },
+        "#gas is": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 3
+        },
+        "gas station": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "fuel center": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "no fuel": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "no diesel": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "no gasoline": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+
+        "no gas": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 1
+        },
+        "gas prices": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 3
+        },
+        "natural gas": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        }
+    },
+    "falseBigram": {
+        "auto sales": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 6
+        },
+        "got into": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "get into": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "got in": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 1
+        },
+        "by accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "on accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "bus driver": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 3
+        },
+        "go canes": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 8
+        },
+        "football coach": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "miami hurricanes": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "storm troopers": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 7
+        },
+        "digital Storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 7
+        },
+        "perfect storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 6
+        },
+        "to storm": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 4
+        },
+        "electricity bill": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 3
+        },
+        "power bill": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 3
+        },
+        "power rangers": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 7
+        },
+        "power chargers": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 7
+        },
+        "power charger": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 7
+        },
+        "car wash": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "car rental": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "rental car": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "#job alert": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "job alert": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "pandora station": {
+            "category": "accident fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "car alarm": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 7
+        }
+    },
+    "trigrams": {
+        "traffic incident @": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "traffic incident on": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "traffic incident at": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "passed an accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 5
+        },
+        "electricity went out": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "electricity goes out": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "out of power": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "power is out": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "power goes of": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "power goes off": {
+            "category": "poweroutage",
+            "synonyms": null,
+            "value": 8
+        },
+        "the hurricane is": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "national hurricane center": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 5
+        },
+        "out of gas": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        },
+        "out of fuel": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        },
+        "out of gasoline": {
+            "category": "fuel",
+            "synonyms": null,
+            "value": 2
+        },
+        "fire breaks out": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 5
+        }
+    },
+    "falseTrigram": {
+        "not an accident": {
+            "category": "accident",
+            "synonyms": null,
+            "value": 7
+        },
+        "played with fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "play with fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "caught on fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 4
+        },
+        "playing with fire": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 7
+        },
+        "let it burn": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 4
+        },
+        "watch it burn": {
+            "category": "fire",
+            "synonyms": null,
+            "value": 4
+        },
+        "big storm brewery": {
+            "category": "hurricane",
+            "synonyms": null,
+            "value": 7
+        }
+    },
+    "authors": "fpl"
+}

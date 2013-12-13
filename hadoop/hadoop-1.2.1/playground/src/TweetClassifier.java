@@ -1,17 +1,3 @@
-/**
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 
 package empanada;
 
@@ -26,6 +12,7 @@ import java.util.TreeMap;
 import java.util.Scanner;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.net.URL;
@@ -34,23 +21,6 @@ import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import javax.swing.text.Position.Bias;
 
@@ -88,12 +58,15 @@ public class TweetClassifier {
     	 	/*READING TWEET*/
 			String tweetText = "";
 			String tweetAuthor = "";
+			String source = "";
 			try {
 				JSONObject tweet = new JSONObject(value.toString());
 				tweetText = tweet.getString("text");			
 				tweetAuthor = tweet.getJSONObject("user").getString("screen_name");
+				source = tweet.getString("source");
 			} catch (Exception e) {
 				LOG.info(e);
+				e.printStackTrace();
 			}
 			/*FINISH READING TWEET*/ 
     	
@@ -102,6 +75,12 @@ public class TweetClassifier {
 				context.write(new Text("poweroutage" + "\t" + value), new IntWritable(10));
 				return;
 			}
+			
+			/*If tweet comes from foursquare add 1 to fuel*/
+			if (source.contains("foursquare")){
+				context.write(new Text("fuel" + "\t" + value), new IntWritable(1)); 				
+			}
+			
     	
 			//Get the all the keywords
 			Configuration config = context.getConfiguration();
@@ -111,7 +90,24 @@ public class TweetClassifier {
 				vector = new JSONObject(allContent);
 			} catch (JSONException e) {
 				LOG.info(e);
+				e.printStackTrace();
 			} 
+			
+			//Get the possible keywords
+			String possibleKeywords = config.get("possibleKeywords");
+			JSONObject possibleKeywordsVector = new JSONObject();
+			JSONArray possibleKeywordsList = new JSONArray();
+			if (!possibleKeywords.equals("nada")){
+				try {
+					possibleKeywordsVector = new JSONObject(possibleKeywords);
+					possibleKeywordsList = possibleKeywordsVector.names();
+				} catch (JSONException e) {
+					LOG.info(e);
+					e.printStackTrace();
+				} 
+			}
+			
+
 			
 			try {
 				JSONObject keywordsVector =  vector.getJSONObject("keywords");
@@ -141,6 +137,20 @@ public class TweetClassifier {
 					boolean isTrigram = false;
 					String tweetWord =  itr.nextToken();		
 						
+					//Look for possible keywords
+					for (int i = 0; i < possibleKeywordsList.length(); i++){
+						if (tweetWord.equalsIgnoreCase(possibleKeywordsList.getString(i))){
+							JSONObject keyword = possibleKeywordsVector.getJSONObject(possibleKeywordsList.getString(i));
+					    	int weight = keyword.getInt("rating");
+							Scanner keywordCategoryScan = new Scanner(keyword.getString("category"));
+					    	while (keywordCategoryScan.hasNext()){	    		
+					    		String category = keywordCategoryScan.next();
+					    		context.write(new Text(category + "\t" + value), new IntWritable(weight));  
+					    	}
+						}
+					}
+					
+					
 					//check if the word in tweet is a valid keyword
 					for (int i = 0; i < keywordsList.length(); i++){					
 						if (tweetWord.equalsIgnoreCase(keywordsList.getString(i))){
@@ -313,15 +323,12 @@ public class TweetClassifier {
     	
 		 catch (JSONException e) {
 			LOG.info(e);
+			e.printStackTrace();
 		}  
 		
 		//context.write(new Text("shelter" + "\t" + value), new IntWritable(0)); 
     }
   }
-	
-	
-	
-
 	
 
   public static class IntSumReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
@@ -349,6 +356,22 @@ public class TweetClassifier {
 		}
 		
 		
+		String possibleKeywords = "nada";
+	/*	try{
+			FileMaker fileMaker = new FileMaker();
+			possibleKeywords = fileMaker.readKeywordsFile("keywords-m-00000");
+		} catch (FileNotFoundException e) {
+			LOG.info(e);
+			e.printStackTrace();
+		} catch (JSONException e) {
+			LOG.info(e);
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOG.info(e);
+			e.printStackTrace();
+		}			*/
+		
+		
     	URL url = TweetClassifier.class.getResource("vector2.json");
     	LOG.info( "this is  file " + url);
 		
@@ -367,10 +390,14 @@ public class TweetClassifier {
         catch( IOException e )
         {
             LOG.info( "Error handling file " + url + ":" + e );
+            e.printStackTrace();
 		}    	
     	/*FINISH READING VECTOR FILE*/	
 		conf.set("vectorText", allContent);
 		
+		conf.set("possibleKeywords", possibleKeywords);
+
+			
 
 		
 		Job job = new Job(conf, "empanada");

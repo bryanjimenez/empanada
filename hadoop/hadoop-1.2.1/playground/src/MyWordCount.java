@@ -1,26 +1,16 @@
-/**
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 
 
 package empanada;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -46,133 +36,113 @@ import org.json.simple.parser.ParseException;
 
 
 public class MyWordCount {
-
-  public static class TokenizerMapper 
-       extends Mapper<Object, Text, Text, IntWritable>{
-    
-    private final static IntWritable one = new IntWritable(1);
-    private Text word = new Text();
-      
-    public void map(Object key, Text value, Context context
-                    ) throws IOException, InterruptedException {
-    	
-    	String myString = value.toString();
-    	String myCategory = myString.substring(0, myString.indexOf('\t'));
-    	myString = myString.substring(myString.indexOf('\t')+1);
-    	//System.out.println(myString);
-    	
-    	/*READING TWEET*/
-    	String tweetText = "";
-    	try {
-    		JSONObject tweet = new JSONObject(myString);
-    		tweetText = tweet.get("text").toString();			
-    	} catch (JSONException e) {
-    		e.printStackTrace();
-    	}
-    	/*FINISH READING TWEET*/ 
-    	
-    	ArrayList<String> myDeadWords = new ArrayList<String>();
-    	    	
-    	File deadWordsFile = new File("partOfSpeech.txt");
-    	Scanner deadWordsScanner = new Scanner(deadWordsFile);
-    	while (deadWordsScanner.hasNextLine()){
-    		myDeadWords.add(deadWordsScanner.nextLine());
-    	}
-    	
-    	boolean isDead = false;
-    	
-    	String previousWord = "";
-    	
-      StringTokenizer itr = new StringTokenizer(tweetText, " \t\n\r\f,.:;?![]\"()-");
-      while (itr.hasMoreTokens()) {
-    	      	  
-    	  String myWord = itr.nextToken().toLowerCase();
-    	  
-    	  if (!myWord.matches(".*\\d.*")){
-        	  if (!previousWord.isEmpty()){
-        		  previousWord = previousWord.concat(" "+myWord);
-        		  previousWord = myCategory.concat("_" + previousWord);
-        		  context.write(new Text(previousWord), one);
-        	  }
-        	  
-        	  previousWord = myWord;
-        	  
-        	  for (int i = 0; i < myDeadWords.size(); i++){
-        		  if (myWord.equals(myDeadWords.get(i))){ 	  
-        			  isDead = true;
-        			  i = myDeadWords.size();
-        		  }
-        	  }
-        	  if (!isDead){
-        		  myWord = myCategory.concat("_" + myWord);
-        		  System.out.println(myWord);
-        		  word.set(myWord);
-        		  context.write(word, one);
-        	  }
-        	  
-        	  
-    		  
-    	  }
-    	    
-      }
-      
-      
-      /*      while (itr.hasMoreTokens()) {
-    	  
-    	  String myWord = itr.nextToken();
-    	  
-    	  for (int i = 0; i < myDeadWords.size(); i++){
-    		  if (myWord.equals(myDeadWords.get(i))){ 	  
-    			  isDead = true;
-    			  i = myDeadWords.size();
-    		  }
-    	  }
-    	  if (!isDead){
-    		  word.set(previousWord);
-    		  context.write(word, one);
-    	  }
-    	  
-    	  previousWord = myWord;
-      }*/
-      
-      
-      
-    }
-  }
-  
-
-  public static class MyReducer extends Reducer<Text,IntWritable,IntWritable,Text> {
-	  
-	  String generateFileName(IntWritable v, Text k) {
-		   return k.toString() + "_" + v.toString();
+	
+	private static final Log LOG = LogFactory.getLog(MyWordCount.class);
+	
+	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable>{
+		
+		private final static IntWritable one = new IntWritable(1);
+	    private Text word = new Text();
+	    
+	    public void map(Object key, Text value, Context context
+                ) throws IOException, InterruptedException {
+	    	
+	    	String myString = value.toString();
+		    String myCategory = myString.substring(0, myString.indexOf('\t'));
+		    myString = myString.substring(myString.indexOf('\t')+1);
+		    myString = myString.substring(0, myString.indexOf('\t'));
+		    
+		    /*
+		    for (int i = 0; i < 100; i++){
+		    	System.out.println("we're in mapper");
+			    System.out.println(myString);
+		    }*/
+		    
+		    //System.out.println(myString);
+		    	
+		    /*READING TWEET*/
+		    String tweetText = "";
+	    	try {
+	    		JSONObject tweet = new JSONObject(myString);
+	    		tweetText = tweet.get("text").toString();			
+	    	} catch (JSONException e) {
+	    		LOG.info(e);
+	    		e.printStackTrace();
+	    	}
+		    /*FINISH READING TWEET*/ 
+	    	
+	    	ArrayList<String> myDeadWords = new ArrayList<String>();
+	    	Configuration config = context.getConfiguration();
+	    	String deadWords = config.get("deadWords");
+	    	
+	    	Scanner deadWordsScanner = new Scanner(deadWords);
+	    	while (deadWordsScanner.hasNextLine()){
+	    		myDeadWords.add(deadWordsScanner.nextLine());
+	    	}
+	    	
+	    	boolean isDead = false;
+	    	
+	    	String previousWord = "";
+		    StringTokenizer itr = new StringTokenizer(tweetText, " \t\n\r\f,.:;?![]\"()-/");
+		    
+		    while (itr.hasMoreTokens()) {
+		    	String myWord = itr.nextToken().toLowerCase(); 
+		    	if (!myWord.matches(".*\\d.*")){	    		
+		        	for (int i = 0; i < myDeadWords.size(); i++){
+		        		if (myWord.equalsIgnoreCase(myDeadWords.get(i))){ 	  
+		        			isDead = true;
+		        			i = myDeadWords.size();
+		        		}
+		        	} 	
+		        	if (!isDead){
+		        		word.set(myCategory + "_" + myWord);
+		        		context.write(word, one);
+		        	}
+		    		if (!previousWord.isEmpty()){
+		        		context.write(new Text(myCategory + "_" + previousWord + " " + myWord), one);
+		    		}	  
+		    		
+		        	previousWord = myWord;
+		    	}
+		    	else
+		    		previousWord= "";
+		    }
+	    }
+	}
+	
+	
+	public static class MyReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+		
+		String generateFileName(Text k, IntWritable v) {
+			return k.toString() + "_" + v.toString();
 		 }
 	  	  
-	  private MultipleOutputs<IntWritable,Text> mos;
-	  private IntWritable result = new IntWritable();
+		  private MultipleOutputs<Text,IntWritable> mos;
+		  private IntWritable result = new IntWritable();
 	  
-	  public void setup(Context context) {
-		  mos = new MultipleOutputs<IntWritable, Text>(context);
-	  }
+		  public void setup(Context context) {
+			  mos = new MultipleOutputs<Text, IntWritable>(context);
+		  }
 	  
-	  public void reduce(Text key, Iterable<IntWritable> values, Context context
-                       ) throws IOException, InterruptedException {
-		  
-		  int sum = 0;
-		  for (IntWritable val : values) {
-			  sum += val.get();
-		  }  
-		  result.set(sum);
-		  
-		  String myString = key.toString();
-		  if (myString.contains(" ")){
-			  mos.write("bigram", result, key);	  
+		  public void reduce(Text key, Iterable<IntWritable> values, Context context
+                  ) throws IOException, InterruptedException {
+			  
+			  int sum = 0;
+			  for (IntWritable val : values) {
+				  sum += val.get();
+			  }  
+			  result.set(sum);
+	  
+			  String myString = key.toString();
+			  if (myString.contains(" ") && sum > 0){
+				  mos.write("bigram", key, result);	  
+			  }
+			  else if (sum > 0){
+				  mos.write("keywords", key, result);
+			  }
+     //context.write(key, result);
+	  
 		  }
-		  else{
-			  mos.write("keywords", result, key);
-		  }
-	      //context.write(key, result);
-		  
-	  }
 	  
 
 	  public void cleanup(Context context) throws IOException {
@@ -236,13 +206,42 @@ public class MyWordCount {
 		Configuration conf = new Configuration();	
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: wordcount <in> <out>");
+			System.err.println("Usage: empanada.MyWordCount <in> <out>");
 			System.exit(2);
 		}	
-		// Create a new Job
-		Job job = new Job(conf, "my word count");
-		job.setJarByClass(MyWordCount.class);
+		
+		
+    	URL url = MyWordCount.class.getResource("partOfSpeech.txt");
+    	LOG.info( "this is  file " + url);
 
+		String allContent = "";	
+		
+		/*READING VECTOR FILE*/
+    	try
+        {
+        	File f1 = new File(url.toURI());
+    		Scanner scanner1 = new Scanner(f1);
+    		allContent = scanner1.useDelimiter("//A").next();
+    		//LOG.info("this is the vector file:" + allContent);
+    				
+        }
+        catch( IOException e )
+        {
+            LOG.info( "Error handling file " + url + ":" + e );
+            e.printStackTrace();
+		}    	
+    	/*FINISH READING VECTOR FILE*/	
+		conf.set("deadWords", allContent);
+			
+		// Create a new Job
+		Job job = new Job(conf, "MyWordCount");
+		job.setJarByClass(MyWordCount.class);
+		
+		
+				
+		
+		
+		
 		// Specify various job-specific parameters
 		job.setPartitionerClass(MyPartitioner.class);
 		job.setMapperClass(TokenizerMapper.class);
@@ -254,9 +253,9 @@ public class MyWordCount {
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		
-		MultipleOutputs.addNamedOutput(job, "keywords", TextOutputFormat.class, IntWritable.class, Text.class);
+		MultipleOutputs.addNamedOutput(job, "keywords", TextOutputFormat.class, Text.class, IntWritable.class);
 		 // Defines additional sequence-file based output 'sequence' for the job
-		MultipleOutputs.addNamedOutput(job, "bigram", TextOutputFormat.class, IntWritable.class, Text.class);
+		MultipleOutputs.addNamedOutput(job, "bigram", TextOutputFormat.class, Text.class, IntWritable.class);
 		 
 		// Submit the job, then poll for progress until the job is complete
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
