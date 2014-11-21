@@ -3,6 +3,8 @@ EmPANaDa
 
 Emergency Preparedness Against Natural Disasters
 
+http://empanada.site50.net (demo only)
+
 
 Setup
 -----
